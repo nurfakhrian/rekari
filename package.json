@@ -1,0 +1,19 @@
+{
+  "name": "rekari",
+  "version": "1.0.0",
+  "description": "record and monitoring application using mysql, express, react and nodejs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/hirzi/rekari.git"
+  },
+  "author": "hirzi nurfakhrian",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/hirzi/rekari/issues"
+  },
+  "homepage": "https://gitlab.com/hirzi/rekari#readme"
+}
