@@ -27,3 +27,5 @@ operator.post('/login', (req, res) => {
         }
     })
 });
+
+module.exports = operator;
