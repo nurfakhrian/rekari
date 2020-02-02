@@ -2,7 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const Operator = require('../models/Operator');
+const models = require('../models');
+const Operator = require('../models/operator')(models.sequelize, models.Sequelize.DataTypes);
 
 const operator = express.Router();
 const SECRET_KEY = "hiams_ib";
@@ -22,8 +23,11 @@ operator.post('/register', (req, res) => {
             bcrypt.hash(req.body.password, 10, (err, hash) => {
                 newOperator.password = hash;
                 Operator.create(newOperator).then(result => {
+                    const { password, ...rest } = result.dataValues;
+                    console.log(rest);
+                    console.log(result);
                     res.json({ 
-                        data: result,
+                        data: rest,
                         error: null
                     });
                 }).catch(err => {
@@ -47,7 +51,11 @@ operator.post('/login', (req, res) => {
             if (bcrypt.compareSync(req.body.password, result.password)) {
                 const token = jwt.sign(result.dataValues, SECRET_KEY, { expiresIn: "10h" });
                 res.json({
-                    data: result,
+                    data: {
+                        id: result.id,
+                        code: result.code,
+                        name: result.name
+                    },
                     token: token,
                     error: null
                 });

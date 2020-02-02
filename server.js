@@ -2,8 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
-var app = express();
-var PORT = 3028;
+const app = express();
+const PORT = 3028;
 
 // config
 app.use(bodyParser.json());
@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 // routing
-var operator = require('./routes/operator');
+const operator = require('./routes/operator');
 app.use('/operator', operator);
 
 // run server

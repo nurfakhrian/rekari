@@ -1,22 +1,22 @@
-const Sequelize = require('sequelize');
-const sequelize = require('../database/db');
-
-module.exports = sequelize.define('operator', {
-    id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+  const Operator = sequelize.define('Operator', {
     code: {
-        type: Sequelize.STRING,
-        allowNull: false
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
     },
     name: {
-        type: Sequelize.STRING,
-        allowNull: false
+      type: DataTypes.STRING,
+      allowNull: false
     },
     password: {
-        type: Sequelize.STRING,
-        allowNull: false
+      type: DataTypes.STRING,
+      allowNull: false
     }
-});
+  }, {});
+  Operator.associate = function(models) {
+    // associations can be defined here
+  };
+  return Operator;
+};
