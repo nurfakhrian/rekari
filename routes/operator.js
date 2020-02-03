@@ -23,11 +23,9 @@ operator.post('/register', (req, res) => {
             bcrypt.hash(req.body.password, 10, (err, hash) => {
                 newOperator.password = hash;
                 Operator.create(newOperator).then(result => {
-                    const { password, ...rest } = result.dataValues;
-                    console.log(rest);
-                    console.log(result);
+                    const { password, ...safeResult } = result.dataValues;
                     res.json({ 
-                        data: rest,
+                        data: safeResult,
                         error: null
                     });
                 }).catch(err => {
@@ -50,12 +48,9 @@ operator.post('/login', (req, res) => {
         if (result) {
             if (bcrypt.compareSync(req.body.password, result.password)) {
                 const token = jwt.sign(result.dataValues, SECRET_KEY, { expiresIn: "10h" });
+                const { password, ...safeResult } = result.dataValues;
                 res.json({
-                    data: {
-                        id: result.id,
-                        code: result.code,
-                        name: result.name
-                    },
+                    data: safeResult,
                     token: token,
                     error: null
                 });
@@ -63,6 +58,28 @@ operator.post('/login', (req, res) => {
             else {
                 res.status(400).json({ error: 'username or password is wrong' });
             }
+        }
+        else {
+            res.status(400).json({ error: 'operator does not exist' });
+        }
+    }).catch(err => {
+        res.status(400).json({ error: err });
+    });
+});
+
+operator.get('/detail', (req, res) => {
+    const decoded = jwt.verify(req.headers['authorization'], process.env.SECRET_KEY)
+    Operator.findOne({
+      where: {
+        id: decoded.id
+      }
+    }).then(result => {
+        if (result) {
+            const { password, ...safeResult } = result.dataValues;
+            res.json({
+                data: safeResult,
+                error: null
+            });
         }
         else {
             res.status(400).json({ error: 'operator does not exist' });
