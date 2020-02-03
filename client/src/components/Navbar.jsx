@@ -25,12 +25,12 @@ class Navbar extends Component {
                     <Link to="/detail" className="nav-link">Detail</Link>
                 </li>
                 <li className="nav-item">
-                    <a href="" onClick={this.logout.bind(this)} className="nav-link">Logout</a>
+                    <a href="/" onClick={this.logout.bind(this)} className="nav-link">Logout</a>
                 </li>
             </ul>
         )
         return (
-            <nav className="navbar navbar-expand-lg navbar-dark bg-dark rounded">
+            <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -51,7 +51,7 @@ class Navbar extends Component {
                         <Link to="/" className="nav-link">Home</Link>
                         </li>
                     </ul>
-                    {localStorage.usertoken ? logedLink : anonLink}
+                    {localStorage.logintoken ? logedLink : anonLink}
                 </div>
             </nav>
           )
