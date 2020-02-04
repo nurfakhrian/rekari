@@ -14,7 +14,7 @@ class Sidebar extends Component {
                 <ul className="custom-scrollbar">
                     <li>
                         <div className="logo-wrapper reset-border waves-light">
-                            <a href="/">Rekari</a>
+                            <a href="/"><img src="images/logo.png" class="img-fluid flex-center"></img></a>
                         </div>
                     </li>
                     <li>

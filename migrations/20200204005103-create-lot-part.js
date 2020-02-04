@@ -1,29 +1,32 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Operators', {
+    return queryInterface.createTable('LotParts', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      code: {
-        type: Sequelize.STRING(50),
+      total: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      operatorId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
-        unique: true
+        references: {
+          model: 'Operators',
+          key: 'id'
+        },
       },
-      name: {
-        type: Sequelize.STRING(50),
-        allowNull: false
-      },
-      password: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      role: {
-        type: Sequelize.STRING(10),
-        allowNull: false
+      typePartId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'TypeParts',
+          key: 'id'
+        },
       },
       createdAt: {
         allowNull: false,
@@ -36,6 +39,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Operators');
+    return queryInterface.dropTable('LotParts');
   }
 };

@@ -25,7 +25,7 @@ operator.post('/register', (req, res) => {
                 Operator.create(newOperator).then(result => {
                     const { password, ...safeResult } = result.dataValues;
                     res.json({ 
-                        data: safeResult,
+                        values: safeResult,
                         error: null
                     });
                 }).catch(err => {
@@ -50,7 +50,7 @@ operator.post('/login', (req, res) => {
                 const token = jwt.sign(result.dataValues, SECRET_KEY, { expiresIn: "10h" });
                 const { password, ...safeResult } = result.dataValues;
                 res.json({
-                    data: safeResult,
+                    values: safeResult,
                     token: token,
                     error: null
                 });
@@ -67,26 +67,26 @@ operator.post('/login', (req, res) => {
     });
 });
 
-operator.get('/detail', (req, res) => {
-    const decoded = jwt.verify(req.headers['authorization'], process.env.SECRET_KEY)
-    Operator.findOne({
-      where: {
-        id: decoded.id
-      }
-    }).then(result => {
-        if (result) {
-            const { password, ...safeResult } = result.dataValues;
-            res.json({
-                data: safeResult,
-                error: null
-            });
-        }
-        else {
-            res.status(400).json({ error: 'operator does not exist' });
-        }
-    }).catch(err => {
-        res.status(400).json({ error: err });
-    });
-});
+// operator.get('/detail', (req, res) => {
+//     const decoded = jwt.verify(req.headers['authorization'], process.env.SECRET_KEY)
+//     Operator.findOne({
+//       where: {
+//         id: decoded.id
+//       }
+//     }).then(result => {
+//         if (result) {
+//             const { password, ...safeResult } = result.dataValues;
+//             res.json({
+//                 data: safeResult,
+//                 error: null
+//             });
+//         }
+//         else {
+//             res.status(400).json({ error: 'operator does not exist' });
+//         }
+//     }).catch(err => {
+//         res.status(400).json({ error: err });
+//     });
+// });
 
 module.exports = operator;
