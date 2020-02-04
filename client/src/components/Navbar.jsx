@@ -12,10 +12,10 @@ class Navbar extends Component {
         const anonLink = (
             <ul className="navbar-nav">
                 <li className="nav-item">
-                    <Link to="/login" className="nav-link">Login</Link>
+                    <Link to="/operator/login" className="nav-link">Login</Link>
                 </li>
                 <li className="nav-item">
-                    <Link to="/register" className="nav-link">Register</Link>
+                    <Link to="/operator/register" className="nav-link">Register</Link>
                 </li>
             </ul>
         )
@@ -32,7 +32,7 @@ class Navbar extends Component {
         return (
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <button
-                    className="navbar-toggler"
+                    className="navbar-toggler ml-auto"
                     type="button"
                     data-toggle="collapse"
                     data-target="#navbarCollapse"
@@ -42,10 +42,9 @@ class Navbar extends Component {
                     <span className="navbar-toggler-icon" />
                 </button>
       
-                <div
-                className="collapse navbar-collapse justify-content-md-center"
-                id="navbarCollapse"
-                >
+                <div 
+                    id="navbarCollapse"
+                    className="collapse navbar-collapse">
                     <ul className="navbar-nav">
                         <li className="nav-item">
                         <Link to="/" className="nav-link">Home</Link>
