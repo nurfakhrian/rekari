@@ -5,7 +5,7 @@ function Footer(props) {
         <footer className="page-footer text-center text-md-left bg-agt-gradient">
             <div className="footer-copyright py-3 text-center">
                 <div className="container-fluid">
-                    © 2019 Copyright <a href="/#">&nbsp;HIAMS AS-IB</a>
+                    © 2019 Copyright <a href="/#">&nbsp;HIAMS - IB</a>
                 </div>
             </div>
         </footer>

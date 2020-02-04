@@ -7,6 +7,8 @@ import Container from './components/common/Container';
 import Card from './components/common/Card';
 import Footer from './components/common/Footer';
 
+import "./App.scss";
+
 // import Navbar from './components/Navbar';
 // import Landing from './components/Landing';
 // import Login from './components/Login';

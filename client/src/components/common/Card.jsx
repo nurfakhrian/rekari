@@ -7,7 +7,7 @@ class Card extends Component {
     render() {
         return (
             <div className="card col pr-0 pl-0">
-                <div className="card-header text-center h5 bg-agt-dark text-white">News List</div>
+                <div className="card-header text-center h5 bg-dark text-white">News List</div>
                 <div className="card-body">
                     <div className="row align-items-center">
                         <div className="col-md-2 pr-md-1 mb-md-0 mb-2">

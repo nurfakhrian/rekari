@@ -14,12 +14,12 @@ class Sidebar extends Component {
                 <ul className="custom-scrollbar">
                     <li>
                         <div className="logo-wrapper reset-border waves-light">
-                            <a href="/#">Rikari</a>
+                            <a href="/">Rekari</a>
                         </div>
                     </li>
                     <li>
                         <ul className="collapsible">
-                            <li>
+                            {/* <li>
                                 <div className="collapsible-body d-block">
                                     <ul>
                                         <li>
@@ -27,7 +27,7 @@ class Sidebar extends Component {
                                         </li>
                                     </ul>
                                 </div>
-                            </li>
+                            </li> */}
                             <li className="active">
                                 <a className="collapsible-header waves-effect arrow-r active">News</a>
                                 <div className="collapsible-body d-block">

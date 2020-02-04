@@ -1,0 +1,112 @@
+@font-face {
+    font-family: 'myFont';
+    src: url("/fonts/RobotoCondensed-Regular.ttf") format("truetype");
+}
+
+$font-main: 'RobotoCondensed-Bold', sans-serif;
+
+$colors: (
+    dark: #ae0001
+);
+
+@function color($color-name) {
+    @return map-get($colors, $color-name)
+}
+
+$desktop: 992px;
+@mixin desktop {
+    @media (min-width: #{$desktop}) {
+        @content;
+    }
+}
+
+$large-desktop: 1200px;
+@mixin large-desktop {
+    @media (min-width: #{$large-desktop}) {
+        @content;
+    }
+}
+
+$extra-large-desktop: 1440px;
+@mixin extra-large-desktop {
+    @media (min-width: #{$extra-large-desktop}) {
+        @content;
+    }
+}
+
+html {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    position: relative;
+    margin: 0;
+    padding-bottom: 6rem;
+    min-height: 100%;
+    background-image: url('/images/pattern.png');
+    background-repeat: repeat;
+    font-family: $font-main !important;
+}
+
+footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+nav, footer, main {
+    padding-left: 0 !important;
+
+    @include extra-large-desktop {
+        padding-left: 285px !important;
+    }
+}
+
+.bg-dark {
+    background: color(dark) !important;
+}
+
+.side-nav {
+    width: 285px !important;
+    // background: #eaeaea;
+    background-image: url('/images/sidebar.png') !important;
+
+    .sidenav-bg {
+        width: 285px !important;
+    }
+
+    a:hover {
+        color: color(dark) !important;
+    }
+
+    .sidenav-bg:after {
+        background: rgba(255, 255, 255, .65) !important;
+    }
+
+    .logo-wrapper a {
+        width: 285px !important;
+    }
+
+    .collapsible-header {
+        pointer-events: none;
+        cursor: default;
+        font-size: .75rem;
+    }
+
+    .collapsible-body a {
+        background-color: transparent !important;
+        font-size: .9rem;
+    }
+
+    .collapsible-header.active,
+    .collapsible-body a.active {
+        color: color(dark) !important;
+    }
+}
+
