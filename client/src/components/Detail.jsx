@@ -7,6 +7,7 @@ class Detail extends Component {
         this.state = {
             code: "",
             name: "",
+            role: "",
             password: ""
         }
     }
@@ -17,6 +18,7 @@ class Detail extends Component {
         this.setState({
             code: decode.code,
             name: decode.name,
+            role: decode.role,
             password: decode.password
         });
     }

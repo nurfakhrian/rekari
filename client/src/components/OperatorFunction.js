@@ -4,6 +4,7 @@ export const register = newOperator => {
     return axios.post('operator/register', {
         code: newOperator.code,
         name: newOperator.name,
+        role: newOperator.role,
         password: newOperator.password
     }).then(response => response);
 }

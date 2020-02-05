@@ -9,7 +9,7 @@ class Navbar extends Component {
             <nav className="navbar fixed-top navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav"
             aria-label="breadcrumb">
                 <div className="float-left">
-                    <a href="/#" data-activates="slide-out" className="button-collapse black-text">
+                    <a href="#" data-activates="slide-out" className="button-collapse black-text">
                         <FontAwesomeIcon icon={faBars} />
                     </a>
                 </div>

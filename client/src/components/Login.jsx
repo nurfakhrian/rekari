@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { login } from './OperatorFunction';
+import { connect } from 'react-redux';
+// import { login } from './OperatorFunction';
+import { login, logout } from '../store/actions/auth';
 
 class Login extends Component {
     constructor() {
@@ -20,53 +22,24 @@ class Login extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-        const operator = {
-            code: this.state.code,
-            password: this.state.password
-        }
-        login(operator).then(response => {
-            if (response.status !== 200) {
-                console.log(response.data);
-            }
-            else {
-                this.props.history.push('/detail');
-            }
-        });
+        this.props.login();
+        // const operator = {
+        //     code: this.state.code,
+        //     password: this.state.password
+        // }
+        // login(operator).then(response => {
+        //     if (response.status !== 200) {
+        //         console.log(response.data);
+        //     }
+        //     else {
+        //         this.props.history.push('/detail');
+        //         this.props.loginReducer();
+        //     }
+        // });
     }
 
     render() {
         return (
-            // <div className="container">
-            //     <div className="row">
-            //         <div className="col-md-6 mt-5 mx-auto">
-            //             <form noValidate onSubmit={this.onSubmit}>
-            //                 <h1 className="h3 mb-3 font-weight-normal">Login</h1>
-            //                 <div className="form-group">
-            //                     <label htmlFor="code">Code</label>
-            //                     <input
-            //                         type="text"
-            //                         className="form-control"
-            //                         name="code"
-            //                         placeholder="Enter code"
-            //                         value={this.state.code}
-            //                         onChange={this.onChange} />
-            //                 </div>
-            //                 <div className="form-group">
-            //                     <label htmlFor="password">Password</label>
-            //                     <input
-            //                         type="password"
-            //                         className="form-control"
-            //                         name="password"
-            //                         placeholder="Enter password"
-            //                         value={this.state.password}
-            //                         onChange={this.onChange} />
-            //                 </div>
-            //                 <button className="btn btn-lg btn-primary btn-block">Login</button>
-            //             </form>
-            //         </div>
-            //     </div>
-            // </div>
-
             <div className="col-md-4 pt-5">
                 <div className="card col pr-0 pl-0">
                     <div className="card-header text-center h5 bg-dark text-white">Login</div>
@@ -101,4 +74,16 @@ class Login extends Component {
     }
 }
 
-export default Login;
+const mapStateToProps = (state) => {
+    return {
+        isLogedIn: state.isLogedIn,
+        dataLogin: state.dataLogin
+    }
+}
+
+const mapDispatchToProps = {
+    login,
+    logout
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
