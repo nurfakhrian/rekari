@@ -5,9 +5,7 @@ export const register = newOperator => {
         code: newOperator.code,
         name: newOperator.name,
         password: newOperator.password
-    }).then(response => {
-        console.log(response)
-    });
+    }).then(response => response);
 }
 
 export const login = operator => {
@@ -15,7 +13,7 @@ export const login = operator => {
         code: operator.code,
         password: operator.password
     }).then(response => {
-        console.log(response);
         localStorage.setItem('logintoken', response.data.token);
-    }).catch(err => console.log(err));
+        return response;
+    }).catch(err => err.response);
 }

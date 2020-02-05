@@ -14,17 +14,19 @@ operator.post('/register', (req, res) => {
     const newOperator = {
         code: req.body.code,
         name: req.body.name,
+        role: req.body.role,
         password: "",
     }
     Operator.findOne({
         where: { code: req.body.code }
     }).then(result => {
+        console.log(result)
         if (!result) {
             bcrypt.hash(req.body.password, 10, (err, hash) => {
                 newOperator.password = hash;
                 Operator.create(newOperator).then(result => {
                     const { password, ...safeResult } = result.dataValues;
-                    res.json({ 
+                    res.json({
                         values: safeResult,
                         error: null
                     });

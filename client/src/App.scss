@@ -6,7 +6,9 @@
 $font-main: 'RobotoCondensed-Bold', sans-serif;
 
 $colors: (
-    dark: #ae0001
+    primary: rgb(120, 120, 120),
+    secondary: #ae0001,
+    dark: #000
 );
 
 @function color($color-name) {
@@ -68,21 +70,12 @@ nav, footer, main {
     }
 }
 
-.bg-dark {
-    background: color(dark) !important;
-}
-
 .side-nav {
     width: 285px !important;
-    // background: #eaeaea;
     background-image: url('/images/sidebar.png') !important;
 
     .sidenav-bg {
         width: 285px !important;
-    }
-
-    a:hover {
-        color: color(dark) !important;
     }
 
     .sidenav-bg:after {
@@ -93,10 +86,15 @@ nav, footer, main {
         width: 285px !important;
     }
 
+    a:hover {
+        color: color(secondary) !important;
+    }
+
     .collapsible-header {
         pointer-events: none;
         cursor: default;
         font-size: .75rem;
+        color: rgba(0, 0, 0, .55);
     }
 
     .collapsible-body a {
@@ -106,7 +104,86 @@ nav, footer, main {
 
     .collapsible-header.active,
     .collapsible-body a.active {
-        color: color(dark) !important;
+        color: color(secondary) !important;
     }
 }
 
+.navbar {
+    .breadcrumb-item + .breadcrumb-item::before {
+        color: color(primary) !important;
+    }
+
+    .breadcrumb-item:first-of-type > a {
+        font-size: 1.2rem !important;
+        color: color(secondary) !important;
+        font-weight: 600;
+    }
+}
+
+.input-with-icon {
+    position: relative;
+
+    input {
+        padding-left: 30px;
+        border: 1px solid #eaeaea;
+    }
+
+    i {
+        position: absolute;
+        left: 0;
+        top: 4px;
+        padding: 3px 10px;
+        color: #495057;
+    }
+}
+
+.input-with-icon-right {
+    position: relative;
+
+    i {
+        position: absolute;
+        right: 0;
+        top: 4px;
+        padding: 1.5px 10px;
+        color: #495057;
+    }
+}
+
+.bg-primary {
+    background: color(primary) !important;
+}
+
+.bg-secondary {
+    background: color(secondary) !important;
+}
+
+.bg-dark {
+    background: color(dark) !important;
+}
+
+.bg-grey {
+    background-color: #eaeaea !important;
+}
+
+.btn-cc {
+    text-transform: none !important;
+    font-size: .9rem !important;
+}
+
+.btn-cc-radius-normal {
+    border-radius: .33rem;
+}
+
+.btn-cc-radius-extra {
+    border-radius: 2rem;
+}
+
+.btn-cc-primary {
+    background-color: color(primary) !important;
+    color: #fff !important;
+}
+
+.btn-cc-secondary {
+    background-color: color(secondary) !important;
+    color: #fff !important;
+}

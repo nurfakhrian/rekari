@@ -11,34 +11,44 @@ import "./App.scss";
 
 // import Navbar from './components/Navbar';
 // import Landing from './components/Landing';
-// import Login from './components/Login';
+import Login from './components/Login';
 // import Register from './components/Register';
 // import Detail from './components/Detail';
 
 function App() {
-  return (
-    <Router>
-      <header>
-        <Sidebar />
-        <Navbar />
-      </header>
-      <main>
+    const loged = (
+        <>
+            <header>
+                <Sidebar />
+                <Navbar />
+            </header>
+            <main>
+                <Container>
+                    <Card />
+                </Container>
+            </main>
+            <Footer />
+        </>
+    );
+    const unloged = (
         <Container>
-          <Card />
+            <Login />
         </Container>
-      </main>
-      <Footer />
-      {/* <div className="App">
-        <Navbar />
-        <Route exact path="/" component={Landing} />
-        <div className="container">
-          <Route exact path="/operator/register" component={Register} />
-          <Route exact path="/operator/login" component={Login} />
-          <Route exact path="/detail" component={Detail} />
-        </div>
-      </div> */}
-    </Router>
-  );
+    )
+    return (
+        <Router>
+            {localStorage.logintoken ? loged : unloged}
+            {/* <div className="App">
+                <Navbar />
+                <Route exact path="/" component={Landing} />
+                <div className="container">
+                    <Route exact path="/operator/register" component={Register} />
+                    <Route exact path="/operator/login" component={Login} />
+                    <Route exact path="/detail" component={Detail} />
+                </div>
+            </div> */}
+        </Router>
+    );
 }
 
 export default App;

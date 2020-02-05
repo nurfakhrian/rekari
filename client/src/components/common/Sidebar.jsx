@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-    faLongArrowAltLeft, 
-    faHome, 
-    faNewspaper, 
-    faMoneyBillWaveAlt, 
-    faDice } from '@fortawesome/free-solid-svg-icons';
+    faUserAlt,
+    faPuzzlePiece,
+    faThLarge} from '@fortawesome/free-solid-svg-icons';
 
 class Sidebar extends Component {
     render() {
@@ -14,7 +12,7 @@ class Sidebar extends Component {
                 <ul className="custom-scrollbar">
                     <li>
                         <div className="logo-wrapper reset-border waves-light">
-                            <a href="/"><img src="images/logo.png" class="img-fluid flex-center"></img></a>
+                            <a href="/"><img src="images/logo.png" className="img-fluid flex-center" alt="logo"></img></a>
                         </div>
                     </li>
                     <li>
@@ -29,27 +27,24 @@ class Sidebar extends Component {
                                 </div>
                             </li> */}
                             <li className="active">
-                                <a className="collapsible-header waves-effect arrow-r active">News</a>
+                                <a className="collapsible-header waves-effect arrow-r active">Pengguna</a>
                                 <div className="collapsible-body d-block">
                                     <ul>
                                         <li>
-                                            <a href="manage.html" className="waves-effect pl-4 active"><FontAwesomeIcon icon={faNewspaper} />&emsp;News</a>
-                                        </li>
-                                        <li>
-                                            <a href="home_banner.html" className="waves-effect pl-4"><FontAwesomeIcon icon={faHome} />&emsp;Home Banner</a>
+                                            <a href="manage.html" className="waves-effect pl-4 active"><FontAwesomeIcon icon={faUserAlt} />&emsp;Operator</a>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
                             <li>
-                                <a className="collapsible-header waves-effect arrow-r">Store</a>
+                                <a className="collapsible-header waves-effect arrow-r">Part</a>
                                 <div className="collapsible-body d-block">
                                     <ul>
                                         <li>
-                                            <a href="/#" className="waves-effect pl-4"><FontAwesomeIcon icon={faMoneyBillWaveAlt} />&emsp;Currency</a>
+                                            <a href="/#" className="waves-effect pl-4"><FontAwesomeIcon icon={faThLarge} />&emsp;Tipe</a>
                                         </li>
                                         <li>
-                                            <a href="/#" className="waves-effect pl-4"><FontAwesomeIcon icon={faDice} />&emsp;Game Item</a>
+                                            <a href="/#" className="waves-effect pl-4"><FontAwesomeIcon icon={faPuzzlePiece} />&emsp;Sub Part</a>
                                         </li>
                                     </ul>
                                 </div>
