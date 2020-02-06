@@ -6,8 +6,6 @@ class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
-            // from component state
             code: "",
             password: ""
         }
@@ -75,10 +73,4 @@ const mapState = (state) => ({
     auth: state.auth
 });
 
-// const mapDispatch = {
-//     login,
-//     logout
-// };
-
-// export default connect(mapState, mapDispatch)(Login);
 export default connect(mapState)(Login);

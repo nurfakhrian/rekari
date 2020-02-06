@@ -7,11 +7,9 @@ import Navbar from './components/common/Navbar';
 import Container from './components/common/Container';
 import Card from './components/common/Card';
 import Footer from './components/common/Footer';
-
-import "./App.scss";
-
 import Login from './components/Login';
 
+import "./App.scss";
 
 function App(props) {
     const loged = (
@@ -42,24 +40,6 @@ function App(props) {
     )
 
     return props.store.auth ? loged : unloged;
-
-    // return (
-    //     <Provider store={store}>
-    //         <Router>
-    //             {unloged}
-    //             {this.props.auth ? loged : unloged}
-    //             {/* <div className="App">
-    //                 <Navbar />
-    //                 <Route exact path="/" component={Landing} />
-    //                 <div className="container">
-    //                     <Route exact path="/operator/register" component={Register} />
-    //                     <Route exact path="/operator/login" component={Login} />
-    //                     <Route exact path="/detail" component={Detail} />
-    //                 </div>
-    //             </div> */}
-    //         </Router>
-    //     </Provider>
-    // );
 }
 
 const mapState = (state) => ({

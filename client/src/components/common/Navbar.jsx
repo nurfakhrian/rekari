@@ -50,4 +50,4 @@ const mapState = (state) => ({
     auth: state.auth
 });
 
-export default connect(mapState)(Navbar);
+export default connect(mapState)(withRouter(Navbar));

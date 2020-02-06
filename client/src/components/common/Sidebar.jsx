@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, withRouter, NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
     faUserAlt,
@@ -34,7 +34,7 @@ class Sidebar extends Component {
                                 <div className="collapsible-body d-block">
                                     <ul>
                                         <li>
-                                            <Link to="/operator" className="waves-effect pl-4 active"><FontAwesomeIcon icon={faUserAlt} />&emsp;Operator</Link>
+                                            <NavLink to="/operator" className="waves-effect pl-4"><FontAwesomeIcon icon={faUserAlt} />&emsp;Operator</NavLink>
                                         </li>
                                     </ul>
                                 </div>
@@ -44,10 +44,10 @@ class Sidebar extends Component {
                                 <div className="collapsible-body d-block">
                                     <ul>
                                         <li>
-                                            <a href="/#" className="waves-effect pl-4"><FontAwesomeIcon icon={faThLarge} />&emsp;Tipe</a>
+                                            <NavLink to="/tipe-part" className="waves-effect pl-4"><FontAwesomeIcon icon={faThLarge} />&emsp;Tipe</NavLink>
                                         </li>
                                         <li>
-                                            <a href="/#" className="waves-effect pl-4"><FontAwesomeIcon icon={faPuzzlePiece} />&emsp;Sub Part</a>
+                                            <NavLink to="/sub-part" className="waves-effect pl-4"><FontAwesomeIcon icon={faPuzzlePiece} />&emsp;Sub Part</NavLink>
                                         </li>
                                     </ul>
                                 </div>
@@ -61,4 +61,4 @@ class Sidebar extends Component {
     }
 }
 
-export default Sidebar;
+export default withRouter(Sidebar);
