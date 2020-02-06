@@ -9,7 +9,7 @@ export const register = newOperator => {
     }).then(response => response);
 }
 
-export const login = operator => {
+export const loginnih = operator => {
     return axios.post('operator/login', {
         code: operator.code,
         password: operator.password

@@ -48,7 +48,9 @@
     <script type="text/javascript" src="%PUBLIC_URL%/vendors/mdbootstrap/js/mdb.min.js"></script>
     <script type="text/javascript">
       $(document).ready(() => {
-        $('.button-collapse').sideNav();
+        if ($('.button-collapse').length) {
+          $('.button-collapse').sideNav();
+        }
       });
     </script>
   </body>

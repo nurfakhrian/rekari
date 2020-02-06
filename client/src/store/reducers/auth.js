@@ -1,26 +1,21 @@
 import { LOGIN, LOGOUT } from '../actions/auth';
+import jwt_decode from 'jwt-decode';
 
-const initialState = {
-    isLogedIn: false,
-    dataLogin: {}
+const initialState = () => {
+    const token = localStorage.logintoken;
+    if (!token) {
+        return null;
+    }
+    const {password, iat, exp, ...rest} = jwt_decode(token)
+    return rest;
 };
 
-export default function(state = initialState, action) {
-    // console.log('reducer', state, action);
+export default function(state = initialState(), action) {
     switch(action.type) {
         case LOGIN:
-            return {
-                isLogedIn: true,
-                dataLogin: {
-                    code: 'ucing',
-                    name: 'hirzi'
-                }
-            };
+            return action.response;
         case LOGOUT:
-            return {
-                isLogedIn: false,
-                dataLogin: {}
-            };
+            return action.response;
         default:
             return state;
     }

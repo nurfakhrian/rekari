@@ -28,7 +28,6 @@ operator.post('/register', (req, res) => {
                     const { password, ...safeResult } = result.dataValues;
                     res.json({
                         values: safeResult,
-                        error: null
                     });
                 }).catch(err => {
                     res.status(400).json({ error: err });
@@ -52,20 +51,25 @@ operator.post('/login', (req, res) => {
                 const token = jwt.sign(result.dataValues, SECRET_KEY, { expiresIn: "10h" });
                 const { password, ...safeResult } = result.dataValues;
                 res.json({
-                    values: safeResult,
+                    message: safeResult,
                     token: token,
-                    error: null
                 });
             }
             else {
-                res.status(400).json({ error: 'username or password is wrong' });
+                res.status(400).json({
+                    message: { error: 'username or password is wrong' },
+                });
             }
         }
         else {
-            res.status(400).json({ error: 'operator does not exist' });
+            res.status(400).json({
+                message: { error: 'operator does not exist' },
+            });
         }
     }).catch(err => {
-        res.status(400).json({ error: err });
+        res.status(400).json({
+            message: { error: err },
+        });
     });
 });
 

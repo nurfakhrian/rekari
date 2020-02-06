@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
     faUserAlt,
@@ -12,7 +13,9 @@ class Sidebar extends Component {
                 <ul className="custom-scrollbar">
                     <li>
                         <div className="logo-wrapper reset-border waves-light">
-                            <a href="/"><img src="images/logo.png" className="img-fluid flex-center" alt="logo"></img></a>
+                            <Link to="/">
+                                <img src="images/logo.png" className="img-fluid flex-center" alt="logo"></img>
+                            </Link>
                         </div>
                     </li>
                     <li>
@@ -27,17 +30,17 @@ class Sidebar extends Component {
                                 </div>
                             </li> */}
                             <li className="active">
-                                <a className="collapsible-header waves-effect arrow-r active">Pengguna</a>
+                                <a className="collapsible-header disable-anchor waves-effect arrow-r active">Pengguna</a>
                                 <div className="collapsible-body d-block">
                                     <ul>
                                         <li>
-                                            <a href="manage.html" className="waves-effect pl-4 active"><FontAwesomeIcon icon={faUserAlt} />&emsp;Operator</a>
+                                            <Link to="/operator" className="waves-effect pl-4 active"><FontAwesomeIcon icon={faUserAlt} />&emsp;Operator</Link>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
                             <li>
-                                <a className="collapsible-header waves-effect arrow-r">Part</a>
+                                <a className="collapsible-header disable-anchor waves-effect arrow-r">Part</a>
                                 <div className="collapsible-body d-block">
                                     <ul>
                                         <li>

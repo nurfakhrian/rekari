@@ -5,10 +5,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 class Card extends Component {
+    constructor(props) {
+        super(props);
+    }
+
     render() {
         return (
             <div className="card col pr-0 pl-0">
-                <div className="card-header text-center h5 bg-dark text-white">Operator</div>
+                <div className="card-header text-center h5 bg-dark text-white">{this.props.title}</div>
                 <div className="card-body">
                     <div className="row align-items-center">
                         <div className="col-md-3 pr-md-1 mb-md-0 mb-2">
@@ -23,9 +27,9 @@ class Card extends Component {
                                 // value={selectedOption}
                                 // onChange={this.handleChange}
                                 options={[
-                                    { value: 'chocolate', label: 'Chocolate' },
-                                    { value: 'strawberry', label: 'Strawberry' },
-                                    { value: 'vanilla', label: 'Vanilla' },
+                                    { value: 'su', label: 'Super Admin' },
+                                    { value: 'admin', label: 'Admin' },
+                                    { value: 'operator', label: 'Operator' },
                                 ]} />
                         </div>
                         

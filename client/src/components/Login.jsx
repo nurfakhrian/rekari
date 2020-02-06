@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-// import { login } from './OperatorFunction';
-import { login, logout } from '../store/actions/auth';
+import { login } from '../store/actions/auth';
 
 class Login extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
+
+            // from component state
             code: "",
             password: ""
         }
@@ -22,20 +23,15 @@ class Login extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-        this.props.login();
-        // const operator = {
-        //     code: this.state.code,
-        //     password: this.state.password
-        // }
-        // login(operator).then(response => {
-        //     if (response.status !== 200) {
-        //         console.log(response.data);
-        //     }
-        //     else {
-        //         this.props.history.push('/detail');
-        //         this.props.loginReducer();
-        //     }
-        // });
+        const user = {
+            code: this.state.code,
+            password: this.state.password
+        }
+        this.props.dispatch(login(user)).then(response => {
+            if (response.error) {
+                alert(response.error);
+            }
+        });
     }
 
     render() {
@@ -52,7 +48,8 @@ class Login extends Component {
                                     className="form-control"
                                     name="code"
                                     value={this.state.code}
-                                    onChange={this.onChange} />
+                                    onChange={this.onChange}
+                                    autoFocus />
                                 <label htmlFor="code">Code</label>
                             </div>
                             <div className="md-form">
@@ -65,7 +62,7 @@ class Login extends Component {
                                     onChange={this.onChange} />
                                 <label htmlFor="password">Password</label>
                             </div>
-                            <button className="btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">Login</button>
+                            <button type="submit" className="btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">Login</button>
                         </form>
                     </div>
                 </div>
@@ -74,16 +71,14 @@ class Login extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        isLogedIn: state.isLogedIn,
-        dataLogin: state.dataLogin
-    }
-}
+const mapState = (state) => ({
+    auth: state.auth
+});
 
-const mapDispatchToProps = {
-    login,
-    logout
-};
+// const mapDispatch = {
+//     login,
+//     logout
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+// export default connect(mapState, mapDispatch)(Login);
+export default connect(mapState)(Login);
