@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
 import Sidebar from './components/common/Sidebar';
 import Navbar from './components/common/Navbar';
@@ -12,6 +12,7 @@ import Operator from './components/dashboard/Operator';
 import AnonRoute from './components/AnonRoute';
 import PrivateRoute from './components/PrivateRoute';
 import Login from './components/Login';
+import SubAssy from './components/SubAssy';
 
 import "./App.scss";
 
@@ -27,8 +28,15 @@ const App = (props) => {
             </header>
             <main>
                 <Container>
-                    <AnonRoute exact path="/" auth={props.store.auth} component={Login} />
+                    <Route 
+                        exact path="/" 
+                        render={(props) => <Redirect to={{
+                            pathname: '/login',
+                            state: { from: props.location }
+                        }} />}
+                    />
                     <AnonRoute exact path="/login" auth={props.store.auth} component={Login} />
+                    <AnonRoute exact path="/sub-assy" auth={props.store.auth} component={SubAssy} />
                     <PrivateRoute exact path="/dashboard/operator" auth={props.store.auth} component={Operator} />
                 </Container>
             </main>

@@ -10,7 +10,7 @@ const SECRET_KEY = "hiams_ib";
 
 operator.use(cors());
 
-operator.post('/register', (req, res) => {
+operator.post('/add', (req, res) => {
     const newOperator = {
         code: req.body.code,
         name: req.body.name,
@@ -70,6 +70,18 @@ operator.post('/login', (req, res) => {
         res.status(400).json({
             message: { error: err },
         });
+    });
+});
+
+operator.post('/get', (req, res) => {
+    Operator.findAll().then(result => {
+        let safeResult = result.map(obj => {
+            const { password, ...rest } = obj.dataValues;
+            return rest;
+        });
+        res.json(safeResult);
+    }).catch(err => {
+        res.status(400).json({ error: err });
     });
 });
 

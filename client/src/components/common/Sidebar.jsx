@@ -4,8 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
     faUserAlt,
     faPuzzlePiece,
-    faThLarge} from '@fortawesome/free-solid-svg-icons';
-import logo from '../../logo.png'
+    faThLarge,
+    faSignInAlt,
+    faBox} from '@fortawesome/free-solid-svg-icons';
+import logo from '../../logo.png';
+import { connect } from 'react-redux';
 
 class Sidebar extends Component {
     render() {
@@ -21,6 +24,30 @@ class Sidebar extends Component {
                     </li>
                     <li>
                         <ul className="collapsible">
+                            {this.props.auth === null &&
+                                <>
+                                    <li>
+                                        <a href="/#" className="collapsible-header disable-anchor waves-effect arrow-r">Portal</a>
+                                        <div className="collapsible-body d-block">
+                                            <ul>
+                                                <li>
+                                                    <NavLink to="/login" className="waves-effect pl-4"><FontAwesomeIcon icon={faSignInAlt} />&emsp;Login</NavLink>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a href="/#" className="collapsible-header disable-anchor waves-effect arrow-r">Sub Assy</a>
+                                        <div className="collapsible-body d-block">
+                                            <ul>
+                                                <li>
+                                                    <NavLink to="/sub-assy" className="waves-effect pl-4"><FontAwesomeIcon icon={faBox} />&emsp;Logs</NavLink>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </>
+                            }
                             {/* <li>
                                 <div className="collapsible-body d-block">
                                     <ul>
@@ -30,29 +57,33 @@ class Sidebar extends Component {
                                     </ul>
                                 </div>
                             </li> */}
-                            <li className="active">
-                                <a className="collapsible-header disable-anchor waves-effect arrow-r active">Pengguna</a>
-                                <div className="collapsible-body d-block">
-                                    <ul>
-                                        <li>
-                                            <NavLink to="/dashboard/operator" className="waves-effect pl-4"><FontAwesomeIcon icon={faUserAlt} />&emsp;Operator</NavLink>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li>
-                                <a className="collapsible-header disable-anchor waves-effect arrow-r">Part</a>
-                                <div className="collapsible-body d-block">
-                                    <ul>
-                                        <li>
-                                            <NavLink to="/dashboard/tipe-part" className="waves-effect pl-4"><FontAwesomeIcon icon={faThLarge} />&emsp;Tipe</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to="/dashboard/sub-part" className="waves-effect pl-4"><FontAwesomeIcon icon={faPuzzlePiece} />&emsp;Sub Part</NavLink>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
+                            {this.props.auth &&
+                                <>
+                                    <li>
+                                        <a href="/#" className="collapsible-header disable-anchor waves-effect arrow-r">Pengguna</a>
+                                        <div className="collapsible-body d-block">
+                                            <ul>
+                                                <li>
+                                                    <NavLink to="/dashboard/operator" className="waves-effect pl-4"><FontAwesomeIcon icon={faUserAlt} />&emsp;Operator</NavLink>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a href="/#" className="collapsible-header disable-anchor waves-effect arrow-r">Part</a>
+                                        <div className="collapsible-body d-block">
+                                            <ul>
+                                                <li>
+                                                    <NavLink to="/dashboard/tipe-part" className="waves-effect pl-4"><FontAwesomeIcon icon={faThLarge} />&emsp;Tipe</NavLink>
+                                                </li>
+                                                <li>
+                                                    <NavLink to="/dashboard/sub-part" className="waves-effect pl-4"><FontAwesomeIcon icon={faPuzzlePiece} />&emsp;Sub Part</NavLink>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </>
+                            }
                         </ul>
                     </li>
                 </ul>
@@ -62,4 +93,8 @@ class Sidebar extends Component {
     }
 }
 
-export default withRouter(Sidebar);
+const mapState = (state) => ({
+    auth: state.auth
+});
+
+export default connect(mapState)(withRouter(Sidebar));

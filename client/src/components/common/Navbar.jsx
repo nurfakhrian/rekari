@@ -28,7 +28,7 @@ class Navbar extends Component {
                             <li className="breadcrumb-item black-text">
                                 <a className="disable-anchor" href="/#"><FontAwesomeIcon icon={faUser} />&nbsp;Pengguna</a>
                             </li>
-                            <li className="breadcrumb-item black-text"><Link to="/operator">Operator</Link></li>
+                            <li className="breadcrumb-item black-text"><Link to="/dashboard/operator">Operator</Link></li>
                             <li className="breadcrumb-item black-text active">Data</li>
                         </ol>
                     ) : (
@@ -39,17 +39,19 @@ class Navbar extends Component {
                         </ol>
                     )}
                 </div>
-                {this.props.auth && <ul className="nav navbar-nav nav-flex-icons ml-auto">
-                    <li className="nav-item dropdown">
-                        <a className="nav-link dropdown-toggle" href="/#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            <FontAwesomeIcon icon={faUser} />&nbsp;{this.props.auth.name} ({this.props.auth.code})
-                        </a>
-                        <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                            <a href="/#" className="dropdown-item" onClick={this.logout}>Logout</a>
-                        </div>
-                    </li>
-                </ul>}
+                {this.props.auth &&
+                    <ul className="nav navbar-nav nav-flex-icons ml-auto">
+                        <li className="nav-item dropdown">
+                            <a className="nav-link dropdown-toggle" href="/#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                <FontAwesomeIcon icon={faUser} />&nbsp;{this.props.auth.name} ({this.props.auth.code})
+                            </a>
+                            <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                                <a href="/#" className="dropdown-item" onClick={this.logout}>Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                }
             </nav>
         )
     }

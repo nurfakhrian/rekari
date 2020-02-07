@@ -49,7 +49,7 @@ class Login extends Component {
                                 name="code"
                                 value={this.state.code}
                                 onChange={this.onChange}
-                                autoFocus />
+                                autoFocus required />
                             <label htmlFor="code">Code</label>
                         </div>
                         <div className="md-form">
@@ -59,7 +59,8 @@ class Login extends Component {
                                 className="form-control"
                                 name="password"
                                 value={this.state.password}
-                                onChange={this.onChange} />
+                                onChange={this.onChange}
+                                required />
                             <label htmlFor="password">Password</label>
                         </div>
                         <button type="submit" className="btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">Login</button>
