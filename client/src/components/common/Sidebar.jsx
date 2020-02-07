@@ -5,6 +5,7 @@ import {
     faUserAlt,
     faPuzzlePiece,
     faThLarge} from '@fortawesome/free-solid-svg-icons';
+import logo from '../../logo.png'
 
 class Sidebar extends Component {
     render() {
@@ -14,7 +15,7 @@ class Sidebar extends Component {
                     <li>
                         <div className="logo-wrapper reset-border waves-light">
                             <Link to="/">
-                                <img src="images/logo.png" className="img-fluid flex-center" alt="logo"></img>
+                                <img src={logo} className="img-fluid flex-center" alt="logo"></img>
                             </Link>
                         </div>
                     </li>
@@ -34,7 +35,7 @@ class Sidebar extends Component {
                                 <div className="collapsible-body d-block">
                                     <ul>
                                         <li>
-                                            <NavLink to="/operator" className="waves-effect pl-4"><FontAwesomeIcon icon={faUserAlt} />&emsp;Operator</NavLink>
+                                            <NavLink to="/dashboard/operator" className="waves-effect pl-4"><FontAwesomeIcon icon={faUserAlt} />&emsp;Operator</NavLink>
                                         </li>
                                     </ul>
                                 </div>
@@ -44,10 +45,10 @@ class Sidebar extends Component {
                                 <div className="collapsible-body d-block">
                                     <ul>
                                         <li>
-                                            <NavLink to="/tipe-part" className="waves-effect pl-4"><FontAwesomeIcon icon={faThLarge} />&emsp;Tipe</NavLink>
+                                            <NavLink to="/dashboard/tipe-part" className="waves-effect pl-4"><FontAwesomeIcon icon={faThLarge} />&emsp;Tipe</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink to="/sub-part" className="waves-effect pl-4"><FontAwesomeIcon icon={faPuzzlePiece} />&emsp;Sub Part</NavLink>
+                                            <NavLink to="/dashboard/sub-part" className="waves-effect pl-4"><FontAwesomeIcon icon={faPuzzlePiece} />&emsp;Sub Part</NavLink>
                                         </li>
                                     </ul>
                                 </div>

@@ -5,14 +5,21 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Sidebar from './components/common/Sidebar';
 import Navbar from './components/common/Navbar';
 import Container from './components/common/Container';
-import Card from './components/common/Card';
 import Footer from './components/common/Footer';
+
+import Operator from './components/dashboard/Operator';
+
+import AnonRoute from './components/AnonRoute';
+import PrivateRoute from './components/PrivateRoute';
 import Login from './components/Login';
 
 import "./App.scss";
 
-function App(props) {
-    const loged = (
+const App = (props) => {
+
+    console.log('aku', props.store.auth)
+
+    return (
         <Router>
             <header>
                 <Sidebar />
@@ -20,26 +27,14 @@ function App(props) {
             </header>
             <main>
                 <Container>
-                    <Route 
-                        exact path="/" 
-                        render={(props) => <Card {...props} title={"Operator"} />}
-                    />
-                    <Route 
-                        exact path="/operator" 
-                        render={(props) => <Card {...props} title={"Operator"} />}
-                    />
+                    <AnonRoute exact path="/" auth={props.store.auth} component={Login} />
+                    <AnonRoute exact path="/login" auth={props.store.auth} component={Login} />
+                    <PrivateRoute exact path="/dashboard/operator" auth={props.store.auth} component={Operator} />
                 </Container>
             </main>
             <Footer />
         </Router>
-    );
-    const unloged = (
-        <Container>
-            <Login />
-        </Container>
     )
-
-    return props.store.auth ? loged : unloged;
 }
 
 const mapState = (state) => ({

@@ -1,13 +1,12 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 
-function Container(props) {
-    return (
-        <div className="container-fluid">
-            <div className="row justify-content-center">
-                {props.children}
-            </div>
+const Container = (props) => (
+    <div className="container-fluid">
+        <div className="row justify-content-center">
+            {props.children}
         </div>
-    )
-}
+    </div>
+)
 
-export default Container;
+export default withRouter(Container);

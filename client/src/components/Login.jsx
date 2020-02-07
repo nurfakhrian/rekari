@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { login } from '../store/actions/auth';
+import Card from './common/Card';
 
 class Login extends Component {
     constructor(props) {
@@ -29,42 +30,42 @@ class Login extends Component {
             if (response.error) {
                 alert(response.error);
             }
+            else {
+                this.props.history.push('/dashboard/operator');
+            }
         });
     }
 
     render() {
         return (
-            <div className="col-md-4 pt-5">
-                <div className="card col pr-0 pl-0">
-                    <div className="card-header text-center h5 bg-dark text-white">Login</div>
-                    <div className="card-body">
-                        <form className="text-center" noValidate onSubmit={this.onSubmit}>
-                            <div className="md-form">
-                                <input
-                                    id="code"
-                                    type="text"
-                                    className="form-control"
-                                    name="code"
-                                    value={this.state.code}
-                                    onChange={this.onChange}
-                                    autoFocus />
-                                <label htmlFor="code">Code</label>
-                            </div>
-                            <div className="md-form">
-                                <input
-                                    id="password"
-                                    type="password"
-                                    className="form-control"
-                                    name="password"
-                                    value={this.state.password}
-                                    onChange={this.onChange} />
-                                <label htmlFor="password">Password</label>
-                            </div>
-                            <button type="submit" className="btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">Login</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+            <Card title={"Login"} col={4}>
+                {/* <div className="row align-items-center"> */}
+                    <form className="text-center" noValidate onSubmit={this.onSubmit}>
+                        <div className="md-form">
+                            <input
+                                id="code"
+                                type="text"
+                                className="form-control"
+                                name="code"
+                                value={this.state.code}
+                                onChange={this.onChange}
+                                autoFocus />
+                            <label htmlFor="code">Code</label>
+                        </div>
+                        <div className="md-form">
+                            <input
+                                id="password"
+                                type="password"
+                                className="form-control"
+                                name="password"
+                                value={this.state.password}
+                                onChange={this.onChange} />
+                            <label htmlFor="password">Password</label>
+                        </div>
+                        <button type="submit" className="btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">Login</button>
+                    </form>
+                {/* </div> */}
+            </Card>
         )
     }
 }

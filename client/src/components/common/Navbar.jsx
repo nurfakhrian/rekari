@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, withRouter } from 'react-router-dom';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 import { faUser } from '@fortawesome/free-regular-svg-icons';
 import { connect } from 'react-redux';
 import { logout } from '../../store/actions/auth';
@@ -10,6 +10,7 @@ class Navbar extends Component {
     logout = (e) => {
         e.preventDefault();
         this.props.dispatch(logout());
+        this.props.history.push('/login');
     }
 
     render() {
@@ -22,15 +23,23 @@ class Navbar extends Component {
                     </a>
                 </div>
                 <div className="pl-lg-3">
-                    <ol className="breadcrumb clearfix d-none align-items-center d-md-inline-flex pt-0">
-                        <li className="breadcrumb-item black-text">
-                            <a className="disable-anchor" href="/#"><FontAwesomeIcon icon={faUser} />&nbsp;Pengguna</a>
-                        </li>
-                        <li className="breadcrumb-item black-text"><Link to="/operator">Operator</Link></li>
-                        <li className="breadcrumb-item black-text active">Data</li>
-                    </ol>
+                    {this.props.auth ? (
+                        <ol className="breadcrumb clearfix d-none align-items-center d-md-inline-flex pt-0">
+                            <li className="breadcrumb-item black-text">
+                                <a className="disable-anchor" href="/#"><FontAwesomeIcon icon={faUser} />&nbsp;Pengguna</a>
+                            </li>
+                            <li className="breadcrumb-item black-text"><Link to="/operator">Operator</Link></li>
+                            <li className="breadcrumb-item black-text active">Data</li>
+                        </ol>
+                    ) : (
+                        <ol className="breadcrumb clearfix d-none align-items-center d-md-inline-flex pt-0">
+                            <li className="breadcrumb-item black-text">
+                                <a className="disable-anchor" href="/#"><FontAwesomeIcon icon={faSignInAlt} />&nbsp;Login</a>
+                            </li>
+                        </ol>
+                    )}
                 </div>
-                <ul className="nav navbar-nav nav-flex-icons ml-auto">
+                {this.props.auth && <ul className="nav navbar-nav nav-flex-icons ml-auto">
                     <li className="nav-item dropdown">
                         <a className="nav-link dropdown-toggle" href="/#" id="navbarDropdownMenuLink" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
@@ -40,7 +49,7 @@ class Navbar extends Component {
                             <a href="/#" className="dropdown-item" onClick={this.logout}>Logout</a>
                         </div>
                     </li>
-                </ul>
+                </ul>}
             </nav>
         )
     }
