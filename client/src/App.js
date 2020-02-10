@@ -18,7 +18,7 @@ import "./App.scss";
 
 const App = (props) => {
 
-    console.log('aku', props.store.auth)
+    // console.log('aku', props.store.auth)
 
     return (
         <Router>

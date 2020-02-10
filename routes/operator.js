@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const models = require('../models');
 const Operator = require('../models/operator')(models.sequelize, models.Sequelize.DataTypes);
+const { Op } = require("sequelize");
 
 const operator = express.Router();
 const SECRET_KEY = "hiams_ib";
@@ -20,7 +21,6 @@ operator.post('/add', (req, res) => {
     Operator.findOne({
         where: { code: req.body.code }
     }).then(result => {
-        console.log(result)
         if (!result) {
             bcrypt.hash(req.body.password, 10, (err, hash) => {
                 newOperator.password = hash;
@@ -52,7 +52,7 @@ operator.post('/login', (req, res) => {
                 const { password, ...safeResult } = result.dataValues;
                 res.json({
                     message: safeResult,
-                    token: token,
+                    token: token
                 });
             }
             else {
@@ -73,15 +73,61 @@ operator.post('/login', (req, res) => {
     });
 });
 
-operator.post('/get', (req, res) => {
-    Operator.findAll().then(result => {
-        let safeResult = result.map(obj => {
-            const { password, ...rest } = obj.dataValues;
-            return rest;
-        });
-        res.json(safeResult);
+operator.post('/', (req, res) => {
+    console.log(req.body);
+    let w;
+    if (req.body.code && req.body.role) {
+        w = {
+            where: {
+                [Op.and]: [
+                    { 
+                        code: {
+                            [Op.substring]: req.body.code
+                        }
+                    },
+                    { 
+                        role: req.body.role
+                    }
+                ]
+            }
+        }
+    }
+
+    if (req.body.code && !req.body.role) {
+        w = {
+            where: {
+                code: {
+                    [Op.substring]: req.body.code
+                }
+            }
+        }
+    }
+
+    if (!req.body.code && req.body.role) {
+        w = {
+            where: {
+                role: req.body.role
+            }
+        }
+    }
+
+    const q = (req.body.code || req.body.role) ?
+        Operator.findAll(w) : 
+        Operator.findAll();
+    q.then(result => {
+        if (result) {
+            let safeResult = result.map(obj => {
+                const { password, ...rest } = obj.dataValues;
+                return rest;
+            });
+            res.json({
+                message: safeResult
+            });
+        }
     }).catch(err => {
-        res.status(400).json({ error: err });
+        res.status(400).json({
+            message: { error: err },
+        });
     });
 });
 

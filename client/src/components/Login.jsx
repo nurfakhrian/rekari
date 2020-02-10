@@ -39,33 +39,31 @@ class Login extends Component {
     render() {
         return (
             <Card title={"Login"} col={4}>
-                {/* <div className="row align-items-center"> */}
-                    <form className="text-center" noValidate onSubmit={this.onSubmit}>
-                        <div className="md-form">
-                            <input
-                                id="code"
-                                type="text"
-                                className="form-control"
-                                name="code"
-                                value={this.state.code}
-                                onChange={this.onChange}
-                                autoFocus required />
-                            <label htmlFor="code">Code</label>
-                        </div>
-                        <div className="md-form">
-                            <input
-                                id="password"
-                                type="password"
-                                className="form-control"
-                                name="password"
-                                value={this.state.password}
-                                onChange={this.onChange}
-                                required />
-                            <label htmlFor="password">Password</label>
-                        </div>
-                        <button type="submit" className="btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">Login</button>
-                    </form>
-                {/* </div> */}
+                <form className="text-center" noValidate onSubmit={this.onSubmit}>
+                    <div className="md-form">
+                        <input
+                            id="code"
+                            type="text"
+                            className="form-control"
+                            name="code"
+                            value={this.state.code}
+                            onChange={this.onChange}
+                            autoFocus required />
+                        <label htmlFor="code">Code</label>
+                    </div>
+                    <div className="md-form">
+                        <input
+                            id="password"
+                            type="password"
+                            className="form-control"
+                            name="password"
+                            value={this.state.password}
+                            onChange={this.onChange}
+                            required />
+                        <label htmlFor="password">Password</label>
+                    </div>
+                    <button type="submit" className="btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">Login</button>
+                </form>
             </Card>
         )
     }
