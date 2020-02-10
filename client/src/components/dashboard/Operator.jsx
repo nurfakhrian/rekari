@@ -112,7 +112,7 @@ class Operator extends Component {
                 sortable: false,
                 Cell: ({ original }) => (
                     <>
-                        <Link to={{pathname: `/dashboard/operator/edit/${original.code}`}}
+                        <Link to={{pathname: `/dashboard/operator/edit/${original.id}`}}
                             className="btn btn-cc btn-cc-primary btn-cc-radius-normal p-1 mb-1">
                             <i><FontAwesomeIcon icon={faEdit} /></i>&nbsp;Edit
                         </Link>

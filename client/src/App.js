@@ -8,6 +8,7 @@ import Container from './components/common/Container';
 import Footer from './components/common/Footer';
 
 import Operator from './components/dashboard/Operator';
+import OperatorEdit from './components/dashboard/OperatorEdit';
 
 import AnonRoute from './components/AnonRoute';
 import PrivateRoute from './components/PrivateRoute';
@@ -38,6 +39,7 @@ const App = (props) => {
                     <AnonRoute exact path="/login" auth={props.store.auth} component={Login} />
                     <AnonRoute exact path="/sub-assy" auth={props.store.auth} component={SubAssy} />
                     <PrivateRoute exact path="/dashboard/operator" auth={props.store.auth} component={Operator} />
+                    <PrivateRoute exact path="/dashboard/operator/edit/:operatorId" auth={props.store.auth} component={OperatorEdit}/>
                 </Container>
             </main>
             <Footer />

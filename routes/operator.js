@@ -74,7 +74,6 @@ operator.post('/login', (req, res) => {
 });
 
 operator.post('/', (req, res) => {
-    console.log(req.body);
     let w;
     if (req.body.code && req.body.role) {
         w = {
@@ -122,6 +121,28 @@ operator.post('/', (req, res) => {
             });
             res.json({
                 message: safeResult
+            });
+        }
+    }).catch(err => {
+        res.status(400).json({
+            message: { error: err },
+        });
+    });
+});
+
+operator.post('/detail', (req, res) => {
+    Operator.findOne({
+        where: { id: req.body.id }
+    }).then(result => {
+        if (result) {
+            const { password, ...safeResult } = result.dataValues;
+            res.json({
+                message: safeResult,
+            });
+        }
+        else {
+            res.status(400).json({
+                message: { error: 'operator does not exist' },
             });
         }
     }).catch(err => {
