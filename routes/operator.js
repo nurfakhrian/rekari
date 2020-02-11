@@ -152,6 +152,89 @@ operator.post('/detail', (req, res) => {
     });
 });
 
+operator.post('/detail', (req, res) => {
+    Operator.findOne({
+        where: { id: req.body.id }
+    }).then(result => {
+        if (result) {
+            const { password, ...safeResult } = result.dataValues;
+            res.json({
+                message: safeResult,
+            });
+        }
+        else {
+            res.status(400).json({
+                message: { error: 'operator does not exist' },
+            });
+        }
+    }).catch(err => {
+        res.status(400).json({
+            message: { error: err },
+        });
+    });
+});
+
+operator.post('/edit', (req, res) => {
+    Operator.findOne({
+        where: { id: req.body.id }
+    }).then(result => {
+        if (result) {
+            if (req.body.password) {
+                bcrypt.hash(req.body.password, 10, (err, hash) => {
+                    req.body.password = hash;
+                    const  { id, ...newData } = req.body;
+                    Operator.update(newData, {
+                        where: {
+                            id: id
+                        }
+                    }).then(updated => {
+                        if (updated) {
+                            const  { password, ...safeResult } = req.body;
+                            res.json({
+                                message: safeResult,
+                            });
+                        }
+                        else {
+                            res.status(400).json({
+                                message: { error: 'database error' },
+                            });
+                        }
+                    });
+                });
+            }
+            else {
+                const  { id, password, ...newData } = req.body;
+                Operator.update(newData, {
+                    where: {
+                        id: id
+                    }
+                }).then(updated => {
+                    if (updated) {
+                        const  { password, ...safeResult } = req.body;
+                        res.json({
+                            message: safeResult,
+                        });
+                    }
+                    else {
+                        res.status(400).json({
+                            message: { error: 'database error' },
+                        });
+                    }
+                });
+            }
+        }
+        else {
+            res.status(400).json({
+                message: { error: 'operator does not exist' },
+            });
+        }
+    }).catch(err => {
+        res.status(400).json({
+            message: { error: err },
+        });
+    });
+});
+
 // operator.get('/detail', (req, res) => {
 //     const decoded = jwt.verify(req.headers['authorization'], process.env.SECRET_KEY)
 //     Operator.findOne({

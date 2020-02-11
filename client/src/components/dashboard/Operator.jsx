@@ -6,7 +6,7 @@ import ReactTable from 'react-table-6';
 import 'react-table-6/react-table.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faPlus, faTrashAlt, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 import Card from '../common/Card';
 // import { getOperator } from '../../store/actions/operator';
@@ -89,7 +89,8 @@ class Operator extends Component {
         const columns = [
             {
                 Header: 'Code',
-                accessor: 'code'
+                accessor: 'code',
+                width: 100
             },
             {
                 Header: 'Nama',
@@ -97,7 +98,8 @@ class Operator extends Component {
             },
             {
                 Header: 'Role',
-                accessor: 'role'
+                accessor: 'role',
+                width: 100
             },
             {
                 Header: 'Created at',
@@ -110,15 +112,20 @@ class Operator extends Component {
             {
                 Header: 'Action',
                 sortable: false,
+                width: 250,
                 Cell: ({ original }) => (
                     <>
+                        <Link to={{pathname: `/dashboard/operator/detail/${original.id}`}}
+                            className="btn btn-cc btn-cc-primary btn-cc-radius-normal p-1 mb-1">
+                            <FontAwesomeIcon icon={faInfoCircle} />&nbsp;Detil
+                        </Link>
                         <Link to={{pathname: `/dashboard/operator/edit/${original.id}`}}
                             className="btn btn-cc btn-cc-primary btn-cc-radius-normal p-1 mb-1">
-                            <i><FontAwesomeIcon icon={faEdit} /></i>&nbsp;Edit
+                            <FontAwesomeIcon icon={faEdit} />&nbsp;Edit
                         </Link>
                         <Link to={{pathname: `/dashboard/operator/delete/${original.code}`}}
                             className="btn btn-cc btn-cc-secondary btn-cc-radius-normal p-1 mb-1">
-                            <i><FontAwesomeIcon icon={faTrashAlt} /></i>&nbsp;Delete
+                            <FontAwesomeIcon icon={faTrashAlt} />&nbsp;Hapus
                         </Link>
                     </>
                 )

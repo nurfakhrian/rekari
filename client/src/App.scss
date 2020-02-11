@@ -127,6 +127,11 @@ input.focus:focus {
     border: 1px solid #fff !important;
 }
 
+.form-control:focus {
+    border-color: #80bdff !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25) !important;
+}
+
 .input-with-icon {
     position: relative;
 
@@ -198,4 +203,9 @@ input.focus:focus {
 .btn-cc-secondary {
     background-color: color(secondary) !important;
     color: #fff !important;
+}
+
+.btn-cc-white {
+    background-color: #fff !important;
+    color: color(primary) !important;
 }

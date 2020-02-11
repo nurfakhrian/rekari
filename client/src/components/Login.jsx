@@ -39,8 +39,9 @@ class Login extends Component {
     render() {
         return (
             <Card title={"Login"} col={4}>
-                <form className="text-center" noValidate onSubmit={this.onSubmit}>
-                    <div className="md-form">
+                <form noValidate onSubmit={this.onSubmit}>
+                    <div className="form-group">
+                        <label htmlFor="code">Code</label>
                         <input
                             id="code"
                             type="text"
@@ -48,21 +49,21 @@ class Login extends Component {
                             name="code"
                             value={this.state.code}
                             onChange={this.onChange}
-                            autoFocus required />
-                        <label htmlFor="code">Code</label>
+                            autoFocus />
                     </div>
-                    <div className="md-form">
+                    <div className="form-group">
+                        <label htmlFor="password">Password</label>
                         <input
                             id="password"
                             type="password"
                             className="form-control"
                             name="password"
                             value={this.state.password}
-                            onChange={this.onChange}
-                            required />
-                        <label htmlFor="password">Password</label>
+                            onChange={this.onChange} />
                     </div>
-                    <button type="submit" className="btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">Login</button>
+                    <div className="row">
+                        <button type="submit" className="ml-auto btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">Login</button>
+                    </div>
                 </form>
             </Card>
         )
