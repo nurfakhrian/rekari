@@ -24,13 +24,13 @@ class OperatorAdd extends Component {
     handleChange(e) {
         this.setState({
             [e.target.name]: e.target.value
-        }, () => console.log(this.state));
+        });
     }
 
     handleChangeSelect(selectRole) {
         this.setState(
-            { selectRole, role: selectRole.value },
-            () => console.log(this.state));
+            { selectRole, role: selectRole.value }
+        );
     }
 
     handleSubmit(e) {
@@ -42,7 +42,6 @@ class OperatorAdd extends Component {
             const { selectRole, ...newOperator } = this.state;
             axios.post('http://localhost:3028/operator/add', newOperator)
                 .then(response => {
-                    console.log(response);
                     this.props.history.push("./detail/" + response.data.message.id)
                 })
                 .catch(err => console.log(err.response.data.message));

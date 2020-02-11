@@ -158,14 +158,18 @@ operator.post('/detail', (req, res) => {
     });
 });
 
-operator.post('/detail', (req, res) => {
+operator.post('/delete', (req, res) => {
     Operator.findOne({
         where: { id: req.body.id }
     }).then(result => {
         if (result) {
             const { password, ...safeResult } = result.dataValues;
-            res.json({
-                message: safeResult,
+            Operator.destroy({
+                where: { id: result.dataValues.id }
+            }).then(r => {
+                res.json({
+                    message: safeResult,
+                });
             });
         }
         else {
@@ -240,27 +244,5 @@ operator.post('/edit', (req, res) => {
         });
     });
 });
-
-// operator.get('/detail', (req, res) => {
-//     const decoded = jwt.verify(req.headers['authorization'], process.env.SECRET_KEY)
-//     Operator.findOne({
-//       where: {
-//         id: decoded.id
-//       }
-//     }).then(result => {
-//         if (result) {
-//             const { password, ...safeResult } = result.dataValues;
-//             res.json({
-//                 data: safeResult,
-//                 error: null
-//             });
-//         }
-//         else {
-//             res.status(400).json({ error: 'operator does not exist' });
-//         }
-//     }).catch(err => {
-//         res.status(400).json({ error: err });
-//     });
-// });
 
 module.exports = operator;

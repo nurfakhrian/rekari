@@ -29,6 +29,7 @@ class Operator extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
         this.drawTable = this.drawTable.bind(this);
         // this.handleGotoEdit = this.handleGotoEdit.bind(this);
         // this.onSubmit = this.onSubmit.bind(this);
@@ -81,6 +82,22 @@ class Operator extends Component {
         this.drawTable(query)
     }
 
+    handleDelete(e) {
+        if (window.confirm(`Hapus data dengan id ${e.target.dataset.id} dan code ${e.target.dataset.code} ?`)) {
+            axios.post('http://localhost:3028/operator/delete', { id: e.target.dataset.id })
+                .then(response => {
+                    if (response.data.message.id) {
+                        alert(`Data dengan id ${response.data.message.id} dan code ${response.data.message.code} berhasil dihapus.`)
+                        this.handleSearch();
+                    }
+                    else {
+                        alert("Terjadi kesalahan.");
+                    }
+                })
+                .catch(err => console.log(err.response.data.message));
+        }
+    }
+
     // handleGotoEdit(code) {
     //     this.props.history.push(`/dashboard/operator/edit/${code}`)
     // }
@@ -123,10 +140,13 @@ class Operator extends Component {
                             className="btn btn-cc btn-cc-primary btn-cc-radius-normal p-1 mb-1">
                             <FontAwesomeIcon icon={faEdit} />&nbsp;Edit
                         </Link>
-                        <Link to={{pathname: `/dashboard/operator/delete/${original.code}`}}
-                            className="btn btn-cc btn-cc-secondary btn-cc-radius-normal p-1 mb-1">
+                        <button
+                            className="btn btn-cc btn-cc-secondary btn-cc-radius-normal p-1 mb-1"
+                            data-id={original.id}
+                            data-code={original.code}
+                            onClick={this.handleDelete}>
                             <FontAwesomeIcon icon={faTrashAlt} />&nbsp;Hapus
-                        </Link>
+                        </button>
                     </>
                 )
             },
@@ -179,7 +199,8 @@ class Operator extends Component {
                 <ReactTable 
                     data={this.state.datatable.data}
                     columns={columns}
-                    pageSize={10} />
+                    pageSize={10}
+                    minRows={0} />
             </Card>
         )
     }
