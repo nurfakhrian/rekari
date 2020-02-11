@@ -169,7 +169,11 @@ class Operator extends Component {
                         </button>
                     </div>
                     <div className="col-md-3 ml-md-auto text-center text-md-right">
-                        <a href="/#" className="btn btn-cc btn-cc-primary btn-cc-radius-extra ml-0 py-2 px-5 px-md-2"><FontAwesomeIcon icon={faPlus} />&ensp;Tambah</a>
+                        <Link
+                            to="/dashboard/operator/add"
+                            className="btn btn-cc btn-cc-primary btn-cc-radius-extra ml-0 py-2 px-5 px-md-2">
+                            <FontAwesomeIcon icon={faPlus} />&ensp;Tambah
+                        </Link>
                     </div>
                 </div>
                 <ReactTable 

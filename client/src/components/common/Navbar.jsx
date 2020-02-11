@@ -16,22 +16,22 @@ import { logout } from '../../store/actions/auth';
 import { faPlusSquare, faEdit } from '@fortawesome/free-regular-svg-icons';
 
 const breadcrumbData1 = [
-    { name: 'dashboard', logo: faTachometerAlt, link: "/" },
-    { name: 'login', logo: faSignInAlt, link: "/login" },
-    { name: 'sub-assy', logo: faBox, link: "/sub-assy" }
+    { name: 'dashboard', label: "Dashboard", logo: faTachometerAlt, link: "/" },
+    { name: 'login', label: "Login", logo: faSignInAlt, link: "/login" },
+    { name: 'sub-assy', label: "Sub Assy", logo: faBox, link: "/sub-assy" }
 ]
 
 const breadcrumbData2 = [
-    { name: 'operator', logo: faUserAlt, link: "/dashboard/operator" },
-    { name: 'tipe-part', logo: faThLarge, link: "/dashboard/tipe-part" },
-    { name: 'sub-part', logo: faPuzzlePiece, link: "/dashboard/sub-part" }
+    { name: 'operator', label: "Operator", logo: faUserAlt, link: "/dashboard/operator" },
+    { name: 'tipe-part', label: "Tipe Part", logo: faThLarge, link: "/dashboard/tipe-part" },
+    { name: 'sub-part', label: "Sub Part", logo: faPuzzlePiece, link: "/dashboard/sub-part" }
 ]
 
 const breadcrumbData3 = [
-    { name: 'list', logo: faList },
-    { name: 'add', logo: faPlusSquare },
-    { name: 'edit', logo: faEdit },
-    { name: 'detail', logo: faInfoCircle }
+    { name: 'list', label: "List", logo: faList },
+    { name: 'add', label: "Tambah", logo: faPlusSquare },
+    { name: 'edit', label: "Edit", logo: faEdit },
+    { name: 'detail', label: "Detil", logo: faInfoCircle }
 ]
 
 class Navbar extends Component {
@@ -51,7 +51,7 @@ class Navbar extends Component {
         const pathsUri = this.getLocation().pathname.split('/');
         const breadcrumb1 = breadcrumbData1.find(o => o.name === pathsUri[1]);
         const breadcrumb2 = breadcrumbData2.find(o => o.name === pathsUri[2]);
-        const breadcrumb3 = breadcrumb1.name === 'dashboard' ? breadcrumbData3.find(o => o.name === (pathsUri[3] || 'list')) : null;
+        const breadcrumb3 = (breadcrumb1 && breadcrumb1.name) === 'dashboard' ? breadcrumbData3.find(o => o.name === (pathsUri[3] || 'list')) : null;
         return breadcrumb1 ? (
             <nav className="navbar fixed-top navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav"
             aria-label="breadcrumb">
@@ -64,18 +64,18 @@ class Navbar extends Component {
                     <ol className="breadcrumb clearfix d-none align-items-center d-md-inline-flex pt-0">
                         <li className="breadcrumb-item black-text">
                             <a href={breadcrumb1.link}><FontAwesomeIcon icon={breadcrumb1.logo} />
-                                &nbsp;{breadcrumb1.name.charAt(0).toUpperCase() + breadcrumb1.name.slice(1)}
+                                &nbsp;{breadcrumb1.label}
                             </a>
                         </li>
                         {breadcrumb2 &&
                         <li className="breadcrumb-item black-text">
                             <Link to={breadcrumb2.link}><FontAwesomeIcon icon={breadcrumb2.logo} />
-                                &nbsp;{breadcrumb2.name.charAt(0).toUpperCase() + breadcrumb2.name.slice(1)}
+                                &nbsp;{breadcrumb2.label}
                             </Link>
                         </li>}
                         {breadcrumb3 &&
                             <li className="breadcrumb-item black-text"><FontAwesomeIcon icon={breadcrumb3.logo} />
-                                &nbsp;{breadcrumb3.name.charAt(0).toUpperCase() + breadcrumb3.name.slice(1)}
+                                &nbsp;{breadcrumb3.label}
                             </li>}
                     </ol>
                 </div>

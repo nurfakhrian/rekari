@@ -17,6 +17,7 @@ import Login from './components/Login';
 import SubAssy from './components/SubAssy';
 
 import "./App.scss";
+import OperatorAdd from './components/dashboard/OperatorAdd';
 
 const App = (props) => {
 
@@ -40,6 +41,7 @@ const App = (props) => {
                     <AnonRoute exact path="/login" auth={props.store.auth} component={Login} />
                     <AnonRoute exact path="/sub-assy" auth={props.store.auth} component={SubAssy} />
                     <PrivateRoute exact path="/dashboard/operator" auth={props.store.auth} component={Operator} />
+                    <PrivateRoute exact path="/dashboard/operator/add" auth={props.store.auth} component={OperatorAdd}/>
                     <PrivateRoute exact path="/dashboard/operator/detail/:operatorId" auth={props.store.auth} component={OperatorDetail}/>
                     <PrivateRoute exact path="/dashboard/operator/edit/:operatorId" auth={props.store.auth} component={OperatorEdit}/>
                 </Container>

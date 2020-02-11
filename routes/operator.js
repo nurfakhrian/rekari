@@ -27,18 +27,24 @@ operator.post('/add', (req, res) => {
                 Operator.create(newOperator).then(result => {
                     const { password, ...safeResult } = result.dataValues;
                     res.json({
-                        values: safeResult,
+                        message: safeResult,
                     });
                 }).catch(err => {
-                    res.status(400).json({ error: err });
+                    res.status(400).json({
+                        message: { error: err },
+                    });
                 });
             });
         }
         else {
-            res.status(400).json({ error: 'user already exists' });
+            res.status(400).json({
+                message: { error: 'user already exists' },
+            });
         }
     }).catch(err => {
-        res.status(400).json({ error: err });
+        res.status(400).json({
+            message: { error: err },
+        });
     });
 });
 
