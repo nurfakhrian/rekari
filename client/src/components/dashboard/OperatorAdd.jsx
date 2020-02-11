@@ -35,13 +35,21 @@ class OperatorAdd extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        const { selectRole, ...newOperator } = this.state;
-        axios.post('http://localhost:3028/operator/add', newOperator)
-            .then(response => {
-                console.log(response);
-                this.props.history.push("./detail/" + response.data.message.id)
-            })
-            .catch(err => console.log(err.response.data.message));
+        if (this.state.code && 
+            this.state.name && 
+            this.state.role && 
+            this.state.password) {
+            const { selectRole, ...newOperator } = this.state;
+            axios.post('http://localhost:3028/operator/add', newOperator)
+                .then(response => {
+                    console.log(response);
+                    this.props.history.push("./detail/" + response.data.message.id)
+                })
+                .catch(err => console.log(err.response.data.message));
+        }
+        else {
+            alert("Form tidak boleh kosong.");
+        }
     }
 
     render() {

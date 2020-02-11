@@ -47,11 +47,18 @@ class OperatorEdit extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        axios.post('http://localhost:3028/operator/edit', this.state)
-            .then(response => {
-                this.props.history.push("../detail/" + this.state.id)
-            })
-            .catch(err => console.log(err.response.data.message));
+        if (this.state.code && 
+            this.state.name && 
+            this.state.role) {
+            axios.post('http://localhost:3028/operator/edit', this.state)
+                .then(response => {
+                    this.props.history.push("../detail/" + this.state.id)
+                })
+                .catch(err => console.log(err.response.data.message));
+        }
+        else {
+            alert("Form tidak boleh kosong.");
+        }
     }
 
     render() {
