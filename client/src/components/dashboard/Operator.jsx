@@ -161,7 +161,7 @@ class Operator extends Component {
                             <input
                                 type="text"
                                 name="searchValue"
-                                className="form-control font-italic bg-grey focus"
+                                className="form-control bg-grey focus"
                                 id="search-dt"
                                 placeholder="Cari..."
                                 onChange={this.handleChange}></input>
@@ -200,7 +200,7 @@ class Operator extends Component {
                     data={this.state.datatable.data}
                     columns={columns}
                     pageSize={10}
-                    minRows={0} />
+                    minRows={1} />
             </Card>
         )
     }

@@ -12,7 +12,9 @@ app.use(cors());
 
 // routing
 const operator = require('./routes/operator');
+const typepart = require('./routes/typepart');
 app.use('/operator', operator);
+app.use('/typepart', typepart);
 
 // run server
 app.listen(PORT, () => {

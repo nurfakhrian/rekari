@@ -11,6 +11,63 @@ const SECRET_KEY = "hiams_ib";
 
 operator.use(cors());
 
+operator.post('/', (req, res) => {
+    let w;
+    if (req.body.code && req.body.role) {
+        w = {
+            where: {
+                [Op.and]: [
+                    { 
+                        code: {
+                            [Op.substring]: req.body.code
+                        }
+                    },
+                    { 
+                        role: req.body.role
+                    }
+                ]
+            }
+        }
+    }
+
+    if (req.body.code && !req.body.role) {
+        w = {
+            where: {
+                code: {
+                    [Op.substring]: req.body.code
+                }
+            }
+        }
+    }
+
+    if (!req.body.code && req.body.role) {
+        w = {
+            where: {
+                role: req.body.role
+            }
+        }
+    }
+
+    const q = (req.body.code || req.body.role) ?
+        Operator.findAll(w) : 
+        Operator.findAll();
+    q.then(result => {
+        if (result) {
+            let safeResult = result.map(obj => {
+                const { password, ...rest } = obj.dataValues;
+                return rest;
+            });
+            res.json({
+                message: safeResult
+            });
+        }
+    }).catch(err => {
+        res.status(400).json({
+            message: { error: err },
+        });
+    });
+});
+
 operator.post('/add', (req, res) => {
     const newOperator = {
         code: req.body.code,
@@ -70,63 +127,6 @@ operator.post('/login', (req, res) => {
         else {
             res.status(400).json({
                 message: { error: 'operator does not exist' },
-            });
-        }
-    }).catch(err => {
-        res.status(400).json({
-            message: { error: err },
-        });
-    });
-});
-
-operator.post('/', (req, res) => {
-    let w;
-    if (req.body.code && req.body.role) {
-        w = {
-            where: {
-                [Op.and]: [
-                    { 
-                        code: {
-                            [Op.substring]: req.body.code
-                        }
-                    },
-                    { 
-                        role: req.body.role
-                    }
-                ]
-            }
-        }
-    }
-
-    if (req.body.code && !req.body.role) {
-        w = {
-            where: {
-                code: {
-                    [Op.substring]: req.body.code
-                }
-            }
-        }
-    }
-
-    if (!req.body.code && req.body.role) {
-        w = {
-            where: {
-                role: req.body.role
-            }
-        }
-    }
-
-    const q = (req.body.code || req.body.role) ?
-        Operator.findAll(w) : 
-        Operator.findAll();
-    q.then(result => {
-        if (result) {
-            let safeResult = result.map(obj => {
-                const { password, ...rest } = obj.dataValues;
-                return rest;
-            });
-            res.json({
-                message: safeResult
             });
         }
     }).catch(err => {
