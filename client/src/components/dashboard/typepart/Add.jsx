@@ -59,6 +59,17 @@ class Add extends Component {
             const { selectSection, ...newData } = this.state;
             axios.post('http://localhost:3028/typepart/add', newData)
                 .then(response => {
+                    for (let i = 0; i < this.state.nSubPart ; i++) {
+                        const newSubPart = {
+                            name: this.state.subPart[i],
+                            typePartId: response.data.message.id
+                        }
+                        axios.post('http://localhost:3028/subpart/add', newSubPart)
+                            .then(responseSub => {
+                                console.log(responseSub);
+                            })
+                            .catch(err => console.log(err.response.data.message));
+                    }
                     this.props.history.push("./detail/" + response.data.message.id)
                 })
                 .catch(err => console.log(err.response.data.message));
