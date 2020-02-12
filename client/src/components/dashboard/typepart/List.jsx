@@ -84,15 +84,22 @@ class List extends Component {
             {
                 Header: 'Nama',
                 accessor: 'name',
-                width: 250
+                width: 200
             },
             {
                 Header: 'Section',
                 accessor: 'section',
             },
             {
-                Header: 'Jumlah Sub Part',
-                accessor: 'nSubPart'
+                Header: 'Sub Part',
+                id: 'subparts',
+                accessor: data => {
+                    const output = data.subparts.map(subpart => {
+                        return subpart.name;
+                    });
+                    return output.join(', ');
+                },
+                width: 300
             },
             {
                 Header: 'Created at',

@@ -15,7 +15,10 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {});
   TypePart.associate = function(models) {
-    // associations can be defined here
+    TypePart.hasMany(models.SubPartDetail, {
+      foreignKey: 'typePartId',
+      as: 'subpart'
+    });
   };
   return TypePart;
 };

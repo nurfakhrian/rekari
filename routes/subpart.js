@@ -1,34 +1,16 @@
 const express = require('express');
 const cors = require('cors');
 const models = require('../models');
-const TypePart = require('../models/typepart')(models.sequelize, models.Sequelize.DataTypes);
 const SubPart = require('../models/subpartdetail')(models.sequelize, models.Sequelize.DataTypes);
 const { Op } = require("sequelize");
 
-const typepart = express.Router();
+const subpart = express.Router();
 
-typepart.use(cors());
+subpart.use(cors());
 
-typepart.post('/', (req, res) => {
+subpart.post('/', (req, res) => {
     let w;
-    if (req.body.name && req.body.section) {
-        w = {
-            where: {
-                [Op.and]: [
-                    { 
-                        name: {
-                            [Op.substring]: req.body.name
-                        }
-                    },
-                    { 
-                        section: req.body.section
-                    }
-                ]
-            }
-        }
-    }
-
-    if (req.body.name && !req.body.section) {
+    if (req.body.name) {
         w = {
             where: {
                 name: {
@@ -37,34 +19,21 @@ typepart.post('/', (req, res) => {
             }
         }
     }
-
-    if (!req.body.name && req.body.section) {
+    if (req.body.id) {
         w = {
             where: {
-                section: req.body.section
+                typePartId: req.body.typePartId
             }
         }
     }
-    const q = (req.body.name || req.body.section) ?
-        TypePart.findAll(w) : 
-        TypePart.findAll();
+    const q = (req.body.name) ?
+        SubPart.findAll(w) : 
+        SubPart.findAll();
     q.then(result => {
         if (result) {
-            let finalResult = result.map((item, index) => {
-                return SubPart.findAll({
-                    where: { typePartId: item.dataValues.id }
-                }).then(subparts => {
-                    item.dataValues.subparts = subparts.map(item => {
-                        return item.dataValues
-                    });
-                    return item.dataValues
-                })
+            res.json({
+                message: result
             });
-            Promise.all(finalResult).then(promiseResult => {
-                res.json({
-                    message: promiseResult
-                });
-            })
         }
     }).catch(err => {
         res.status(400).json({
@@ -73,8 +42,8 @@ typepart.post('/', (req, res) => {
     });
 });
 
-typepart.post('/add', (req, res) => {
-    TypePart.create(req.body).then(result => {
+subpart.post('/add', (req, res) => {
+    SubPart.create(req.body).then(result => {
         res.json({
             message: result.dataValues,
         });
@@ -85,8 +54,8 @@ typepart.post('/add', (req, res) => {
     });
 });
 
-typepart.post('/detail', (req, res) => {
-    TypePart.findOne({
+subpart.post('/detail', (req, res) => {
+    SubPart.findOne({
         where: { id: req.body.id }
     }).then(result => {
         if (result) {
@@ -96,7 +65,7 @@ typepart.post('/detail', (req, res) => {
         }
         else {
             res.status(400).json({
-                message: { error: 'typepart does not exist' },
+                message: { error: 'subpart does not exist' },
             });
         }
     }).catch(err => {
@@ -106,12 +75,12 @@ typepart.post('/detail', (req, res) => {
     });
 });
 
-typepart.post('/delete', (req, res) => {
-    TypePart.findOne({
+subpart.post('/delete', (req, res) => {
+    SubPart.findOne({
         where: { id: req.body.id }
     }).then(result => {
         if (result) {
-            TypePart.destroy({
+            SubPart.destroy({
                 where: { id: result.dataValues.id }
             }).then(r => {
                 res.json({
@@ -125,7 +94,7 @@ typepart.post('/delete', (req, res) => {
         }
         else {
             res.status(400).json({
-                message: { error: 'typepart does not exist' },
+                message: { error: 'subpart does not exist' },
             });
         }
     }).catch(err => {
@@ -135,13 +104,13 @@ typepart.post('/delete', (req, res) => {
     });
 });
 
-typepart.post('/edit', (req, res) => {
-    TypePart.findOne({
+subpart.post('/edit', (req, res) => {
+    SubPart.findOne({
         where: { id: req.body.id }
     }).then(result => {
         if (result) {
             const  { id, ...reqWithoutId } = req.body;
-            TypePart.update(reqWithoutId, {
+            SubPart.update(reqWithoutId, {
                 where: {
                     id: id
                 }
@@ -164,7 +133,7 @@ typepart.post('/edit', (req, res) => {
         }
         else {
             res.status(400).json({
-                message: { error: 'typepart does not exist' },
+                message: { error: 'subpart does not exist' },
             });
         }
     }).catch(err => {
@@ -174,4 +143,4 @@ typepart.post('/edit', (req, res) => {
     });
 });
 
-module.exports = typepart;
+module.exports = subpart;

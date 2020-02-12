@@ -20,7 +20,7 @@ module.exports = {
           key: 'id'
         },
       },
-      SubPartDetailtId: {
+      subPartDetailtId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {

@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id'
       },
     },
-    SubPartDetailtId: {
+    subPartDetailtId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
