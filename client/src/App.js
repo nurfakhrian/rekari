@@ -7,17 +7,23 @@ import Navbar from './components/common/Navbar';
 import Container from './components/common/Container';
 import Footer from './components/common/Footer';
 
-import Operator from './components/dashboard/Operator';
-import OperatorEdit from './components/dashboard/OperatorEdit';
-import OperatorDetail from './components/dashboard/OperatorDetail';
-
 import AnonRoute from './components/AnonRoute';
 import PrivateRoute from './components/PrivateRoute';
+
+import Operator from './components/dashboard/operator/List';
+import OperatorAdd from './components/dashboard/operator/Add';
+import OperatorEdit from './components/dashboard/operator/Edit';
+import OperatorDetail from './components/dashboard/operator/Detail';
+
+import Typepart from './components/dashboard/typepart/List';
+import TypepartAdd from './components/dashboard/typepart/Add';
+import TypepartEdit from './components/dashboard/typepart/Edit';
+import TypepartDetail from './components/dashboard/typepart/Detail';
+
 import Login from './components/Login';
 import SubAssy from './components/SubAssy';
 
 import "./App.scss";
-import OperatorAdd from './components/dashboard/OperatorAdd';
 
 const App = (props) => {
 
@@ -46,10 +52,10 @@ const App = (props) => {
                     <PrivateRoute exact path="/dashboard/operator/detail/:operatorId" auth={props.store.auth} component={OperatorDetail}/>
                     <PrivateRoute exact path="/dashboard/operator/edit/:operatorId" auth={props.store.auth} component={OperatorEdit}/>
                     {/* Tipe */}
-                    <PrivateRoute exact path="/dashboard/tipe-part" auth={props.store.auth} component={Operator} />
-                    <PrivateRoute exact path="/dashboard/tipe-part/add" auth={props.store.auth} component={OperatorAdd}/>
-                    <PrivateRoute exact path="/dashboard/tipe-part/detail/:operatorId" auth={props.store.auth} component={OperatorDetail}/>
-                    <PrivateRoute exact path="/dashboard/tipe-part/edit/:operatorId" auth={props.store.auth} component={OperatorEdit}/>
+                    <PrivateRoute exact path="/dashboard/tipe-part" auth={props.store.auth} component={Typepart} />
+                    <PrivateRoute exact path="/dashboard/tipe-part/add" auth={props.store.auth} component={TypepartAdd}/>
+                    <PrivateRoute exact path="/dashboard/tipe-part/detail/:operatorId" auth={props.store.auth} component={TypepartDetail}/>
+                    <PrivateRoute exact path="/dashboard/tipe-part/edit/:operatorId" auth={props.store.auth} component={TypepartEdit}/>
                 </Container>
             </main>
             <Footer />

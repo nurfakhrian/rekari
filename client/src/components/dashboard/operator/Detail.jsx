@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import Card from '../common/Card';
+import Card from '../../common/Card';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
-class operatorDetail extends Component {
+class Detail extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -22,7 +22,7 @@ class operatorDetail extends Component {
                 const roleOptions = [
                     { value: 'su', label: 'Super Admin' },
                     { value: 'admin', label: 'Admin' },
-                    { value: 'operator', label: 'Operator' },
+                    { value: 'operator', label: 'Operator' }
                 ];
                 const myRole = roleOptions.find(o => o.value === response.data.message.role);
                 this.setState({
@@ -63,7 +63,7 @@ class operatorDetail extends Component {
                             id="iRole"
                             type="text"
                             className="form-control"
-                            name="name"
+                            name="role"
                             value={this.state.role}
                             readOnly />
                 </div>
@@ -82,4 +82,4 @@ class operatorDetail extends Component {
     }
 }
 
-export default operatorDetail;
+export default Detail;

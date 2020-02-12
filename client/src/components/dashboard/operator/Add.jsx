@@ -1,36 +1,24 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-import Card from '../common/Card';
+import Card from '../../common/Card';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
-class OperatorEdit extends Component {
+class Add extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: this.props.match.params.operatorId,
             code: "",
             name: "",
             password: "",
-            role: ""
+            role: "",
+            selectRole: null
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    componentDidMount() {
-        axios.post('http://localhost:3028/operator/detail', { id: this.state.id })
-            .then(response => {
-                this.setState({
-                    code: response.data.message.code,
-                    name: response.data.message.name,
-                    role: response.data.message.role
-                });
-            })
-            .catch(err => console.log(err.response.data.message));
     }
 
     handleChange(e) {
@@ -39,20 +27,22 @@ class OperatorEdit extends Component {
         });
     }
 
-    handleChangeSelect(obj) {
-        this.setState({
-            role: obj.value
-        });
+    handleChangeSelect(selectRole) {
+        this.setState(
+            { selectRole, role: selectRole.value }
+        );
     }
 
     handleSubmit(e) {
         e.preventDefault();
         if (this.state.code && 
             this.state.name && 
-            this.state.role) {
-            axios.post('http://localhost:3028/operator/edit', this.state)
+            this.state.role && 
+            this.state.password) {
+            const { selectRole, ...newOperator } = this.state;
+            axios.post('http://localhost:3028/operator/add', newOperator)
                 .then(response => {
-                    this.props.history.push("../detail/" + this.state.id)
+                    this.props.history.push("./detail/" + response.data.message.id)
                 })
                 .catch(err => console.log(err.response.data.message));
         }
@@ -63,13 +53,12 @@ class OperatorEdit extends Component {
 
     render() {
         const roleOptions = [
-            { value: '', label: '-- Semua --' },
             { value: 'su', label: 'Super Admin' },
             { value: 'admin', label: 'Admin' },
-            { value: 'operator', label: 'Operator' },
+            { value: 'operator', label: 'Operator' }
         ];
         return (
-            <Card title={this.state.name} col={6}>
+            <Card title="Tambah Data" col={6}>
                 <form
                     onSubmit={this.handleSubmit}
                     noValidate>
@@ -98,7 +87,7 @@ class OperatorEdit extends Component {
                         <Select
                             id="iRole"
                             placeholder="Pilih Role"
-                            value={roleOptions.filter(option => option.value === this.state.role)}
+                            value={this.state.selectRole}
                             onChange={this.handleChangeSelect}
                             options={roleOptions} />
                     </div>
@@ -111,9 +100,6 @@ class OperatorEdit extends Component {
                                 name="password"
                                 value={this.state.password}
                                 onChange={this.handleChange} />
-                        <small className="form-text text-muted">
-                            Kosongkan jika tidak ingin mengganti password.
-                        </small>
                     </div>
                     <div className="d-flex">
                         <Link to="/dashboard/operator"
@@ -122,7 +108,7 @@ class OperatorEdit extends Component {
                         </Link>
                         <button type="submit"
                             className="ml-auto btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">
-                            <i><FontAwesomeIcon icon={faSave} /></i>&nbsp;Simpan
+                            <i><FontAwesomeIcon icon={faPlusSquare} /></i>&nbsp;Tambahkan
                         </button>
                     </div>
                 </form>
@@ -131,4 +117,4 @@ class OperatorEdit extends Component {
     }
 }
 
-export default OperatorEdit;
+export default Add;

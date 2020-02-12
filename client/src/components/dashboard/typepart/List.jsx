@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-// import { connect } from 'react-redux';
 
 import ReactTable from 'react-table-6';
 import 'react-table-6/react-table.css';
@@ -8,21 +7,18 @@ import 'react-table-6/react-table.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faPlus, faTrashAlt, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
-import Card from '../common/Card';
-// import { getOperator } from '../../store/actions/operator';
+import Card from '../../common/Card';
 import axios from 'axios';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { Link } from 'react-router-dom';
 
-class Operator extends Component {
+class List extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            datatable: {
-                data: []
-            },
+            dataSet: [],
             searchValue: null,
-            searchRole: {
+            searchSection: {
                 value: null
             }
         }
@@ -31,34 +27,19 @@ class Operator extends Component {
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.drawTable = this.drawTable.bind(this);
-        // this.handleGotoEdit = this.handleGotoEdit.bind(this);
-        // this.onSubmit = this.onSubmit.bind(this);
     }
 
     drawTable(query = {}) {
-        axios.post('http://localhost:3028/operator', query)
+        axios.post('http://localhost:3028/typepart', query)
             .then(response => {
-                this.setState(prevState => ({
-                    datatable: {
-                        ...prevState.datatable,
-                        data: response.data.message
-                    }
-                }))
+                this.setState({
+                    dataSet: response.data.message
+                })
             })
             .catch(err => console.log(err.response.data.message));
     }
 
     componentDidMount() {
-        // this.props.dispatch(getOperator()).then(response => {
-        //     console.log(response);
-        // });
-        // axios.post('http://localhost:3028/operator')
-        //     .then(response => {
-        //         this.setState({
-        //             datatable: { data: response.data.message }
-        //         })
-        //     })
-        //     .catch(err => console.log(err.response.data.message));
         this.drawTable();
     }
 
@@ -70,24 +51,24 @@ class Operator extends Component {
 
     handleChangeSelect(val) {
         this.setState({
-            searchRole: val
+            searchSection: val
         });
     }
 
     handleSearch() {
         let query = { 
-            code: this.state.searchValue,
-            role: this.state.searchRole.value || null
+            name: this.state.searchValue,
+            section: this.state.searchSection.value || null
         };
         this.drawTable(query)
     }
 
     handleDelete(e) {
-        if (window.confirm(`Hapus data dengan id ${e.target.dataset.id} dan code ${e.target.dataset.code} ?`)) {
-            axios.post('http://localhost:3028/operator/delete', { id: e.target.dataset.id })
+        if (window.confirm(`Hapus data dengan id ${e.target.dataset.id} (${e.target.dataset.name}) ?`)) {
+            axios.post('http://localhost:3028/typepart/delete', { id: e.target.dataset.id })
                 .then(response => {
                     if (response.data.message.id) {
-                        alert(`Data dengan id ${response.data.message.id} dan code ${response.data.message.code} berhasil dihapus.`)
+                        alert(`Data dengan id ${response.data.message.id} (${response.data.message.name}) berhasil dihapus.`)
                         this.handleSearch();
                     }
                     else {
@@ -98,25 +79,20 @@ class Operator extends Component {
         }
     }
 
-    // handleGotoEdit(code) {
-    //     this.props.history.push(`/dashboard/operator/edit/${code}`)
-    // }
-
     render() {
         const columns = [
             {
-                Header: 'Code',
-                accessor: 'code',
-                width: 100
-            },
-            {
                 Header: 'Nama',
-                accessor: 'name'
+                accessor: 'name',
+                width: 250
             },
             {
-                Header: 'Role',
-                accessor: 'role',
-                width: 100
+                Header: 'Section',
+                accessor: 'section',
+            },
+            {
+                Header: 'Jumlah Sub Part',
+                accessor: 'nSubPart'
             },
             {
                 Header: 'Created at',
@@ -132,18 +108,18 @@ class Operator extends Component {
                 width: 250,
                 Cell: ({ original }) => (
                     <>
-                        <Link to={{pathname: `/dashboard/operator/detail/${original.id}`}}
+                        <Link to={{pathname: `/dashboard/tipe-part/detail/${original.id}`}}
                             className="btn btn-cc btn-cc-primary btn-cc-radius-normal p-1 mb-1">
                             <FontAwesomeIcon icon={faInfoCircle} />&nbsp;Detil
                         </Link>
-                        <Link to={{pathname: `/dashboard/operator/edit/${original.id}`}}
+                        <Link to={{pathname: `/dashboard/tipe-part/edit/${original.id}`}}
                             className="btn btn-cc btn-cc-primary btn-cc-radius-normal p-1 mb-1">
                             <FontAwesomeIcon icon={faEdit} />&nbsp;Edit
                         </Link>
                         <button
                             className="btn btn-cc btn-cc-secondary btn-cc-radius-normal p-1 mb-1"
                             data-id={original.id}
-                            data-code={original.code}
+                            data-name={original.name}
                             onClick={this.handleDelete}>
                             <FontAwesomeIcon icon={faTrashAlt} />&nbsp;Hapus
                         </button>
@@ -153,7 +129,7 @@ class Operator extends Component {
         ];
 
         return (
-            <Card title={"Operator"} col={12}>
+            <Card title={"Tipe Part"} col={12}>
                 <div className="row align-items-center">
                     <div className="col-md-3 pr-md-1 mb-md-0 mb-2">
                         <label className="sr-only" htmlFor="search-dt">Cari</label>
@@ -170,14 +146,12 @@ class Operator extends Component {
                     </div>
                     <div className="col-md-3 p-md-1 mb-md-0 mb-2">
                         <Select
-                            placeholder="Pilih Role"
-                            // value={this.state.searchRole}
+                            placeholder="Pilih Section"
                             onChange={this.handleChangeSelect}
                             options={[
                                 { value: '', label: '-- Semua --' },
-                                { value: 'su', label: 'Super Admin' },
-                                { value: 'admin', label: 'Admin' },
-                                { value: 'operator', label: 'Operator' },
+                                { value: 'master', label: 'Master' },
+                                { value: 'caliper', label: 'Caliper' }
                             ]} />
                     </div>
                     
@@ -190,25 +164,20 @@ class Operator extends Component {
                     </div>
                     <div className="col-md-3 ml-md-auto text-center text-md-right">
                         <Link
-                            to="/dashboard/operator/add"
+                            to="/dashboard/tipe-part/add"
                             className="btn btn-cc btn-cc-primary btn-cc-radius-extra ml-0 py-2 px-5 px-md-2">
                             <FontAwesomeIcon icon={faPlus} />&ensp;Tambah
                         </Link>
                     </div>
                 </div>
                 <ReactTable 
-                    data={this.state.datatable.data}
+                    data={this.state.dataSet}
                     columns={columns}
                     pageSize={10}
-                    minRows={1} />
+                    minRows={2} />
             </Card>
         )
     }
 }
 
-// const mapState = (state) => ({
-//     operator: state.operator
-// });
-
-// export default connect(mapState)(Operator);
-export default Operator;
+export default List;

@@ -1,20 +1,19 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-import Card from '../common/Card';
+import Card from '../../common/Card';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
-class OperatorAdd extends Component {
+class Add extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            code: "",
             name: "",
-            password: "",
-            role: "",
-            selectRole: null
+            nSubPart: 0,
+            section: "",
+            selectSection: null
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
@@ -27,51 +26,39 @@ class OperatorAdd extends Component {
         });
     }
 
-    handleChangeSelect(selectRole) {
+    handleChangeSelect(selectSection) {
         this.setState(
-            { selectRole, role: selectRole.value }
+            { selectSection, section: selectSection.value }
         );
     }
 
     handleSubmit(e) {
         e.preventDefault();
-        if (this.state.code && 
-            this.state.name && 
-            this.state.role && 
-            this.state.password) {
-            const { selectRole, ...newOperator } = this.state;
-            axios.post('http://localhost:3028/operator/add', newOperator)
+        if (this.state.name && 
+            this.state.nSubPart > 1 && 
+            this.state.section) {
+            const { selectSection, ...newData } = this.state;
+            axios.post('http://localhost:3028/typepart/add', newData)
                 .then(response => {
                     this.props.history.push("./detail/" + response.data.message.id)
                 })
                 .catch(err => console.log(err.response.data.message));
         }
         else {
-            alert("Form tidak boleh kosong.");
+            alert("Form tidak boleh kosong/salah.");
         }
     }
 
     render() {
-        const roleOptions = [
-            { value: 'su', label: 'Super Admin' },
-            { value: 'admin', label: 'Admin' },
-            { value: 'operator', label: 'Operator' },
+        const sectionOptions = [
+            { value: 'master', label: 'Master' },
+            { value: 'caliper', label: 'Caliper' }
         ];
         return (
             <Card title="Tambah Data" col={6}>
                 <form
                     onSubmit={this.handleSubmit}
                     noValidate>
-                    <div className="form-group">
-                        <label htmlFor="iCode">Code</label>
-                        <input
-                                id="iCode"
-                                type="text"
-                                className="form-control"
-                                name="code"
-                                value={this.state.code}
-                                onChange={this.handleChange} />
-                    </div>
                     <div className="form-group">
                         <label htmlFor="iNama">Nama</label>
                         <input
@@ -83,26 +70,26 @@ class OperatorAdd extends Component {
                                 onChange={this.handleChange} />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="iRole">Role</label>
+                        <label htmlFor="iSection">Section</label>
                         <Select
-                            id="iRole"
-                            placeholder="Pilih Role"
-                            value={this.state.selectRole}
+                            id="iSection"
+                            placeholder="Pilih Section"
+                            value={this.state.selectSection}
                             onChange={this.handleChangeSelect}
-                            options={roleOptions} />
+                            options={sectionOptions} />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="iPassword">Password</label>
+                        <label htmlFor="inSubPart">Jumlah Sub Part</label>
                         <input
-                                id="iPassword"
-                                type="password"
+                                id="inSubPart"
+                                type="number"
                                 className="form-control"
-                                name="password"
-                                value={this.state.password}
+                                name="nSubPart"
+                                value={this.state.nSubPart}
                                 onChange={this.handleChange} />
                     </div>
                     <div className="d-flex">
-                        <Link to="/dashboard/operator"
+                        <Link to="/dashboard/tipe-part"
                             className="btn btn-cc btn-cc-white btn-cc-radius-normal ml-0 py-2 px-5">
                             <i><FontAwesomeIcon icon={faArrowLeft} /></i>&nbsp;Semua
                         </Link>
@@ -117,4 +104,4 @@ class OperatorAdd extends Component {
     }
 }
 
-export default OperatorAdd;
+export default Add;
