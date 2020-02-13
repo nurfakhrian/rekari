@@ -90,17 +90,17 @@ class List extends Component {
                 Header: 'Section',
                 accessor: 'section',
             },
-            {
-                Header: 'Sub Part',
-                id: 'subParts',
-                accessor: data => {
-                    const output = data.subParts.map(subpart => {
-                        return subpart.name;
-                    });
-                    return output.join(', ');
-                },
-                width: 300
-            },
+            // {
+            //     Header: 'Sub Part',
+            //     id: 'subParts',
+            //     accessor: data => {
+            //         const output = data.subParts.map(subpart => {
+            //             return subpart.name;
+            //         });
+            //         return output.join(', ');
+            //     },
+            //     width: 300
+            // },
             {
                 Header: 'Created at',
                 accessor: 'createdAt'
