@@ -58,9 +58,7 @@ class Add extends Component {
         e.preventDefault();
         let nullSubPart = false;
         for (let i = 0; i < this.state.subParts.length; i++) {
-            console.log(this.state.subParts[i].name)
             if (this.state.subParts[i].name === "") {
-                console.log(this.state.subParts[i].name);
                 nullSubPart = true;
                 break;
             }

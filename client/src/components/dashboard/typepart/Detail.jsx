@@ -12,14 +12,15 @@ class Detail extends Component {
             id: this.props.match.params.operatorId,
             name: "",
             section: "",
+            subParts: [],
             nSubPart: 0
         }
+        this.renderSubPart = this.renderSubPart.bind(this);
     }
 
     componentDidMount() {
         axios.post('http://localhost:3028/typepart/detail', { id: this.state.id })
             .then(response => {
-                console.log(response);
                 const sectionOptions = [
                     { value: 'master', label: 'Master' },
                     { value: 'caliper', label: 'Caliper' }
@@ -27,11 +28,33 @@ class Detail extends Component {
                 const myRole = sectionOptions.find(o => o.value === response.data.message.section);
                 this.setState({
                     name: response.data.message.name,
-                    section: myRole.value,
+                    section: myRole.label,
                     nSubPart: response.data.message.nSubPart,
+                    subParts: response.data.message.subParts
                 });
             })
             .catch(err => console.log(err.response.data.message));
+    }
+
+    renderSubPart() {
+        const subPartElem = index => (
+            <div className="form-group" key={index}>
+                <label>Sub Part {index + 1}</label>
+                <input
+                    value={this.state.subParts[index].name}
+                    // data-index={index}
+                    // onChange={this.handleChangeSubPart}
+                    type="text"
+                    className="form-control"
+                    name="subPart" 
+                    readOnly />
+            </div>
+        );
+        let subPartForm = [];
+        for (let i = 0; i < this.state.nSubPart ; i++) {
+            subPartForm.push(subPartElem(i));
+        }
+        return subPartForm;
     }
     
     render() {
@@ -66,6 +89,11 @@ class Detail extends Component {
                             name="nSubPart"
                             value={this.state.nSubPart}
                             readOnly />
+                </div>
+                <div className="ml-5">
+                    {this.renderSubPart().map(component => {
+                        return component;
+                    })}
                 </div>
                 <div className="d-flex">
                     <Link to="/dashboard/tipe-part"
