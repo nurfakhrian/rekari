@@ -19,6 +19,7 @@ class Detail extends Component {
     componentDidMount() {
         axios.post('http://localhost:3028/typepart/detail', { id: this.state.id })
             .then(response => {
+                console.log(response);
                 const sectionOptions = [
                     { value: 'master', label: 'Master' },
                     { value: 'caliper', label: 'Caliper' }

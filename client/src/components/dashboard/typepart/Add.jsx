@@ -13,7 +13,10 @@ class Add extends Component {
             name: "",
             nSubPart: 2,
             section: "",
-            subParts: [],
+            subParts: [
+                {name: ""},
+                {name: ""}
+            ],
             selectSection: null,
 
         }
@@ -53,9 +56,19 @@ class Add extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
+        let nullSubPart = false;
+        for (let i = 0; i < this.state.subParts.length; i++) {
+            console.log(this.state.subParts[i].name)
+            if (this.state.subParts[i].name === "") {
+                console.log(this.state.subParts[i].name);
+                nullSubPart = true;
+                break;
+            }
+        }
         if (this.state.name && 
             this.state.nSubPart > 1 && 
-            this.state.section) {
+            this.state.section &&
+            !nullSubPart) {
             const { selectSection, ...newData } = this.state;
             axios.post('http://localhost:3028/typepart/add', newData)
                 .then(response => {
