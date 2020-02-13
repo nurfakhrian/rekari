@@ -17,7 +17,8 @@ module.exports = (sequelize, DataTypes) => {
   TypePart.associate = function(models) {
     TypePart.hasMany(models.SubPartDetail, {
       foreignKey: 'typePartId',
-      as: 'subpart'
+      sourceKey: 'id',
+      as: 'subParts'
     });
   };
   return TypePart;

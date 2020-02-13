@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('LotPartsLotSubParts', {
+    return queryInterface.createTable('lotpartslotsubparts', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -16,7 +16,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'LotParts',
+          model: 'lotparts',
           key: 'id'
         },
       },
@@ -24,7 +24,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'SubPartDetails',
+          model: 'subpartdetails',
           key: 'id'
         },
       },
@@ -39,6 +39,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('LotPartsLotSubParts');
+    return queryInterface.dropTable('lotpartslotsubparts');
   }
 };

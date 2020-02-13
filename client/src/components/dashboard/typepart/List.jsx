@@ -92,9 +92,9 @@ class List extends Component {
             },
             {
                 Header: 'Sub Part',
-                id: 'subparts',
+                id: 'subParts',
                 accessor: data => {
-                    const output = data.subparts.map(subpart => {
+                    const output = data.subParts.map(subpart => {
                         return subpart.name;
                     });
                     return output.join(', ');

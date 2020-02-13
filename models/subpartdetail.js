@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'TypeParts',
+        model: 'typeparts',
         key: 'id'
       },
     },
@@ -17,7 +17,8 @@ module.exports = (sequelize, DataTypes) => {
   SubPartDetail.associate = function(models) {
     SubPartDetail.belongsTo(models.TypePart, {
       foreignKey: 'typePartId',
-      as: 'typepart',
+      targetKey: 'id',
+      // as: 'typepart',
       onDelete: 'CASCADE'
     });
   };

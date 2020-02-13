@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const models = require('../models');
 const TypePart = require('../models/typepart')(models.sequelize, models.Sequelize.DataTypes);
-const SubPart = require('../models/subpartdetail')(models.sequelize, models.Sequelize.DataTypes);
 const { Op } = require("sequelize");
 
 const typepart = express.Router();
@@ -10,7 +9,7 @@ const typepart = express.Router();
 typepart.use(cors());
 
 typepart.post('/', (req, res) => {
-    let w;
+    let w = {where: {}, include: ['subParts']};
     if (req.body.name && req.body.section) {
         w = {
             where: {
@@ -27,7 +26,6 @@ typepart.post('/', (req, res) => {
             }
         }
     }
-
     if (req.body.name && !req.body.section) {
         w = {
             where: {
@@ -37,7 +35,6 @@ typepart.post('/', (req, res) => {
             }
         }
     }
-
     if (!req.body.name && req.body.section) {
         w = {
             where: {
@@ -45,26 +42,11 @@ typepart.post('/', (req, res) => {
             }
         }
     }
-    const q = (req.body.name || req.body.section) ?
-        TypePart.findAll(w) : 
-        TypePart.findAll();
-    q.then(result => {
+    models.TypePart.findAll(w).then(result => {
         if (result) {
-            let finalResult = result.map((item, index) => {
-                return SubPart.findAll({
-                    where: { typePartId: item.dataValues.id }
-                }).then(subparts => {
-                    item.dataValues.subparts = subparts.map(item => {
-                        return item.dataValues
-                    });
-                    return item.dataValues
-                })
+            res.json({
+                message: result
             });
-            Promise.all(finalResult).then(promiseResult => {
-                res.json({
-                    message: promiseResult
-                });
-            })
         }
     }).catch(err => {
         res.status(400).json({
@@ -74,7 +56,12 @@ typepart.post('/', (req, res) => {
 });
 
 typepart.post('/add', (req, res) => {
-    TypePart.create(req.body).then(result => {
+    models.TypePart.create(req.body, {
+        include: [{
+            model: models.SubPartDetail,
+            as: 'subParts'
+        }]
+      }).then(result => {
         res.json({
             message: result.dataValues,
         });
@@ -86,8 +73,9 @@ typepart.post('/add', (req, res) => {
 });
 
 typepart.post('/detail', (req, res) => {
-    TypePart.findOne({
-        where: { id: req.body.id }
+    models.TypePart.findOne({
+        where: { id: req.body.id },
+        include: ['subParts']
     }).then(result => {
         if (result) {
             res.json({
@@ -107,11 +95,11 @@ typepart.post('/detail', (req, res) => {
 });
 
 typepart.post('/delete', (req, res) => {
-    TypePart.findOne({
+    models.TypePart.findOne({
         where: { id: req.body.id }
     }).then(result => {
         if (result) {
-            TypePart.destroy({
+            models.TypePart.destroy({
                 where: { id: result.dataValues.id }
             }).then(r => {
                 res.json({
