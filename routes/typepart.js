@@ -136,13 +136,9 @@ typepart.post('/edit', (req, res) => {
                     const n = Math.abs(nSubPart - initialNSubPart);
                     if (nSubPart > initialNSubPart) { // penambahan data subpart
                         subPartsToAdd = subParts.splice(-n, n);
-                        // console.log("add this", subPartsToAdd)
-                        // console.log("update this", subParts)
                     }
                     if (nSubPart < initialNSubPart) { // pengurangan data subpart
                         subPartsToDelete = subParts.splice(-n, n);
-                        console.log("delete this", subPartsToDelete)
-                        console.log("update this", subParts)
                     }
                     let updateSubPart = subParts.map(item => {
                         const  { id, ...itemWihoutId } = item;
@@ -162,7 +158,6 @@ typepart.post('/edit', (req, res) => {
                                 return models.SubPartDetail.create(subPart)
                                     .then(rs => rs)
                                     .catch(err => {
-                                        console.log("add", err)
                                         res.status(400).json({
                                             message: { error: err },
                                         });
@@ -178,7 +173,6 @@ typepart.post('/edit', (req, res) => {
                                 return models.SubPartDetail.destroy({ where: { id: subPart.id } })
                                     .then(rs => rs)
                                     .catch(err => {
-                                        console.log("delete", err)
                                         res.status(400).json({
                                             message: { error: err },
                                         });

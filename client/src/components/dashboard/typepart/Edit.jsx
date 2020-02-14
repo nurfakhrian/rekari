@@ -98,7 +98,6 @@ class Edit extends Component {
             !nullSubPart) {
             axios.post('http://localhost:3028/typepart/edit', this.state)
                 .then(response => {
-                    console.log(response)
                     this.props.history.push("../detail/" + this.state.id)
                 })
                 .catch(err => console.log(err.response.data.message));
