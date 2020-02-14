@@ -20,6 +20,11 @@ module.exports = (sequelize, DataTypes) => {
       sourceKey: 'id',
       as: 'subParts'
     });
+    TypePart.hasMany(models.LotPart, {
+      foreignKey: 'typePartId',
+      sourceKey: 'id',
+      as: 'lotParts'
+    });
   };
   return TypePart;
 };

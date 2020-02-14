@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const models = require('../models');
-const TypePart = require('../models/typepart')(models.sequelize, models.Sequelize.DataTypes);
 const { Op } = require("sequelize");
 
 const typepart = express.Router();

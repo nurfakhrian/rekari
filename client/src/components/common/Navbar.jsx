@@ -24,7 +24,8 @@ const breadcrumbData1 = [
 const breadcrumbData2 = [
     { name: 'operator', label: "Operator", logo: faUserAlt, link: "/dashboard/operator" },
     { name: 'tipe-part', label: "Tipe Part", logo: faThLarge, link: "/dashboard/tipe-part" },
-    { name: 'sub-part', label: "Sub Part", logo: faPuzzlePiece, link: "/dashboard/sub-part" }
+    { name: 'sub-part', label: "Sub Part", logo: faPuzzlePiece, link: "/dashboard/sub-part" },
+    { name: 'work-subassy', label: "Work (Sub Assy)", logo: faBox, link: "/dashboard/work-subassy" }
 ]
 
 const breadcrumbData3 = [

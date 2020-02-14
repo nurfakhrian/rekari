@@ -14,7 +14,6 @@ module.exports = {
       },
       operatorId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
         references: {
           model: 'operators',
           key: 'id'
@@ -22,7 +21,6 @@ module.exports = {
       },
       typePartId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
         references: {
           model: 'typeparts',
           key: 'id'

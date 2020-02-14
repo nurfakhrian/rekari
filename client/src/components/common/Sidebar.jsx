@@ -3,7 +3,6 @@ import { Link, withRouter, NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
     faUserAlt,
-    faPuzzlePiece,
     faThLarge,
     faSignInAlt,
     faBox} from '@fortawesome/free-solid-svg-icons';
@@ -76,8 +75,15 @@ class Sidebar extends Component {
                                                 <li>
                                                     <NavLink to="/dashboard/tipe-part" className="waves-effect pl-4"><FontAwesomeIcon icon={faThLarge} />&emsp;Tipe</NavLink>
                                                 </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a href="/#" className="collapsible-header disable-anchor waves-effect arrow-r">Work</a>
+                                        <div className="collapsible-body d-block">
+                                            <ul>
                                                 <li>
-                                                    <NavLink to="/dashboard/sub-part" className="waves-effect pl-4"><FontAwesomeIcon icon={faPuzzlePiece} />&emsp;Sub Part</NavLink>
+                                                    <NavLink to="/dashboard/work-subassy" className="waves-effect pl-4"><FontAwesomeIcon icon={faBox} />&emsp;Sub Assy</NavLink>
                                                 </li>
                                             </ul>
                                         </div>

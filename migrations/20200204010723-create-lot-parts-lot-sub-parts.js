@@ -12,19 +12,15 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      subPartName: {
+        type: Sequelize.STRING(50),
+        allowNull: false
+      },
       lotPartId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: 'lotparts',
-          key: 'id'
-        },
-      },
-      subPartDetailtId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'subpartdetails',
           key: 'id'
         },
       },

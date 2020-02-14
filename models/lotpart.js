@@ -7,7 +7,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     operatorId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
       references: {
         model: 'operators',
         key: 'id'
@@ -15,7 +14,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     typePartId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
       references: {
         model: 'typeparts',
         key: 'id'
@@ -23,7 +21,23 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {});
   LotPart.associate = function(models) {
-    // associations can be defined here
+    LotPart.belongsTo(models.Operator, {
+      foreignKey: 'operatorId',
+      targetKey: 'id',
+      as: 'operator',
+      onDelete: 'SET NULL'
+    });
+    LotPart.belongsTo(models.TypePart, {
+      foreignKey: 'typePartId',
+      targetKey: 'id',
+      as: 'typePart',
+      onDelete: 'SET NULL'
+    });
+    LotPart.hasMany(models.LotPartsLotSubPart, {
+      foreignKey: 'lotPartId',
+      sourceKey: 'id',
+      as: 'lotPartsLotSubParts'
+    });
   };
   return LotPart;
 };

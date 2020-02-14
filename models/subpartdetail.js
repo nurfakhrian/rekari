@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     SubPartDetail.belongsTo(models.TypePart, {
       foreignKey: 'typePartId',
       targetKey: 'id',
-      // as: 'typepart',
+      as: 'typePart',
       onDelete: 'CASCADE'
     });
   };

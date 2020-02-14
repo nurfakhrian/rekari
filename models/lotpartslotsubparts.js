@@ -1,29 +1,30 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const LotPartsLotSubParts = sequelize.define('LotPartsLotSubParts', {
+  const LotPartsLotSubParts = sequelize.define('LotPartsLotSubPart', {
     lotSubPartCode: {
       type: DataTypes.STRING,
+      allowNull: false
+    },
+    subPartName: {
+      type: DataTypes.STRING(50),
       allowNull: false
     },
     lotPartId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'lotlarts',
+        model: 'lotparts',
         key: 'id'
       },
-    },
-    subPartDetailtId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'subpartdetails',
-        key: 'id'
-      },
-    },
+    }
   }, {});
   LotPartsLotSubParts.associate = function(models) {
-    // associations can be defined here
+    LotPartsLotSubParts.belongsTo(models.LotPart, {
+      foreignKey: 'lotPartId',
+      targetKey: 'id',
+      as: 'lotPart',
+      onDelete: 'CASCADE'
+    });
   };
   return LotPartsLotSubParts;
 };

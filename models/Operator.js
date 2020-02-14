@@ -20,7 +20,11 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {});
   Operator.associate = function(models) {
-    // associations can be defined here
+    Operator.hasMany(models.LotPart, {
+      foreignKey: 'operatorId',
+      sourceKey: 'id',
+      as: 'lotParts'
+    });
   };
   return Operator;
 };
