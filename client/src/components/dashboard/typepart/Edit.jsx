@@ -57,11 +57,8 @@ class Edit extends Component {
                         }
                     }
                     else {
-                        // const newSubparts = prevState.subParts;
-                        // newSubparts.splice(-1,1);
                         return {
                             nSubPart: parseInt(value),
-                            // subParts: newSubparts
                         }
                     }
                 }

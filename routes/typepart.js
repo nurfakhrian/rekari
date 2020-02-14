@@ -131,15 +131,10 @@ typepart.post('/edit', (req, res) => {
                 where: { id: id }
             }).then(updated => {
                 if (updated) {
-                    let subPartsToAdd, subPartsToDelete;
+                    let subPartsToAction;
                     const { initialNSubPart, nSubPart, subParts } = req.body;
                     const n = Math.abs(nSubPart - initialNSubPart);
-                    if (nSubPart > initialNSubPart) { // penambahan data subpart
-                        subPartsToAdd = subParts.splice(-n, n);
-                    }
-                    if (nSubPart < initialNSubPart) { // pengurangan data subpart
-                        subPartsToDelete = subParts.splice(-n, n);
-                    }
+                    subPartsToAction = (nSubPart != initialNSubPart) ? subParts.splice(-n, n) : [];
                     let updateSubPart = subParts.map(item => {
                         const  { id, ...itemWihoutId } = item;
                         return models.SubPartDetail.update(itemWihoutId, {
@@ -153,9 +148,16 @@ typepart.post('/edit', (req, res) => {
                         });
                     });
                     Promise.all(updateSubPart).then(r => {
-                        if (nSubPart > initialNSubPart) {
-                            return Promise.all(subPartsToAdd.map(subPart => {
-                                return models.SubPartDetail.create(subPart)
+                        if (nSubPart != initialNSubPart) {
+                            let subPartQuery = () => {};
+                            if (nSubPart > initialNSubPart) {
+                                subPartQuery = (subPart) => models.SubPartDetail.create(subPart)
+                            }
+                            if (nSubPart < initialNSubPart) {
+                                subPartQuery = (subPart) => models.SubPartDetail.destroy({ where: { id: subPart.id } });
+                            }
+                            return Promise.all(subPartsToAction.map(subPart => {
+                                return subPartQuery(subPart)
                                     .then(rs => rs)
                                     .catch(err => {
                                         res.status(400).json({
@@ -168,21 +170,10 @@ typepart.post('/edit', (req, res) => {
                                 });
                             })
                         }
-                        if (nSubPart < initialNSubPart) {
-                            return Promise.all(subPartsToDelete.map(subPart => {
-                                return models.SubPartDetail.destroy({ where: { id: subPart.id } })
-                                    .then(rs => rs)
-                                    .catch(err => {
-                                        res.status(400).json({
-                                            message: { error: err },
-                                        });
-                                    });
-                            })).then(rs => {
-                                res.json({
-                                    message: req.body,
-                                });
-                            });
-                        }
+                        res.json({
+                            message: req.body,
+                        });
+                        
                     });
                 }
                 else {
