@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Select from 'react-select';
 import Card from '../../common/Card';
 import axios from 'axios';
@@ -12,7 +13,8 @@ class Add extends Component {
         this.state = {
             typeParts: [],
             // typePartsSelect: [],
-            subParts: []
+            subParts: [],
+            total: 1
         }
         // this.state = {
         //     name: "",
@@ -25,9 +27,9 @@ class Add extends Component {
         //     selectSection: null,
 
         // }
-        // this.handleChange = this.handleChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
-        // this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
         // this.renderSubPart = this.renderSubPart.bind(this);
         // this.handleChangeSubPart = this.handleChangeSubPart.bind(this);
     }
@@ -50,6 +52,14 @@ class Add extends Component {
         );
     }
 
+    handleChange(e) {
+        if (e.target.name === "nSubPart" && e.target.value > 0) {
+            this.setState({
+                total: parseInt(e.target.value)
+            }, () => console.log(this.state));
+        }
+    }
+
     renderSubPart() {
         const subPartElem = (index, id, name) => (
             <div className="form-group" key={index}>
@@ -70,11 +80,16 @@ class Add extends Component {
         return subPartForm;
     }
 
+    handleSubmit() {
+
+    }
+
     render() {
+        // console.log(this.props.auth.id);
         return (
             <Card title="Tambah Data Log" col={6}>
                 <form
-                    // onSubmit={this.handleSubmit}
+                    onSubmit={this.handleSubmit}
                     noValidate>
                     <div className="form-group">
                         <label htmlFor="iTipe">Tipe Part</label>
@@ -92,14 +107,14 @@ class Add extends Component {
                         })}
                     </div>
                     <div className="form-group">
-                        <label htmlFor="inSubPart">Jumlah per Lot</label>
+                        <label htmlFor="iNPerLot">Jumlah per Lot</label>
                         <input
-                                id="inSubPart"
+                                id="iNPerLot"
                                 type="number"
                                 className="form-control"
                                 name="nSubPart"
-                                // value={this.state.nSubPart}
-                                // onChange={this.handleChange}
+                                value={this.state.total}
+                                onChange={this.handleChange}
                                 />
                     </div>
                     
@@ -119,4 +134,8 @@ class Add extends Component {
     }
 }
 
-export default Add;
+const mapState = (state) => ({
+    auth: state.auth
+});
+
+export default connect(mapState)(Add);
