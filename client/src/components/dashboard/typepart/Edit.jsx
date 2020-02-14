@@ -13,11 +13,14 @@ class Edit extends Component {
             id: this.props.match.params.operatorId,
             name: "",
             section: "",
-            nSubPart: 0
+            nSubPart: 0,
+            subParts: []
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.renderSubPart = this.renderSubPart.bind(this);
+        this.handleChangeSubPart = this.handleChangeSubPart.bind(this);
     }
 
     componentDidMount() {
@@ -26,7 +29,8 @@ class Edit extends Component {
                 this.setState({
                     name: response.data.message.name,
                     section: response.data.message.section,
-                    nSubPart: response.data.message.nSubPart
+                    nSubPart: response.data.message.nSubPart,
+                    subParts: response.data.message.subParts
                 });
             })
             .catch(err => console.log(err.response.data.message));
@@ -44,6 +48,14 @@ class Edit extends Component {
         });
     }
 
+    handleChangeSubPart(e) {
+        let tempSubParts = [ ...this.state.subParts ];
+        tempSubParts[e.target.dataset.index].name = e.target.value;
+        this.setState(
+            { subParts: tempSubParts }, () => console.log(this.state)
+        );
+    }
+
     handleSubmit(e) {
         e.preventDefault();
         if (this.state.name && 
@@ -58,6 +70,26 @@ class Edit extends Component {
         else {
             alert("Form tidak boleh kosong/salah.");
         }
+    }
+
+    renderSubPart() {
+        const subPartElem = index => (
+            <div className="form-group" key={index}>
+                <label>Sub Part {index + 1}</label>
+                <input
+                    value={this.state.subParts[index].name}
+                    data-index={index}
+                    onChange={this.handleChangeSubPart}
+                    type="text"
+                    className="form-control"
+                    name="subPart" />
+            </div>
+        );
+        let subPartForm = [];
+        for (let i = 0; i < this.state.nSubPart ; i++) {
+            subPartForm.push(subPartElem(i));
+        }
+        return subPartForm;
     }
 
     render() {
@@ -98,6 +130,11 @@ class Edit extends Component {
                                 name="nSubPart"
                                 value={this.state.nSubPart}
                                 onChange={this.handleChange} />
+                    </div>
+                    <div className="ml-5">
+                        {this.renderSubPart().map(component => {
+                            return component;
+                        })}
                     </div>
                     <div className="d-flex">
                         <Link to="/dashboard/tipe-part"

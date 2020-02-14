@@ -57,10 +57,7 @@ typepart.post('/', (req, res) => {
 
 typepart.post('/add', (req, res) => {
     models.TypePart.create(req.body, {
-        include: [{
-            model: models.SubPartDetail,
-            as: 'subParts'
-        }]
+        include: ['subParts']
       }).then(result => {
         res.json({
             message: result.dataValues,
@@ -124,20 +121,33 @@ typepart.post('/delete', (req, res) => {
 });
 
 typepart.post('/edit', (req, res) => {
-    TypePart.findOne({
-        where: { id: req.body.id }
+    models.TypePart.findOne({
+        where: { id: req.body.id },
+        include: ['subParts']
     }).then(result => {
         if (result) {
             const  { id, ...reqWithoutId } = req.body;
-            TypePart.update(reqWithoutId, {
-                where: {
-                    id: id
-                }
+            models.TypePart.update(reqWithoutId, {
+                where: { id: id }
             }).then(updated => {
                 if (updated) {
-                    res.json({
-                        message: req.body,
+                    let updateSubPart = req.body.subParts.map(item => {
+                        const  { id, ...itemWihoutId } = item;
+                        return models.SubPartDetail.update(itemWihoutId, {
+                            where: { id: item.id }
+                        }).then(subpart => {
+                            return subpart
+                        }).catch(err => {
+                            res.status(400).json({
+                                message: { error: err },
+                            });
+                        });
                     });
+                    Promise.all(updateSubPart).then(promiseResult => {
+                        res.json({
+                            message: req.body,
+                        });
+                    })
                 }
                 else {
                     res.status(400).json({
