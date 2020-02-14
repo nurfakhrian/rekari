@@ -10,10 +10,11 @@ class Edit extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: this.props.match.params.operatorId,
+            id: this.props.match.params.typePartId,
             name: "",
             section: "",
             nSubPart: 0,
+            initialNSubPart: 0,
             subParts: []
         }
         this.handleChange = this.handleChange.bind(this);
@@ -21,6 +22,7 @@ class Edit extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.renderSubPart = this.renderSubPart.bind(this);
         this.handleChangeSubPart = this.handleChangeSubPart.bind(this);
+        this.handleChangeNSubPart = this.handleChangeNSubPart.bind(this);
     }
 
     componentDidMount() {
@@ -30,6 +32,7 @@ class Edit extends Component {
                     name: response.data.message.name,
                     section: response.data.message.section,
                     nSubPart: response.data.message.nSubPart,
+                    initialNSubPart: response.data.message.nSubPart,
                     subParts: response.data.message.subParts
                 });
             })
@@ -42,6 +45,30 @@ class Edit extends Component {
         });
     }
 
+    handleChangeNSubPart(e) {
+        const value = e.target.value;
+        if (value > 1) {
+            this.setState(
+                (prevState) => {
+                    if (parseInt(value) > parseInt(prevState.nSubPart)) {
+                        return {
+                            nSubPart: parseInt(value),
+                            subParts: [ ...prevState.subParts, {name: "", typePartId: this.state.id}]
+                        }
+                    }
+                    else {
+                        // const newSubparts = prevState.subParts;
+                        // newSubparts.splice(-1,1);
+                        return {
+                            nSubPart: parseInt(value),
+                            // subParts: newSubparts
+                        }
+                    }
+                }
+            );
+        }
+    }
+
     handleChangeSelect(obj) {
         this.setState({
             section: obj.value
@@ -52,17 +79,26 @@ class Edit extends Component {
         let tempSubParts = [ ...this.state.subParts ];
         tempSubParts[e.target.dataset.index].name = e.target.value;
         this.setState(
-            { subParts: tempSubParts }, () => console.log(this.state)
+            { subParts: tempSubParts }
         );
     }
 
     handleSubmit(e) {
         e.preventDefault();
+        let nullSubPart = false;
+        for (let i = 0; i < this.state.subParts.length; i++) {
+            if (this.state.subParts[i].name === "") {
+                nullSubPart = true;
+                break;
+            }
+        }
         if (this.state.name && 
             this.state.nSubPart > 1 && 
-            this.state.section) {
+            this.state.section &&
+            !nullSubPart) {
             axios.post('http://localhost:3028/typepart/edit', this.state)
                 .then(response => {
+                    console.log(response)
                     this.props.history.push("../detail/" + this.state.id)
                 })
                 .catch(err => console.log(err.response.data.message));
@@ -77,7 +113,7 @@ class Edit extends Component {
             <div className="form-group" key={index}>
                 <label>Sub Part {index + 1}</label>
                 <input
-                    value={this.state.subParts[index].name}
+                    value={(this.state.subParts[index] && this.state.subParts[index].name) || ""}
                     data-index={index}
                     onChange={this.handleChangeSubPart}
                     type="text"
@@ -129,7 +165,7 @@ class Edit extends Component {
                                 className="form-control"
                                 name="nSubPart"
                                 value={this.state.nSubPart}
-                                onChange={this.handleChange} />
+                                onChange={this.handleChangeNSubPart} />
                     </div>
                     <div className="ml-5">
                         {this.renderSubPart().map(component => {

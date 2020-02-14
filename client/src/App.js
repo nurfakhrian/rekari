@@ -54,8 +54,8 @@ const App = (props) => {
                     {/* Tipe */}
                     <PrivateRoute exact path="/dashboard/tipe-part" auth={props.store.auth} component={Typepart} />
                     <PrivateRoute exact path="/dashboard/tipe-part/add" auth={props.store.auth} component={TypepartAdd}/>
-                    <PrivateRoute exact path="/dashboard/tipe-part/detail/:operatorId" auth={props.store.auth} component={TypepartDetail}/>
-                    <PrivateRoute exact path="/dashboard/tipe-part/edit/:operatorId" auth={props.store.auth} component={TypepartEdit}/>
+                    <PrivateRoute exact path="/dashboard/tipe-part/detail/:typePartId" auth={props.store.auth} component={TypepartDetail}/>
+                    <PrivateRoute exact path="/dashboard/tipe-part/edit/:typePartId" auth={props.store.auth} component={TypepartEdit}/>
                 </Container>
             </main>
             <Footer />

@@ -9,7 +9,7 @@ class Detail extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: this.props.match.params.operatorId,
+            id: this.props.match.params.typePartId,
             name: "",
             section: "",
             subParts: [],

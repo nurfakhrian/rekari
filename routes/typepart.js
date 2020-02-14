@@ -131,7 +131,20 @@ typepart.post('/edit', (req, res) => {
                 where: { id: id }
             }).then(updated => {
                 if (updated) {
-                    let updateSubPart = req.body.subParts.map(item => {
+                    let subPartsToAdd, subPartsToDelete;
+                    const { initialNSubPart, nSubPart, subParts } = req.body;
+                    const n = Math.abs(nSubPart - initialNSubPart);
+                    if (nSubPart > initialNSubPart) { // penambahan data subpart
+                        subPartsToAdd = subParts.splice(-n, n);
+                        // console.log("add this", subPartsToAdd)
+                        // console.log("update this", subParts)
+                    }
+                    if (nSubPart < initialNSubPart) { // pengurangan data subpart
+                        subPartsToDelete = subParts.splice(-n, n);
+                        console.log("delete this", subPartsToDelete)
+                        console.log("update this", subParts)
+                    }
+                    let updateSubPart = subParts.map(item => {
                         const  { id, ...itemWihoutId } = item;
                         return models.SubPartDetail.update(itemWihoutId, {
                             where: { id: item.id }
@@ -143,11 +156,40 @@ typepart.post('/edit', (req, res) => {
                             });
                         });
                     });
-                    Promise.all(updateSubPart).then(promiseResult => {
-                        res.json({
-                            message: req.body,
-                        });
-                    })
+                    Promise.all(updateSubPart).then(r => {
+                        if (nSubPart > initialNSubPart) {
+                            return Promise.all(subPartsToAdd.map(subPart => {
+                                return models.SubPartDetail.create(subPart)
+                                    .then(rs => rs)
+                                    .catch(err => {
+                                        console.log("add", err)
+                                        res.status(400).json({
+                                            message: { error: err },
+                                        });
+                                    });
+                            })).then(rs => {
+                                res.json({
+                                    message: req.body,
+                                });
+                            })
+                        }
+                        if (nSubPart < initialNSubPart) {
+                            return Promise.all(subPartsToDelete.map(subPart => {
+                                return models.SubPartDetail.destroy({ where: { id: subPart.id } })
+                                    .then(rs => rs)
+                                    .catch(err => {
+                                        console.log("delete", err)
+                                        res.status(400).json({
+                                            message: { error: err },
+                                        });
+                                    });
+                            })).then(rs => {
+                                res.json({
+                                    message: req.body,
+                                });
+                            });
+                        }
+                    });
                 }
                 else {
                     res.status(400).json({
