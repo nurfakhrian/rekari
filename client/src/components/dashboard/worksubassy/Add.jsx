@@ -75,7 +75,7 @@ class Add extends Component {
         this.setState(
             { subPartsToSend: tempSubPartsToSend }
         );
-        const catchGroup = /(PC)(\d+)/.exec(e.target.value);
+        const catchGroup = /=.*-BR0.*(PC)\s(\d+)/.exec(e.target.value);
         console.log(catchGroup);
     }
 
