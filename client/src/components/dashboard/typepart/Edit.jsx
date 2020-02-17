@@ -145,10 +145,10 @@ class Edit extends Component {
                                 onChange={this.handleChange} />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="iRole">Role</label>
+                        <label htmlFor="iRole">Section</label>
                         <Select
                             id="iRole"
-                            placeholder="Pilih Role"
+                            placeholder="Pilih Section"
                             value={sectionOptions.filter(option => option.value === this.state.section)}
                             onChange={this.handleChangeSelect}
                             options={sectionOptions} />

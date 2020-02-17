@@ -36,6 +36,10 @@ class Add extends Component {
         return result;
      }
 
+    // resetSubPartCode() {
+    //     this
+    // }
+
     componentDidMount() {
         axios.post('http://localhost:3028/typepart')
             .then(response => {
@@ -61,14 +65,18 @@ class Add extends Component {
     }
 
     handleChangeSubPart(e) {
+        // e.preventDefault();
+        // console.log(e.target.value);
         let tempSubPartsToSend = [ ...this.state.subPartsToSend ];
         tempSubPartsToSend[e.target.dataset.index] = {
-            lotSubPartCode: e.target.value,
+            lotSubPartCode: e.target.value.replace(/\s/g, ''),
             subPartName: this.state.subPartsToSend[e.target.dataset.index].subPartName
         };
         this.setState(
             { subPartsToSend: tempSubPartsToSend }
         );
+        const catchGroup = /(PC)(\d+)/.exec(e.target.value);
+        console.log(catchGroup);
     }
 
     handleChange(e) {
@@ -84,6 +92,8 @@ class Add extends Component {
             <div className="form-group" key={index}>
                 <label>{name}</label>
                 <input
+                    id={"subPart" + index}
+                    tabIndex="-1"
                     data-index={index}
                     data-idsubpart={id}
                     data-namesubpart={name}
@@ -129,10 +139,28 @@ class Add extends Component {
                             scale: 4
                         });
                         Swal.fire({
-                            title: "Data berhasil terekam!", 
+                            title: "Data berhasil ditambahkan!",
+                            timer: 2000,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
                             html: `
                                 <img src="${canvasBarcode.toDataURL('image/png')}" alt="barcode"/>
-                                <p class="h3 mt-3 font-weight-bold">${generatedUnique}</p>`
+                                <p class="h3 mt-3 font-weight-bold">${generatedUnique}</p>`,
+                            backdrop:true,
+                            allowOutsideClick: false,
+                            onClose: () => {
+                                setTimeout(() => {
+                                    document.getElementById("subPart0").focus()
+                                }, 500);
+                            }
+                        }).then(result => {
+                            if (result.dismiss === Swal.DismissReason.timer) {
+                                console.log("lolo")
+                            }
+                        });
+                        const resetSubPartsToSend = this.state.subPartsToSend.map(obj => ({...obj, lotSubPartCode: ""}));
+                        this.setState({
+                            subPartsToSend: resetSubPartsToSend
                         });
                     }
                     catch(e) {
