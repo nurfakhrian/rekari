@@ -1,6 +1,11 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const LotPart = sequelize.define('LotPart', {
+    lotpartBarcode: {
+      type: DataTypes.STRING(18),
+      allowNull: false,
+      unique: true
+    },
     total: {
       type: DataTypes.INTEGER,
       allowNull: false

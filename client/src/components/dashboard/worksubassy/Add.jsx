@@ -6,33 +6,35 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import bwipjs from 'bwip-js';
+import Swal from 'sweetalert2';
 
 class Add extends Component {
     constructor(props) {
         super(props);
         this.state = {
             typeParts: [],
-            // typePartsSelect: [],
-            subParts: [],
-            total: 1
+            subPartsFromDb: [],
+            // datasend/payload
+            typePartId: null,
+            total: 1,
+            subPartsToSend: []
         }
-        // this.state = {
-        //     name: "",
-        //     nSubPart: 2,
-        //     section: "",
-        //     subParts: [
-        //         {name: ""},
-        //         {name: ""}
-        //     ],
-        //     selectSection: null,
-
-        // }
         this.handleChange = this.handleChange.bind(this);
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        // this.renderSubPart = this.renderSubPart.bind(this);
-        // this.handleChangeSubPart = this.handleChangeSubPart.bind(this);
+        this.handleChangeSubPart = this.handleChangeSubPart.bind(this);
     }
+
+    generateUnique = () => {
+        const length = 15;
+        let result = '';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        for ( var i = 0; i < length; i++ ) {
+           result += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        return result;
+     }
 
     componentDidMount() {
         axios.post('http://localhost:3028/typepart')
@@ -41,14 +43,31 @@ class Add extends Component {
                     typeParts: response.data.message.map(
                         item => ({ value: item.id, label: item.name, ...item })
                     )
-                }, () => console.log(this.state));
+                });
             })
             .catch(err => console.log(err.response.data.message));
     }
 
     handleChangeSelect(selected) {
+        let tempSubPartsToSend = [];
+        selected.subParts.forEach(item => {
+            tempSubPartsToSend.push({lotSubPartCode: "", subPartName: item.name});
+        })
+        this.setState({
+            subPartsFromDb: selected.subParts,
+            typePartId: selected.value,
+            subPartsToSend: tempSubPartsToSend
+        });
+    }
+
+    handleChangeSubPart(e) {
+        let tempSubPartsToSend = [ ...this.state.subPartsToSend ];
+        tempSubPartsToSend[e.target.dataset.index] = {
+            lotSubPartCode: e.target.value,
+            subPartName: this.state.subPartsToSend[e.target.dataset.index].subPartName
+        };
         this.setState(
-            { subParts: selected.subParts }, () => console.log(this.state)
+            { subPartsToSend: tempSubPartsToSend }
         );
     }
 
@@ -56,7 +75,7 @@ class Add extends Component {
         if (e.target.name === "nSubPart" && e.target.value > 0) {
             this.setState({
                 total: parseInt(e.target.value)
-            }, () => console.log(this.state));
+            });
         }
     }
 
@@ -65,27 +84,72 @@ class Add extends Component {
             <div className="form-group" key={index}>
                 <label>{name}</label>
                 <input
-                    // value={this.state.subPart[index]}
                     data-index={index}
-                    // onChange={this.handleChangeSubPart}
+                    data-idsubpart={id}
+                    data-namesubpart={name}
+                    onChange={this.handleChangeSubPart}
+                    value={this.state.subPartsToSend[index].lotSubPartCode}
                     type="text"
                     className="form-control"
                     name="lotSubPartCode" />
             </div>
         );
         let subPartForm = [];
-        this.state.subParts.forEach((item, index) => {
+        this.state.subPartsFromDb.forEach((item, index) => {
             subPartForm.push(subPartElem(index, item.id, item.name));
         });
         return subPartForm;
     }
 
-    handleSubmit() {
-
+    async handleSubmit(e) {
+        e.preventDefault();
+        let nullSubPart = false;
+        for (let i = 0; i < this.state.subPartsFromDb.length; i++) {
+            if (this.state.subPartsToSend[i].lotSubPartCode === "") {
+                nullSubPart = true;
+                break;
+            }
+        }
+        if (this.state.typePartId && this.state.total > 0 && !nullSubPart) {
+            const generatedUnique = this.generateUnique();
+            try {
+                const newLog = await axios.post('http://localhost:3028/lotpart/add', {
+                    lotpartBarcode: generatedUnique,
+                    total: this.state.total,
+                    operatorId: this.props.auth.id,
+                    typePartId: this.state.typePartId,
+                    lotPartsLotSubParts: this.state.subPartsToSend
+                });
+                if (newLog.data.message.id) {
+                    try {
+                        const canvasBarcode = document.createElement('canvas');
+                        bwipjs.toCanvas(canvasBarcode, {
+                            bcid: 'qrcode',
+                            text: generatedUnique,
+                            scale: 4
+                        });
+                        Swal.fire({
+                            title: "Data berhasil terekam!", 
+                            html: `
+                                <img src="${canvasBarcode.toDataURL('image/png')}" alt="barcode"/>
+                                <p class="h3 mt-3 font-weight-bold">${generatedUnique}</p>`
+                        });
+                    }
+                    catch(e) {
+                        console.log(e);
+                    }
+                }
+            }
+            catch(err) {
+                console.log(err.response.data.message);
+            }
+        }
+        else {
+            alert("Form tidak boleh kosong/salah.");
+        }
     }
 
     render() {
-        // console.log(this.props.auth.id);
         return (
             <Card title="Tambah Data Log" col={6}>
                 <form
@@ -96,7 +160,6 @@ class Add extends Component {
                         <Select
                             id="iTipe"
                             placeholder="Pilih Tipe Part"
-                            // value={this.state.selectSection}
                             onChange={this.handleChangeSelect}
                             options={this.state.typeParts}
                             />

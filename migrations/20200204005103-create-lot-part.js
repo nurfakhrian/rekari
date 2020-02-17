@@ -8,6 +8,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      lotpartBarcode: {
+        type: Sequelize.STRING(18),
+        allowNull: false,
+        unique: true
+      },
       total: {
         type: Sequelize.INTEGER,
         allowNull: false
