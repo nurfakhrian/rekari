@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
+import Moment from 'react-moment';
 
 import ReactTable from 'react-table-6';
 import 'react-table-6/react-table.css';
@@ -89,25 +90,35 @@ class List extends Component {
             {
                 Header: 'Section',
                 accessor: 'section',
+                width: 100
             },
-            // {
-            //     Header: 'Sub Part',
-            //     id: 'subParts',
-            //     accessor: data => {
-            //         const output = data.subParts.map(subpart => {
-            //             return subpart.name;
-            //         });
-            //         return output.join(', ');
-            //     },
-            //     width: 300
-            // },
+            {
+                Header: 'Sub Part',
+                Cell: ({ original }) => (
+                    <ul>
+                        {
+                            original.subParts.map((item, i) => {
+                                return <li key={i}>{item.name}</li>
+                            })
+                        }
+                    </ul>
+                )
+            },
             {
                 Header: 'Created at',
-                accessor: 'createdAt'
+                Cell: ({ original }) => (
+                    <Moment format="DD/MM/YYYY HH:mm:ss">
+                        {original.createdAt}
+                    </Moment>
+                )
             },
             {
                 Header: 'Updated at',
-                accessor: 'updatedAt'
+                Cell: ({ original }) => (
+                    <Moment format="DD/MM/YYYY HH:mm:ss">
+                        {original.updatedAt}
+                    </Moment>
+                )
             },
             {
                 Header: 'Action',

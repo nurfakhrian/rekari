@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 // import { connect } from 'react-redux';
+import Moment from 'react-moment';
 
 import ReactTable from 'react-table-6';
 import 'react-table-6/react-table.css';
@@ -115,11 +116,19 @@ class List extends Component {
             },
             {
                 Header: 'Created at',
-                accessor: 'createdAt'
+                Cell: ({ original }) => (
+                    <Moment format="DD/MM/YYYY HH:mm:ss">
+                        {original.createdAt}
+                    </Moment>
+                )
             },
             {
                 Header: 'Updated at',
-                accessor: 'updatedAt'
+                Cell: ({ original }) => (
+                    <Moment format="DD/MM/YYYY HH:mm:ss">
+                        {original.updatedAt}
+                    </Moment>
+                )
             },
             {
                 Header: 'Action',

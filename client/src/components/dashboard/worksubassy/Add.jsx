@@ -67,16 +67,32 @@ class Add extends Component {
     handleChangeSubPart(e) {
         // e.preventDefault();
         // console.log(e.target.value);
-        let tempSubPartsToSend = [ ...this.state.subPartsToSend ];
-        tempSubPartsToSend[e.target.dataset.index] = {
-            lotSubPartCode: e.target.value.replace(/\s/g, ''),
+        let tempSubPartsToSendRaw = [ ...this.state.subPartsToSend ];
+        tempSubPartsToSendRaw[e.target.dataset.index] = {
+            lotSubPartCode: e.target.value,
             subPartName: this.state.subPartsToSend[e.target.dataset.index].subPartName
         };
         this.setState(
-            { subPartsToSend: tempSubPartsToSend }
+            { subPartsToSend: tempSubPartsToSendRaw }
         );
-        const catchGroup = /=.*-BR0.*(PC)\s(\d+)/.exec(e.target.value);
-        console.log(catchGroup);
+        const regex = /.*(.{7})=.*-BR0.*PC\s(\d+)\s{28,29}(.*)(\d{8})\s*\*/;
+        if (regex.test(e.target.value)) {
+            const catchGroup = regex.exec(e.target.value);
+            let tempSubPartsToSend = [ ...this.state.subPartsToSend ];
+            tempSubPartsToSend[e.target.dataset.index] = {
+                lotSubPartCode: catchGroup[2] + "-" + catchGroup[4] + "-" + catchGroup[1] + "-" + catchGroup[3],
+                subPartName: this.state.subPartsToSend[e.target.dataset.index].subPartName
+            };
+            this.setState(
+                { subPartsToSend: tempSubPartsToSend }
+            );
+            try {
+                document.getElementById("subPart" + (parseInt(e.target.dataset.index) + 1)).focus();
+            }
+            catch {
+                document.getElementById("iNPerLot").focus();
+            }
+        }
     }
 
     handleChange(e) {
@@ -150,14 +166,10 @@ class Add extends Component {
                             allowOutsideClick: false,
                             onClose: () => {
                                 setTimeout(() => {
-                                    document.getElementById("subPart0").focus()
+                                    document.getElementById("subPart0").focus();
                                 }, 500);
                             }
-                        }).then(result => {
-                            if (result.dismiss === Swal.DismissReason.timer) {
-                                console.log("lolo")
-                            }
-                        });
+                        })
                         const resetSubPartsToSend = this.state.subPartsToSend.map(obj => ({...obj, lotSubPartCode: ""}));
                         this.setState({
                             subPartsToSend: resetSubPartsToSend
@@ -210,7 +222,7 @@ class Add extends Component {
                     </div>
                     
                     <div className="d-flex">
-                        <Link to="/dashboard/tipe-part"
+                        <Link to="/dashboard/work-subassy"
                             className="btn btn-cc btn-cc-white btn-cc-radius-normal ml-0 py-2 px-5">
                             <i><FontAwesomeIcon icon={faArrowLeft} /></i>&nbsp;Semua
                         </Link>

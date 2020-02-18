@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
+import Moment from 'react-moment';
 
 import ReactTable from 'react-table-6';
 import 'react-table-6/react-table.css';
@@ -30,8 +31,9 @@ class List extends Component {
     }
 
     drawTable(query = {}) {
-        axios.post('http://localhost:3028/typepart', query)
+        axios.post('http://localhost:3028/lotpart', query)
             .then(response => {
+                console.log(response.data.message)
                 this.setState({
                     dataSet: response.data.message
                 })
@@ -82,32 +84,52 @@ class List extends Component {
     render() {
         const columns = [
             {
-                Header: 'Nama',
-                accessor: 'name',
+                Header: 'ID',
+                accessor: 'lotpartBarcode',
                 width: 200
             },
             {
-                Header: 'Section',
-                accessor: 'section',
+                Header: 'SNP',
+                accessor: 'total',
+                width: 50
             },
-            // {
-            //     Header: 'Sub Part',
-            //     id: 'subParts',
-            //     accessor: data => {
-            //         const output = data.subParts.map(subpart => {
-            //             return subpart.name;
-            //         });
-            //         return output.join(', ');
-            //     },
-            //     width: 300
-            // },
+            {
+                Header: 'Assy',
+                Cell: ({ original }) => (
+                    <span>
+                        {original.typePart.name}
+                    </span>
+                ),
+                width: 150
+            },
+            {
+                Header: 'Sub Part',
+                Cell: ({ original }) => (
+                    <ul>
+                        {original.lotPartsLotSubParts.map((item, i) => (
+                            <li key={i}>{item.subPartName + ": " + item.lotSubPartCode}</li>
+                        ))}
+                    </ul>
+                ),
+                width: 450
+            },
+            {
+                Header: 'Operator',
+                Cell: ({ original }) => (
+                    <span>
+                        {original.operator.code}
+                    </span>
+                ),
+                width: 80
+            },
             {
                 Header: 'Created at',
-                accessor: 'createdAt'
-            },
-            {
-                Header: 'Updated at',
-                accessor: 'updatedAt'
+                Cell: ({ original }) => (
+                    <Moment format="DD/MM/YYYY HH:mm:ss">
+                        {original.createdAt}
+                    </Moment>
+                ),
+                width: 200
             },
             {
                 Header: 'Action',
