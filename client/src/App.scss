@@ -161,6 +161,10 @@ input.focus:focus {
     }
 }
 
+.react-datepicker-wrapper {
+    display: block !important;
+}
+
 .disable-anchor {
     pointer-events: none;
     cursor: default;

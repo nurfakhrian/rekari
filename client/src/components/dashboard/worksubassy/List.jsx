@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 import Moment from 'react-moment';
 
+
+
 import ReactTable from 'react-table-6';
 import 'react-table-6/react-table.css';
 
@@ -13,6 +15,9 @@ import axios from 'axios';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { Link } from 'react-router-dom';
 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 class List extends Component {
     constructor(props) {
         super(props);
@@ -22,13 +27,17 @@ class List extends Component {
             searchTypePart: {
                 value: null
             },
-            typeParts: []
+            typeParts: [],
+            searchStartDate: null,
+            searchEndDate: null
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         // this.handleDelete = this.handleDelete.bind(this);
         this.drawTable = this.drawTable.bind(this);
+        this.handleStartDateChange = this.handleStartDateChange.bind(this);
+        this.handleEndDateChange = this.handleEndDateChange.bind(this);
     }
 
     drawTable(query = {}) {
@@ -74,10 +83,37 @@ class List extends Component {
         });
     }
 
+    handleStartDateChange = date => {
+        this.setState({
+            searchStartDate: date
+        }, () => {
+            if (!this.state.searchStartDate) {
+                this.setState({
+                    searchEndDate: null
+                });
+            }
+        });
+    };
+
+    handleEndDateChange = date => {
+        let searchEndDate = new Date();
+        if (new Date().toDateString() !== date.toDateString()) {
+            date.setHours(23,59,0,0);
+            searchEndDate = date;
+        }
+        if (this.state.searchStartDate) {
+            this.setState({
+                searchEndDate: searchEndDate
+            });
+        }
+    };
+
     handleSearch() {
         let query = { 
             lotpartBarcode: this.state.searchValue,
-            typePartId: this.state.searchTypePart.value || null
+            typePartId: this.state.searchTypePart.value || null,
+            startDate: this.state.searchStartDate,
+            endDate: this.state.searchEndDate
         };
         this.drawTable(query)
     }
@@ -195,7 +231,33 @@ class List extends Component {
                         <Select
                             placeholder="Pilih Sub Assy"
                             onChange={this.handleChangeSelect}
-                            options={this.state.typeParts} />
+                            options={this.state.typeParts}
+                        />
+                    </div>
+                    <div className="col-md-2 p-md-1 mb-md-0 mb-2">
+                        <DatePicker
+                            placeholderText="Start Date (00:00)"
+                            className="form-control"
+                            selected={this.state.searchStartDate}
+                            onChange={this.handleStartDateChange}
+                            dateFormat="dd/MM/yyyy"
+                            maxDate={new Date()}
+                            showDisabledMonthNavigation
+                            isClearable
+                        />
+                    </div>
+                    <div className="col-md-2 p-md-1 mb-md-0 mb-2">
+                        <DatePicker
+                            placeholderText="End Date (23:59)"
+                            className="form-control"
+                            selected={this.state.searchEndDate}
+                            onChange={this.handleEndDateChange}
+                            dateFormat="dd/MM/yyyy"
+                            maxDate={new Date()}
+                            minDate={this.state.searchStartDate}
+                            showDisabledMonthNavigation
+                            isClearable
+                        />
                     </div>
                     
                     <div className="col-md-2 p-md-1 text-center text-md-left">

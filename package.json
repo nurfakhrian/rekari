@@ -24,20 +24,12 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
-    "bwip-js": "^2.0.6",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "jquery": "^3.4.1",
     "jsonwebtoken": "^8.5.1",
-    "moment": "^2.24.0",
     "mysql": "^2.18.1",
     "mysql2": "^2.1.0",
-    "react-moment": "^0.9.7",
-    "react-select": "^3.0.8",
-    "react-table-6": "^6.11.0",
-    "redux-thunk": "^2.3.0",
-    "sequelize": "^5.21.3",
-    "sweetalert2": "^9.7.2"
+    "sequelize": "^5.21.3"
   },
   "devDependencies": {
     "concurrently": "^5.1.0",

@@ -8,25 +8,35 @@ const lotpart = express.Router();
 lotpart.use(cors());
 
 lotpart.post('/', (req, res) => {
-    let w = {where: {}, include: ['lotPartsLotSubParts', 'operator', 'typePart']};
-    if (req.body.lotpartBarcode && req.body.typePartId) {
-        w = {
-            where: {
-                [Op.and]: [
-                    { 
-                        lotpartBarcode: {
-                            [Op.substring]: req.body.lotpartBarcode
-                        }
-                    },
-                    { 
-                        typePartId: req.body.typePartId
-                    }
-                ]
+    console.log(new Date(req.body.startDate))
+    console.log(req.body.startDate)
+    console.log(new Date(req.body.endDate))
+    console.log(req.body.endDate)
+    let w = {
+        where: {
+            createdAt: {
+                [Op.lt]: new Date(),
+                [Op.gt]: new Date(new Date() - 48 * 60 * 60 * 1000)
             }
+        },
+        include: ['lotPartsLotSubParts', 'operator', 'typePart']
+    };
+    if (req.body.lotpartBarcode && req.body.typePartId) {
+        w.where = {
+            [Op.and]: [
+                { 
+                    lotpartBarcode: {
+                        [Op.substring]: req.body.lotpartBarcode
+                    }
+                },
+                { 
+                    typePartId: req.body.typePartId
+                }
+            ]
         }
     }
     if (req.body.lotpartBarcode && !req.body.typePartId) {
-        w.where= {
+        w.where = {
             lotpartBarcode: {
                 [Op.substring]: req.body.lotpartBarcode
             }
@@ -35,6 +45,12 @@ lotpart.post('/', (req, res) => {
     if (!req.body.lotpartBarcode && req.body.typePartId) {
         w.where = {
             typePartId: req.body.typePartId
+        }
+    }
+    if (req.body.startDate && req.body.endDate) {
+        w.where.createdAt = {
+            [Op.lt]: new Date(req.body.endDate),
+            [Op.gt]: new Date(req.body.startDate)
         }
     }
     models.LotPart.findAll(w).then(result => {
