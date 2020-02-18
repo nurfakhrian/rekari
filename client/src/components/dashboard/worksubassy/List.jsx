@@ -19,21 +19,21 @@ class List extends Component {
         this.state = {
             dataSet: [],
             searchValue: null,
-            searchSection: {
+            searchTypePart: {
                 value: null
-            }
+            },
+            typeParts: []
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
+        // this.handleDelete = this.handleDelete.bind(this);
         this.drawTable = this.drawTable.bind(this);
     }
 
     drawTable(query = {}) {
         axios.post('http://localhost:3028/lotpart', query)
             .then(response => {
-                console.log(response.data.message)
                 this.setState({
                     dataSet: response.data.message
                 })
@@ -41,8 +41,25 @@ class List extends Component {
             .catch(err => console.log(err.response.data.message));
     }
 
+    async fetchDropdown() {
+        try {
+            const typeParts = await axios.post('http://localhost:3028/typepart');
+            const typePartsTemp = typeParts.data.message.map(
+                item => ({ value: item.id, label: item.name, ...item })
+            );
+            typePartsTemp.unshift({ value: '', label: '-- Semua --' });
+            this.setState({
+                typeParts: typePartsTemp
+            });
+        }
+        catch (err) {
+            console.log(err.response.data.message);
+        }
+    }
+
     componentDidMount() {
         this.drawTable();
+        this.fetchDropdown();
     }
 
     handleChange(e) {
@@ -53,33 +70,33 @@ class List extends Component {
 
     handleChangeSelect(val) {
         this.setState({
-            searchSection: val
+            searchTypePart: val
         });
     }
 
     handleSearch() {
         let query = { 
-            name: this.state.searchValue,
-            section: this.state.searchSection.value || null
+            lotpartBarcode: this.state.searchValue,
+            typePartId: this.state.searchTypePart.value || null
         };
         this.drawTable(query)
     }
 
-    handleDelete(e) {
-        if (window.confirm(`Hapus data dengan id ${e.target.dataset.id} (${e.target.dataset.name}) ?`)) {
-            axios.post('http://localhost:3028/typepart/delete', { id: e.target.dataset.id })
-                .then(response => {
-                    if (response.data.message.id) {
-                        alert(`Data dengan id ${response.data.message.id} (${response.data.message.name}) berhasil dihapus.`)
-                        this.handleSearch();
-                    }
-                    else {
-                        alert("Terjadi kesalahan.");
-                    }
-                })
-                .catch(err => console.log(err.response.data.message));
-        }
-    }
+    // handleDelete(e) {
+    //     if (window.confirm(`Hapus data dengan id ${e.target.dataset.id} (${e.target.dataset.name}) ?`)) {
+    //         axios.post('http://localhost:3028/typepart/delete', { id: e.target.dataset.id })
+    //             .then(response => {
+    //                 if (response.data.message.id) {
+    //                     alert(`Data dengan id ${response.data.message.id} (${response.data.message.name}) berhasil dihapus.`)
+    //                     this.handleSearch();
+    //                 }
+    //                 else {
+    //                     alert("Terjadi kesalahan.");
+    //                 }
+    //             })
+    //             .catch(err => console.log(err.response.data.message));
+    //     }
+    // }
 
     render() {
         const columns = [
@@ -94,7 +111,7 @@ class List extends Component {
                 width: 50
             },
             {
-                Header: 'Assy',
+                Header: 'Sub Assy',
                 Cell: ({ original }) => (
                     <span>
                         {original.typePart.name}
@@ -103,7 +120,7 @@ class List extends Component {
                 width: 150
             },
             {
-                Header: 'Sub Part',
+                Header: 'Repack Part',
                 Cell: ({ original }) => (
                     <ul>
                         {original.lotPartsLotSubParts.map((item, i) => (
@@ -117,10 +134,10 @@ class List extends Component {
                 Header: 'Operator',
                 Cell: ({ original }) => (
                     <span>
-                        {original.operator.code}
+                        {original.operator.code} | {original.operator.name}
                     </span>
                 ),
-                width: 80
+                width: 150
             },
             {
                 Header: 'Created at',
@@ -149,7 +166,8 @@ class List extends Component {
                             className="btn btn-cc btn-cc-secondary btn-cc-radius-normal p-1 mb-1"
                             data-id={original.id}
                             data-name={original.name}
-                            onClick={this.handleDelete}>
+                            // onClick={this.handleDelete}
+                            >
                             <FontAwesomeIcon icon={faTrashAlt} />&nbsp;Hapus
                         </button>
                     </>
@@ -168,26 +186,23 @@ class List extends Component {
                                 name="searchValue"
                                 className="form-control bg-grey focus"
                                 id="search-dt"
-                                placeholder="Cari..."
+                                placeholder="Cari ID..."
                                 onChange={this.handleChange}></input>
                             <i><FontAwesomeIcon icon={faSearch} /></i>
                         </div>
                     </div>
                     <div className="col-md-3 p-md-1 mb-md-0 mb-2">
                         <Select
-                            placeholder="Pilih Section"
+                            placeholder="Pilih Sub Assy"
                             onChange={this.handleChangeSelect}
-                            options={[
-                                { value: '', label: '-- Semua --' },
-                                { value: 'master', label: 'Master' },
-                                { value: 'caliper', label: 'Caliper' }
-                            ]} />
+                            options={this.state.typeParts} />
                     </div>
                     
                     <div className="col-md-2 p-md-1 text-center text-md-left">
                         <button
                             className="btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5 px-md-2"
-                            onClick={this.handleSearch}>
+                            onClick={this.handleSearch}
+                            >
                             <FontAwesomeIcon icon={faSearch} />&ensp;Cari
                         </button>
                     </div>

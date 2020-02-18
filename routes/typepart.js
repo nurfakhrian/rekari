@@ -10,35 +10,29 @@ typepart.use(cors());
 typepart.post('/', (req, res) => {
     let w = {where: {}, include: ['subParts']};
     if (req.body.name && req.body.section) {
-        w = {
-            where: {
-                [Op.and]: [
-                    { 
-                        name: {
-                            [Op.substring]: req.body.name
-                        }
-                    },
-                    { 
-                        section: req.body.section
+        w.where = {
+            [Op.and]: [
+                { 
+                    name: {
+                        [Op.substring]: req.body.name
                     }
-                ]
-            }
+                },
+                { 
+                    section: req.body.section
+                }
+            ]
         }
     }
     if (req.body.name && !req.body.section) {
-        w = {
-            where: {
-                name: {
-                    [Op.substring]: req.body.name
-                }
+        w.where = {
+            name: {
+                [Op.substring]: req.body.name
             }
         }
     }
     if (!req.body.name && req.body.section) {
-        w = {
-            where: {
-                section: req.body.section
-            }
+        w.where = {
+            section: req.body.section
         }
     }
     models.TypePart.findAll(w).then(result => {

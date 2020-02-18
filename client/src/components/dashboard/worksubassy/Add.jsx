@@ -36,10 +36,6 @@ class Add extends Component {
         return result;
      }
 
-    // resetSubPartCode() {
-    //     this
-    // }
-
     componentDidMount() {
         axios.post('http://localhost:3028/typepart')
             .then(response => {
