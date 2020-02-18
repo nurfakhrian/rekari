@@ -80,4 +80,26 @@ lotpart.post('/add', (req, res) => {
     });
 });
 
+lotpart.post('/detail', (req, res) => {
+    models.LotPart.findOne({
+        where: { id: req.body.id },
+        include: ['lotPartsLotSubParts', 'operator', 'typePart']
+    }).then(result => {
+        if (result) {
+            res.json({
+                message: result.dataValues,
+            });
+        }
+        else {
+            res.status(400).json({
+                message: { error: 'lotpart does not exist' },
+            });
+        }
+    }).catch(err => {
+        res.status(400).json({
+            message: { error: err },
+        });
+    });
+});
+
 module.exports = lotpart;

@@ -190,7 +190,7 @@ class List extends Component {
                 width: 250,
                 Cell: ({ original }) => (
                     <>
-                        <Link to={{pathname: `/dashboard/tipe-part/detail/${original.id}`}}
+                        <Link to={{pathname: `/dashboard/work-subassy/detail/${original.id}`}}
                             className="btn btn-cc btn-cc-primary btn-cc-radius-normal p-1 mb-1">
                             <FontAwesomeIcon icon={faInfoCircle} />&nbsp;Detil
                         </Link>

@@ -22,6 +22,7 @@ import TypepartDetail from './components/dashboard/typepart/Detail';
 
 import Worksubassy from './components/dashboard/worksubassy/List';
 import WorksubassyAdd from './components/dashboard/worksubassy/Add';
+import WorksubassyDetail from './components/dashboard/worksubassy/Detail';
 
 import Login from './components/Login';
 import SubAssy from './components/SubAssy';
@@ -62,6 +63,7 @@ const App = (props) => {
                     {/* Sub Assy */}
                     <PrivateRoute exact path="/dashboard/work-subassy" auth={props.store.auth} component={Worksubassy} />
                     <PrivateRoute exact path="/dashboard/work-subassy/add" auth={props.store.auth} component={WorksubassyAdd}/>
+                    <PrivateRoute exact path="/dashboard/work-subassy/detail/:logpartId" auth={props.store.auth} component={WorksubassyDetail}/>
                 </Container>
             </main>
             <Footer />

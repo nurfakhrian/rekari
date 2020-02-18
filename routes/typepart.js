@@ -17,7 +17,7 @@ typepart.post('/', (req, res) => {
                         [Op.substring]: req.body.name
                     }
                 },
-                { 
+                {
                     section: req.body.section
                 }
             ]
