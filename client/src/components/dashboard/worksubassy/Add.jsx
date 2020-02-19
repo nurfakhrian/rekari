@@ -8,12 +8,33 @@ import { faArrowLeft, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import bwipjs from 'bwip-js';
 import ReactToPrint from 'react-to-print';
+import moment from 'moment';
 
 class BarcodeToPrint extends Component {
     render() {
         return (
             <div className="m-5">
-                <img src={this.props.src} alt="barcode"/>
+                <table className="table table-bordered" style={{width:500}}>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Sub Assy</th>
+                            <td>{this.props.name}</td>
+                            <td rowSpan="2" className="text-center">
+                                <img src={this.props.src} alt="barcode" style={{width:200}}/>
+                                <p className="mt-3 h5">{this.props.code}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">SNP</th>
+                            <td>{this.props.total}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Time</th>
+                            <td colSpan="2">{this.props.time}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
             </div>
         );
     }
@@ -28,8 +49,11 @@ class Add extends Component {
             barcodeDataUrl: "",
             // datasend/payload
             typePartId: null,
+            typePartName: null,
             total: 1,
-            subPartsToSend: []
+            subPartsToSend: [],
+            generatedUnique: null,
+            timeLabel: moment(new Date()).format("DD/MM/YYYY HH:mm:ss")
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
@@ -68,13 +92,12 @@ class Add extends Component {
         this.setState({
             subPartsFromDb: selected.subParts,
             typePartId: selected.value,
-            subPartsToSend: tempSubPartsToSend
-        });
+            subPartsToSend: tempSubPartsToSend,
+            typePartName: selected.label
+        }, () => document.getElementById("subPart0").focus());
     }
 
     handleChangeSubPart(e) {
-        // e.preventDefault();
-        // console.log(e.target.value);
         let tempSubPartsToSendRaw = [ ...this.state.subPartsToSend ];
         tempSubPartsToSendRaw[e.target.dataset.index] = {
             lotSubPartCode: e.target.value,
@@ -163,11 +186,13 @@ class Add extends Component {
                         const options = { bcid: 'qrcode', text: generatedUnique, scale: 4 }
                         bwipjs.toCanvas(canvasBarcode, options);
                         this.setState({
-                            barcodeDataUrl: canvasBarcode.toDataURL('image/png')
+                            barcodeDataUrl: canvasBarcode.toDataURL('image/png'),
+                            generatedUnique: generatedUnique,
                         }, () => {
                             const resetSubPartsToSend = this.state.subPartsToSend.map(obj => ({...obj, lotSubPartCode: ""}));
                             this.setState({
-                                subPartsToSend: resetSubPartsToSend
+                                subPartsToSend: resetSubPartsToSend,
+                                timeLabel: moment(newLog.data.message.createdAt).format("DD/MM/YYYY HH:mm:ss")
                             });
                             document.getElementById("subPart0").focus();
 
@@ -235,7 +260,13 @@ class Add extends Component {
                             onBeforeGetContent={() => this.handleSubmit()}
                         />
                         <div style={{ display: "none" }}>
-                            <BarcodeToPrint src={this.state.barcodeDataUrl} ref={el => (this.componentRef = el)} />
+                            <BarcodeToPrint
+                                name={this.state.typePartName}
+                                code={this.state.generatedUnique}
+                                total={this.state.total}
+                                time={this.state.timeLabel}
+                                src={this.state.barcodeDataUrl}
+                                ref={el => (this.componentRef = el)} />
                         </div>
                     </div>
                 </form>
