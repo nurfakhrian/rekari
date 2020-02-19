@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Select from 'react-select';
 import Card from '../../common/Card';
 import axios from 'axios';
@@ -131,6 +132,7 @@ class Edit extends Component {
         ];
         return (
             <Card title={this.state.name} col={6}>
+                {this.props.auth.role === "su" || this.props.auth.role === "admin" ?
                 <form
                     onSubmit={this.handleSubmit}
                     noValidate>
@@ -178,10 +180,15 @@ class Edit extends Component {
                             <i><FontAwesomeIcon icon={faSave} /></i>&nbsp;Simpan
                         </button>
                     </div>
-                </form>
+                </form> :
+                <div className="text-center">
+                    <span>access denied</span>
+                </div>}
             </Card>
         )
     }
 }
 
-export default Edit;
+export default connect(state => ({
+    auth: state.auth
+}))(Edit);

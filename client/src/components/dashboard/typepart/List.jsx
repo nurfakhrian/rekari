@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Select from 'react-select';
 import Moment from 'react-moment';
 
@@ -134,13 +135,14 @@ class List extends Component {
                             className="btn btn-cc btn-cc-primary btn-cc-radius-normal p-1 mb-1">
                             <FontAwesomeIcon icon={faEdit} />&nbsp;Edit
                         </Link>
+                        {this.props.auth.role === "su" ?
                         <button
                             className="btn btn-cc btn-cc-secondary btn-cc-radius-normal p-1 mb-1"
                             data-id={original.id}
                             data-name={original.name}
                             onClick={this.handleDelete}>
                             <FontAwesomeIcon icon={faTrashAlt} />&nbsp;Hapus
-                        </button>
+                        </button> : <></>}
                     </>
                 )
             },
@@ -148,54 +150,62 @@ class List extends Component {
 
         return (
             <Card title={"Tipe Part"} col={12}>
-                <div className="row align-items-center">
-                    <div className="col-md-3 pr-md-1 mb-md-0 mb-2">
-                        <label className="sr-only" htmlFor="search-dt">Cari</label>
-                        <div className="input-with-icon">
-                            <input
-                                type="text"
-                                name="searchValue"
-                                className="form-control bg-grey focus"
-                                id="search-dt"
-                                placeholder="Cari..."
-                                onChange={this.handleChange}></input>
-                            <i><FontAwesomeIcon icon={faSearch} /></i>
+                {this.props.auth.role === "su" || this.props.auth.role === "admin" ?
+                <>
+                    <div className="row align-items-center">
+                        <div className="col-md-3 pr-md-1 mb-md-0 mb-2">
+                            <label className="sr-only" htmlFor="search-dt">Cari</label>
+                            <div className="input-with-icon">
+                                <input
+                                    type="text"
+                                    name="searchValue"
+                                    className="form-control bg-grey focus"
+                                    id="search-dt"
+                                    placeholder="Cari..."
+                                    onChange={this.handleChange}></input>
+                                <i><FontAwesomeIcon icon={faSearch} /></i>
+                            </div>
+                        </div>
+                        <div className="col-md-3 p-md-1 mb-md-0 mb-2">
+                            <Select
+                                placeholder="Pilih Section"
+                                onChange={this.handleChangeSelect}
+                                options={[
+                                    { value: '', label: '-- Semua --' },
+                                    { value: 'master', label: 'Master' },
+                                    { value: 'caliper', label: 'Caliper' }
+                                ]} />
+                        </div>
+                        
+                        <div className="col-md-2 p-md-1 text-center text-md-left">
+                            <button
+                                className="btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5 px-md-2"
+                                onClick={this.handleSearch}>
+                                <FontAwesomeIcon icon={faSearch} />&ensp;Cari
+                            </button>
+                        </div>
+                        <div className="col-md-3 ml-md-auto text-center text-md-right">
+                            <Link
+                                to="/dashboard/tipe-part/add"
+                                className="btn btn-cc btn-cc-primary btn-cc-radius-extra ml-0 py-2 px-5 px-md-2">
+                                <FontAwesomeIcon icon={faPlus} />&ensp;Tambah
+                            </Link>
                         </div>
                     </div>
-                    <div className="col-md-3 p-md-1 mb-md-0 mb-2">
-                        <Select
-                            placeholder="Pilih Section"
-                            onChange={this.handleChangeSelect}
-                            options={[
-                                { value: '', label: '-- Semua --' },
-                                { value: 'master', label: 'Master' },
-                                { value: 'caliper', label: 'Caliper' }
-                            ]} />
-                    </div>
-                    
-                    <div className="col-md-2 p-md-1 text-center text-md-left">
-                        <button
-                            className="btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5 px-md-2"
-                            onClick={this.handleSearch}>
-                            <FontAwesomeIcon icon={faSearch} />&ensp;Cari
-                        </button>
-                    </div>
-                    <div className="col-md-3 ml-md-auto text-center text-md-right">
-                        <Link
-                            to="/dashboard/tipe-part/add"
-                            className="btn btn-cc btn-cc-primary btn-cc-radius-extra ml-0 py-2 px-5 px-md-2">
-                            <FontAwesomeIcon icon={faPlus} />&ensp;Tambah
-                        </Link>
-                    </div>
-                </div>
-                <ReactTable 
-                    data={this.state.dataSet}
-                    columns={columns}
-                    pageSize={10}
-                    minRows={2} />
+                    <ReactTable 
+                        data={this.state.dataSet}
+                        columns={columns}
+                        pageSize={10}
+                        minRows={2} />
+                </>  :
+                <div className="text-center">
+                    <span>access denied</span>
+                </div>}
             </Card>
         )
     }
 }
 
-export default List;
+export default connect(state => ({
+    auth: state.auth
+}))(List);

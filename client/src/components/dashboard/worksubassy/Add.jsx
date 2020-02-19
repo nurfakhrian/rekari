@@ -8,6 +8,17 @@ import { faArrowLeft, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import bwipjs from 'bwip-js';
 import Swal from 'sweetalert2';
+import ReactToPrint from 'react-to-print';
+
+class ComponentToPrint extends React.Component {
+  render() {
+    return (
+      <div>
+          ulala
+      </div>
+    );
+  }
+}
 
 class Add extends Component {
     constructor(props) {
@@ -228,6 +239,13 @@ class Add extends Component {
                         </button>
                     </div>
                 </form>
+                <div>
+                <ReactToPrint
+                    trigger={() => <button>Print this out!</button>}
+                    content={() => this.componentRef}
+                />
+                <ComponentToPrint ref={el => (this.componentRef = el)} />
+                </div>
             </Card>
         )
     }

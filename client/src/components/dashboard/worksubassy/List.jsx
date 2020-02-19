@@ -8,11 +8,16 @@ import ReactTable from 'react-table-6';
 import 'react-table-6/react-table.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faPlus, faTrashAlt, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import {
+    faSearch,
+    faPlus,
+    // faTrashAlt,
+    faInfoCircle
+} from '@fortawesome/free-solid-svg-icons';
 
 import Card from '../../common/Card';
 import axios from 'axios';
-import { faEdit } from '@fortawesome/free-regular-svg-icons';
+// import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { Link } from 'react-router-dom';
 
 import DatePicker from "react-datepicker";
@@ -182,30 +187,30 @@ class List extends Component {
                         {original.createdAt}
                     </Moment>
                 ),
-                width: 200
+                width: 150
             },
             {
                 Header: 'Action',
                 sortable: false,
-                width: 250,
+                width: 100,
                 Cell: ({ original }) => (
                     <>
                         <Link to={{pathname: `/dashboard/work-subassy/detail/${original.id}`}}
                             className="btn btn-cc btn-cc-primary btn-cc-radius-normal p-1 mb-1">
                             <FontAwesomeIcon icon={faInfoCircle} />&nbsp;Detil
                         </Link>
-                        <Link to={{pathname: `/dashboard/tipe-part/edit/${original.id}`}}
+                        {/* <Link to={{pathname: `/dashboard/tipe-part/edit/${original.id}`}}
                             className="btn btn-cc btn-cc-primary btn-cc-radius-normal p-1 mb-1">
                             <FontAwesomeIcon icon={faEdit} />&nbsp;Edit
-                        </Link>
-                        <button
+                        </Link> */}
+                        {/* <button
                             className="btn btn-cc btn-cc-secondary btn-cc-radius-normal p-1 mb-1"
                             data-id={original.id}
                             data-name={original.name}
                             // onClick={this.handleDelete}
                             >
                             <FontAwesomeIcon icon={faTrashAlt} />&nbsp;Hapus
-                        </button>
+                        </button> */}
                     </>
                 )
             },

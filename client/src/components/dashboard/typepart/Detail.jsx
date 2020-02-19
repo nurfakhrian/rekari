@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Card from '../../common/Card';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -60,54 +61,62 @@ class Detail extends Component {
     render() {
         return (
             <Card title={this.state.name} col={6}>
-                <div className="form-group">
-                    <label htmlFor="iNama">Nama</label>
-                    <input
-                            id="iNama"
-                            type="text"
-                            className="form-control"
-                            name="name"
-                            value={this.state.name}
-                            readOnly />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="iSection">Section</label>
-                    <input
-                            id="iSection"
-                            type="text"
-                            className="form-control"
-                            name="section"
-                            value={this.state.section}
-                            readOnly />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="inSubPart">Jumlah Sub Part</label>
-                    <input
-                            id="inSubPart"
-                            type="text"
-                            className="form-control"
-                            name="nSubPart"
-                            value={this.state.nSubPart}
-                            readOnly />
-                </div>
-                <div className="ml-5">
-                    {this.renderSubPart().map(component => {
-                        return component;
-                    })}
-                </div>
-                <div className="d-flex">
-                    <Link to="/dashboard/tipe-part"
-                        className="btn btn-cc btn-cc-white btn-cc-radius-normal ml-0 py-2 px-5">
-                        <i><FontAwesomeIcon icon={faArrowLeft} /></i>&nbsp;Semua
-                    </Link>
-                    <Link to={{pathname: `/dashboard/tipe-part/edit/${this.state.id}`}}
-                        className="ml-auto btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">
-                        <i><FontAwesomeIcon icon={faEdit} /></i>&nbsp;Edit
-                    </Link>
-                </div>
+                {this.props.auth.role === "su" || this.props.auth.role === "admin" ?
+                <>
+                    <div className="form-group">
+                        <label htmlFor="iNama">Nama</label>
+                        <input
+                                id="iNama"
+                                type="text"
+                                className="form-control"
+                                name="name"
+                                value={this.state.name}
+                                readOnly />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="iSection">Section</label>
+                        <input
+                                id="iSection"
+                                type="text"
+                                className="form-control"
+                                name="section"
+                                value={this.state.section}
+                                readOnly />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="inSubPart">Jumlah Sub Part</label>
+                        <input
+                                id="inSubPart"
+                                type="text"
+                                className="form-control"
+                                name="nSubPart"
+                                value={this.state.nSubPart}
+                                readOnly />
+                    </div>
+                    <div className="ml-5">
+                        {this.renderSubPart().map(component => {
+                            return component;
+                        })}
+                    </div>
+                    <div className="d-flex">
+                        <Link to="/dashboard/tipe-part"
+                            className="btn btn-cc btn-cc-white btn-cc-radius-normal ml-0 py-2 px-5">
+                            <i><FontAwesomeIcon icon={faArrowLeft} /></i>&nbsp;Semua
+                        </Link>
+                        <Link to={{pathname: `/dashboard/tipe-part/edit/${this.state.id}`}}
+                            className="ml-auto btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">
+                            <i><FontAwesomeIcon icon={faEdit} /></i>&nbsp;Edit
+                        </Link>
+                    </div>
+                    </>  :
+                <div className="text-center">
+                    <span>access denied</span>
+                </div>}
             </Card>
         )
     }
 }
 
-export default Detail;
+export default connect(state => ({
+    auth: state.auth
+}))(Detail);

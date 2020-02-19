@@ -27,11 +27,17 @@ class Login extends Component {
             password: this.state.password
         }
         this.props.dispatch(login(user)).then(response => {
+            console.log(response)
             if (response.error) {
                 alert(response.error);
             }
             else {
-                this.props.history.push('/dashboard/operator');
+                if (response.role === "operator") {
+                    this.props.history.push('/dashboard/work-subassy/add');
+                }
+                else {
+                    this.props.history.push('/dashboard/operator');
+                }
             }
         });
     }

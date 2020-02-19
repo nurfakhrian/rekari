@@ -6,7 +6,6 @@ import { faArrowLeft, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import bwipjs from 'bwip-js';
 import moment from 'moment';
-import Swal from 'sweetalert2';
 
 class Detail extends Component {
     constructor(props) {
@@ -94,7 +93,7 @@ class Detail extends Component {
                             readOnly />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="iOperator">Operator ID</label>
+                    <label htmlFor="iOperator">Operator</label>
                     <input
                             id="iOperator"
                             type="text"
@@ -105,7 +104,7 @@ class Detail extends Component {
                 </div>
                 <div className="ml-5">
                     <div className="form-group">
-                        <label htmlFor="iOperatorName">Operator Name</label>
+                        <label htmlFor="iOperatorName">Name</label>
                         <input
                                 id="iOperatorName"
                                 type="text"
@@ -115,7 +114,7 @@ class Detail extends Component {
                                 readOnly />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="iOperatorRole">Operator Role</label>
+                        <label htmlFor="iOperatorRole">Role</label>
                         <input
                                 id="iOperatorRole"
                                 type="text"
