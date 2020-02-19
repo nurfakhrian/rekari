@@ -7,17 +7,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import bwipjs from 'bwip-js';
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 import ReactToPrint from 'react-to-print';
 
-class ComponentToPrint extends React.Component {
-  render() {
-    return (
-      <div>
-          ulala
-      </div>
-    );
-  }
+class BarcodeToPrint extends Component {
+    render() {
+        return (
+            <div className="m-5">
+                <img src={this.props.src} alt="barcode"/>
+            </div>
+        );
+    }
 }
 
 class Add extends Component {
@@ -26,6 +26,7 @@ class Add extends Component {
         this.state = {
             typeParts: [],
             subPartsFromDb: [],
+            barcodeDataUrl: "",
             // datasend/payload
             typePartId: null,
             total: 1,
@@ -134,8 +135,8 @@ class Add extends Component {
         return subPartForm;
     }
 
-    async handleSubmit(e) {
-        e.preventDefault();
+    async handleSubmit() {
+        // e.preventDefault();
         let nullSubPart = false;
         for (let i = 0; i < this.state.subPartsFromDb.length; i++) {
             if (this.state.subPartsToSend[i].lotSubPartCode === "") {
@@ -156,31 +157,34 @@ class Add extends Component {
                 if (newLog.data.message.id) {
                     try {
                         const canvasBarcode = document.createElement('canvas');
-                        bwipjs.toCanvas(canvasBarcode, {
-                            bcid: 'qrcode',
-                            text: generatedUnique,
-                            scale: 4
-                        });
-                        Swal.fire({
-                            title: "Data berhasil ditambahkan!",
-                            timer: 2000,
-                            timerProgressBar: true,
-                            showConfirmButton: false,
-                            html: `
-                                <img src="${canvasBarcode.toDataURL('image/png')}" alt="barcode"/>
-                                <p class="h3 mt-3 font-weight-bold">${generatedUnique}</p>`,
-                            backdrop:true,
-                            allowOutsideClick: false,
-                            onClose: () => {
-                                setTimeout(() => {
-                                    document.getElementById("subPart0").focus();
-                                }, 500);
-                            }
-                        })
-                        const resetSubPartsToSend = this.state.subPartsToSend.map(obj => ({...obj, lotSubPartCode: ""}));
+                        const options = { bcid: 'qrcode', text: generatedUnique, scale: 4 }
+                        bwipjs.toCanvas(canvasBarcode, options);
                         this.setState({
-                            subPartsToSend: resetSubPartsToSend
-                        });
+                            barcodeDataUrl: canvasBarcode.toDataURL('image/png')
+                        }, () => {
+                            const resetSubPartsToSend = this.state.subPartsToSend.map(obj => ({...obj, lotSubPartCode: ""}));
+                            this.setState({
+                                subPartsToSend: resetSubPartsToSend
+                            });
+                            document.getElementById("subPart0").focus();
+
+                        })
+                        // Swal.fire({
+                        //     title: "Data berhasil ditambahkan!",
+                        //     timer: 2000,
+                        //     timerProgressBar: true,
+                        //     showConfirmButton: false,
+                        //     html: `
+                        //         <img src="${canvasBarcode.toDataURL('image/png')}" alt="barcode"/>
+                        //         <p class="h3 mt-3 font-weight-bold">${generatedUnique}</p>`,
+                        //     backdrop:true,
+                        //     allowOutsideClick: false,
+                        //     onClose: () => {
+                        //         setTimeout(() => {
+                        //         }, 500);
+                        //     }
+                        // })
+                        
                     }
                     catch(e) {
                         console.log(e);
@@ -200,7 +204,7 @@ class Add extends Component {
         return (
             <Card title="Tambah Data Log" col={6}>
                 <form
-                    onSubmit={this.handleSubmit}
+                    onSubmit={(e) => e.preventDefault()}
                     noValidate>
                     <div className="form-group">
                         <label htmlFor="iTipe">Tipe Part</label>
@@ -233,19 +237,20 @@ class Add extends Component {
                             className="btn btn-cc btn-cc-white btn-cc-radius-normal ml-0 py-2 px-5">
                             <i><FontAwesomeIcon icon={faArrowLeft} /></i>&nbsp;Semua
                         </Link>
-                        <button type="submit"
-                            className="ml-auto btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">
-                            <i><FontAwesomeIcon icon={faPlusSquare} /></i>&nbsp;Tambahkan
-                        </button>
+                        <ReactToPrint
+                            trigger={() => <button
+                                type="submit"
+                                className="ml-auto btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">
+                                <i><FontAwesomeIcon icon={faPlusSquare} /></i>&nbsp;Tambahkan
+                            </button>}
+                            content={() => this.componentRef}
+                            onBeforeGetContent={() => this.handleSubmit()}
+                        />
+                        <div style={{ display: "none" }}>
+                            <BarcodeToPrint src={this.state.barcodeDataUrl} ref={el => (this.componentRef = el)} />
+                        </div>
                     </div>
                 </form>
-                <div>
-                <ReactToPrint
-                    trigger={() => <button>Print this out!</button>}
-                    content={() => this.componentRef}
-                />
-                <ComponentToPrint ref={el => (this.componentRef = el)} />
-                </div>
             </Card>
         )
     }
