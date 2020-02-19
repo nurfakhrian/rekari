@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import bwipjs from 'bwip-js';
+import moment from 'moment';
 import Swal from 'sweetalert2';
 
 class Detail extends Component {
@@ -13,11 +14,11 @@ class Detail extends Component {
         this.state = {
             id: this.props.match.params.logpartId,
             lotpartBarcode: "",
-            typePart: {},
+            typePart: {name:""},
             lotPartsLotSubParts: [],
             total: 0,
-            operator: {name:"", code:""},
-            createdAt: null
+            operator: {name:"", code:"", role:""},
+            createdAt: new Date()
         }
     }
 
@@ -38,118 +39,130 @@ class Detail extends Component {
                     total,
                     operator,
                     createdAt
-                }, () => console.log(this.state));
+                }, () => {
+                    const canvasBarcode = document.createElement('canvas');
+                    bwipjs.toCanvas(canvasBarcode, {
+                        bcid: 'qrcode',
+                        text: this.state.lotpartBarcode,
+                        scale: 4
+                    });
+                    document.getElementById("imgBarcode").src = canvasBarcode.toDataURL('image/png');
+                });
             })
             .catch(err => console.log(err.response.data.message));
     }
 
-    renderSubPart() {
-        // const subPartElem = (index, id, name) => (
-        //     <div className="form-group" key={index}>
-        //         <label>{name}</label>
-        //         <input
-        //             id={"subPart" + index}
-        //             tabIndex="-1"
-        //             data-index={index}
-        //             data-idsubpart={id}
-        //             data-namesubpart={name}
-        //             // onChange={this.handleChangeSubPart}
-        //             // value={this.state.subPartsToSend[index].lotSubPartCode}
-        //             type="text"
-        //             className="form-control"
-        //             name="lotSubPartCode" />
-        //     </div>
-        // );
-        // let subPartForm = [];
-        // this.state.subPartsFromDb.forEach((item, index) => {
-        //     subPartForm.push(subPartElem(index, item.id, item.name));
-        // });
-        // return subPartForm;
-    }
-
     render() {
+        const roleOptions = [
+            { value: 'su', label: 'Super Admin' },
+            { value: 'admin', label: 'Admin' },
+            { value: 'operator', label: 'Operator' }
+        ];
         return (
             <Card title="Detail Sub Assy" col={6}>
-                <form
-                    // onSubmit={this.handleSubmit}
-                    noValidate>
-                    <div className="form-group">
-                        <label htmlFor="iCode">Code</label>
-                        <input
-                                id="iCode"
-                                type="text"
-                                className="form-control"
-                                name="barcode"
-                                value={this.state.lotpartBarcode}
-                                readOnly />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="iTotal">Total (SNP)</label>
-                        <input
-                                id="iTotal"
-                                type="text"
-                                className="form-control"
-                                name="total"
-                                value={this.state.total}
-                                readOnly />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="iOperator">Operator ID</label>
-                        <input
-                                id="iOperator"
-                                type="text"
-                                className="form-control"
-                                name="iOperator"
-                                value={this.state.operator.code}
-                                readOnly />
-                    </div>
+                <div className="text-center">
+                    <img id="imgBarcode" alt="barcode"/>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="iCode">Code</label>
+                    <input
+                            id="iCode"
+                            type="text"
+                            className="form-control"
+                            name="iCode"
+                            value={this.state.lotpartBarcode}
+                            readOnly />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="iTime">Code</label>
+                    <input
+                            id="iTime"
+                            type="text"
+                            className="form-control"
+                            name="iTime"
+                            value={moment(this.state.createdAt).format("DD/MM/YYYY HH:mm:ss")}
+                            readOnly />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="iTotal">Total (SNP)</label>
+                    <input
+                            id="iTotal"
+                            type="text"
+                            className="form-control"
+                            name="iTotal"
+                            value={this.state.total}
+                            readOnly />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="iOperator">Operator ID</label>
+                    <input
+                            id="iOperator"
+                            type="text"
+                            className="form-control"
+                            name="iOperator"
+                            value={this.state.operator.code}
+                            readOnly />
+                </div>
+                <div className="ml-5">
                     <div className="form-group">
                         <label htmlFor="iOperatorName">Operator Name</label>
                         <input
                                 id="iOperatorName"
                                 type="text"
                                 className="form-control"
-                                name="section"
+                                name="iOperatorName"
                                 value={this.state.operator.name}
                                 readOnly />
                     </div>
-                    {/* <div className="form-group">
-                        <label htmlFor="iTipe">Tipe Part</label>
-                        <Select
-                            id="iTipe"
-                            placeholder="Pilih Tipe Part"
-                            // onChange={this.handleChangeSelect}
-                            options={this.state.typeParts}
-                            />
-                    </div> */}
-                    {/* <div className="ml-5">
-                        {this.renderSubPart().map(component => {
-                            return component;
-                        })}
-                    </div> */}
-                    {/* <div className="form-group">
-                        <label htmlFor="iNPerLot">Jumlah per Lot</label>
+                    <div className="form-group">
+                        <label htmlFor="iOperatorRole">Operator Role</label>
                         <input
-                                id="iNPerLot"
-                                type="number"
+                                id="iOperatorRole"
+                                type="text"
                                 className="form-control"
-                                name="nSubPart"
-                                // value={this.state.total}
-                                // onChange={this.handleChange}
-                                />
-                    </div> */}
-                    
-                    <div className="d-flex">
-                        <Link to="/dashboard/work-subassy"
-                            className="btn btn-cc btn-cc-white btn-cc-radius-normal ml-0 py-2 px-5">
-                            <i><FontAwesomeIcon icon={faArrowLeft} /></i>&nbsp;Semua
-                        </Link>
-                        <button type="submit"
-                            className="ml-auto btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">
-                            <i><FontAwesomeIcon icon={faPlusSquare} /></i>&nbsp;Tambahkan
-                        </button>
+                                name="iOperatorRole"
+                                value={
+                                    (roleOptions.find(o => o.value === this.state.operator.role) === undefined) ? "" :
+                                    roleOptions.find(o => o.value === this.state.operator.role).label
+                                }
+                                readOnly />
                     </div>
-                </form>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="iTypePart">Tipe Part</label>
+                    <input
+                            id="iTypePart"
+                            type="text"
+                            className="form-control"
+                            name="iTypePart"
+                            value={this.state.typePart.name}
+                            readOnly />
+                </div>
+                <div className="ml-5">
+                    {this.state.lotPartsLotSubParts.map((item, i) => (
+                        <div key={i} className="form-group">
+                            <label htmlFor={"iSubpart" + i}>{item.subPartName}</label>
+                            <input
+                                    id={"iSubpart" + i}
+                                    type="text"
+                                    className="form-control"
+                                    name="section"
+                                    value={item.lotSubPartCode}
+                                    readOnly />
+                        </div>
+                    ))}
+                </div>
+                
+                <div className="d-flex">
+                    <Link to="/dashboard/work-subassy"
+                        className="btn btn-cc btn-cc-white btn-cc-radius-normal ml-0 py-2 px-5">
+                        <i><FontAwesomeIcon icon={faArrowLeft} /></i>&nbsp;Semua
+                    </Link>
+                    <button type="submit"
+                        className="ml-auto btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">
+                        <i><FontAwesomeIcon icon={faPlusSquare} /></i>&nbsp;Tambahkan
+                    </button>
+                </div>
             </Card>
         )
     }
