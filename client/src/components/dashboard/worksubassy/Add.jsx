@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import bwipjs from 'bwip-js';
-// import Swal from 'sweetalert2';
 import ReactToPrint from 'react-to-print';
 
 class BarcodeToPrint extends Component {
@@ -36,6 +35,7 @@ class Add extends Component {
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeSubPart = this.handleChangeSubPart.bind(this);
+        this.isFormValid = this.isFormValid.bind(this);
     }
 
     generateUnique = () => {
@@ -135,8 +135,7 @@ class Add extends Component {
         return subPartForm;
     }
 
-    async handleSubmit() {
-        // e.preventDefault();
+    isFormValid() {
         let nullSubPart = false;
         for (let i = 0; i < this.state.subPartsFromDb.length; i++) {
             if (this.state.subPartsToSend[i].lotSubPartCode === "") {
@@ -144,7 +143,11 @@ class Add extends Component {
                 break;
             }
         }
-        if (this.state.typePartId && this.state.total > 0 && !nullSubPart) {
+        return this.state.typePartId && this.state.total > 0 && !nullSubPart;
+    }
+
+    async handleSubmit() {
+        if (this.isFormValid()) {
             const generatedUnique = this.generateUnique();
             try {
                 const newLog = await axios.post('http://localhost:3028/lotpart/add', {
@@ -169,22 +172,6 @@ class Add extends Component {
                             document.getElementById("subPart0").focus();
 
                         })
-                        // Swal.fire({
-                        //     title: "Data berhasil ditambahkan!",
-                        //     timer: 2000,
-                        //     timerProgressBar: true,
-                        //     showConfirmButton: false,
-                        //     html: `
-                        //         <img src="${canvasBarcode.toDataURL('image/png')}" alt="barcode"/>
-                        //         <p class="h3 mt-3 font-weight-bold">${generatedUnique}</p>`,
-                        //     backdrop:true,
-                        //     allowOutsideClick: false,
-                        //     onClose: () => {
-                        //         setTimeout(() => {
-                        //         }, 500);
-                        //     }
-                        // })
-                        
                     }
                     catch(e) {
                         console.log(e);
@@ -223,13 +210,13 @@ class Add extends Component {
                     <div className="form-group">
                         <label htmlFor="iNPerLot">Jumlah per Lot</label>
                         <input
-                                id="iNPerLot"
-                                type="number"
-                                className="form-control"
-                                name="nSubPart"
-                                value={this.state.total}
-                                onChange={this.handleChange}
-                                />
+                            id="iNPerLot"
+                            type="number"
+                            className="form-control"
+                            name="nSubPart"
+                            value={this.state.total}
+                            onChange={this.handleChange}
+                            />
                     </div>
                     
                     <div className="d-flex">
@@ -240,6 +227,7 @@ class Add extends Component {
                         <ReactToPrint
                             trigger={() => <button
                                 type="submit"
+                                disabled={!this.isFormValid()}
                                 className="ml-auto btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">
                                 <i><FontAwesomeIcon icon={faPlusSquare} /></i>&nbsp;Tambahkan
                             </button>}

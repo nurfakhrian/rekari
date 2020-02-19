@@ -165,6 +165,12 @@ input.focus:focus {
     display: block !important;
 }
 
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected,
+.react-datepicker__close-icon::after {
+    background-color: color(secondary) !important;
+}
+
 .disable-anchor {
     pointer-events: none;
     cursor: default;
