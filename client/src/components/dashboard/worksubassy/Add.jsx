@@ -187,7 +187,7 @@ class Add extends Component {
                 if (newLog.data.message.id) {
                     try {
                         const canvasBarcode = document.createElement('canvas');
-                        const options = { bcid: 'qrcode', text: generatedUnique, scale: 4 }
+                        const options = { bcid: 'qrcode', text: generatedUnique, scale: 2, version: 5 }
                         bwipjs.toCanvas(canvasBarcode, options);
                         this.setState({
                             barcodeDataUrl: canvasBarcode.toDataURL('image/png'),

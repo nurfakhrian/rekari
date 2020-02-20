@@ -27,7 +27,6 @@ class Login extends Component {
             password: this.state.password
         }
         this.props.dispatch(login(user)).then(response => {
-            console.log(response)
             if (response.error) {
                 alert(response.error);
             }
