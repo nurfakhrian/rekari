@@ -13,7 +13,7 @@ import moment from 'moment';
 class BarcodeToPrint extends Component {
     render() {
         return (
-            <div className="m-5">
+            <div className="mx-5 mt-5">
                 <table className="table table-bordered" style={{width:500, border: '2px solid #000'}}>
                     <tbody>
                         <tr>
@@ -38,7 +38,6 @@ class BarcodeToPrint extends Component {
                         </tr>
                     </tbody>
                 </table>
-                
             </div>
         );
     }
@@ -131,11 +130,12 @@ class Add extends Component {
     }
 
     handleChange(e) {
-        if (e.target.name === "nSubPart" && e.target.value > 0) {
-            this.setState({
-                total: parseInt(e.target.value)
-            });
-        }
+        // if ((e.target.name === "nSubPart" && e.target.value > 0) ||
+        //     (e.target.name === "nSubPart" && e.target.value.isNaN)) {
+        this.setState({
+            total: parseInt(e.target.value)
+        });
+        // }
     }
 
     renderSubPart() {
@@ -264,7 +264,7 @@ class Add extends Component {
                             onBeforeGetContent={() => this.handleSubmit()}
                         />
                         <div
-                            // style={{ display: "none" }
+                            style={{ display: "none" }}
                             >
                             <BarcodeToPrint
                                 name={this.state.typePartName}

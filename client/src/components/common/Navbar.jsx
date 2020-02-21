@@ -69,9 +69,9 @@ class Navbar extends Component {
                 <div className="pl-lg-3">
                     <ol className="breadcrumb clearfix d-none align-items-center d-md-inline-flex pt-0">
                         <li className="breadcrumb-item black-text">
-                            <a href={breadcrumb1.link}><FontAwesomeIcon icon={breadcrumb1.logo} />
+                            <Link to={breadcrumb1.link}><FontAwesomeIcon icon={breadcrumb1.logo} />
                                 &nbsp;{breadcrumb1.label}
-                            </a>
+                            </Link>
                         </li>
                         {breadcrumb2 &&
                         <li className="breadcrumb-item black-text">
