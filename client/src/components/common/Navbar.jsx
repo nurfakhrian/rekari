@@ -10,7 +10,9 @@ import {
     faPuzzlePiece, 
     faThLarge, 
     faList, 
-    faInfoCircle} from '@fortawesome/free-solid-svg-icons';
+    faInfoCircle,
+    faKey,
+    faCogs} from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import { logout } from '../../store/actions/auth';
 import { faPlusSquare, faEdit } from '@fortawesome/free-regular-svg-icons';
@@ -18,14 +20,16 @@ import { faPlusSquare, faEdit } from '@fortawesome/free-regular-svg-icons';
 const breadcrumbData1 = [
     { name: 'dashboard', label: "Dashboard", logo: faTachometerAlt, link: "/" },
     { name: 'login', label: "Login", logo: faSignInAlt, link: "/login" },
-    { name: 'sub-assy', label: "Sub Assy", logo: faBox, link: "/sub-assy" }
+    { name: 'sub-assy', label: "Sub Assy", logo: faBox, link: "/sub-assy" },
+    { name: 'account', label: "Account", logo: faCogs, link: "/account/change-password" },
 ]
 
 const breadcrumbData2 = [
     { name: 'operator', label: "Operator", logo: faUserAlt, link: "/dashboard/operator" },
     { name: 'tipe-part', label: "Tipe Part", logo: faThLarge, link: "/dashboard/tipe-part" },
     { name: 'sub-part', label: "Sub Part", logo: faPuzzlePiece, link: "/dashboard/sub-part" },
-    { name: 'work-subassy', label: "Work (Sub Assy)", logo: faBox, link: "/dashboard/work-subassy" }
+    { name: 'work-subassy', label: "Work (Sub Assy)", logo: faBox, link: "/dashboard/work-subassy" },
+    { name: 'change-password', label: "Change Password", logo: faKey, link: "/account/change-password" }
 ]
 
 const breadcrumbData3 = [
@@ -53,7 +57,7 @@ class Navbar extends Component {
         const pathsUri = pathname.split('/');
         const breadcrumb1 = breadcrumbData1.find(o => o.name === pathsUri[1]);
         const breadcrumb2 = breadcrumbData2.find(o => o.name === pathsUri[2]);
-        const breadcrumb3 = (breadcrumb1 && breadcrumb1.name) === 'dashboard' ? breadcrumbData3.find(o => o.name === (pathsUri[3] || 'list')) : null;
+        const breadcrumb3 = (breadcrumb1 && breadcrumb1.name === 'dashboard') ? breadcrumbData3.find(o => o.name === (pathsUri[3] || 'list')) : null;
         return breadcrumb1 ? (
             <nav className="navbar fixed-top navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav"
             aria-label="breadcrumb">
@@ -89,6 +93,7 @@ class Navbar extends Component {
                                 <FontAwesomeIcon icon={faUserAlt} />&nbsp;{this.props.auth.name} ({this.props.auth.code})
                             </a>
                             <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                                <Link to="/account/change-password" className="dropdown-item">Change Password</Link>
                                 <a href="/#" className="dropdown-item" onClick={this.logout}>Logout</a>
                             </div>
                         </li>

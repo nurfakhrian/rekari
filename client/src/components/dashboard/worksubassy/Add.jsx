@@ -263,7 +263,9 @@ class Add extends Component {
                             content={() => this.componentRef}
                             onBeforeGetContent={() => this.handleSubmit()}
                         />
-                        <div style={{ display: "none" }}>
+                        <div
+                            // style={{ display: "none" }
+                            >
                             <BarcodeToPrint
                                 name={this.state.typePartName}
                                 code={this.state.generatedUnique}

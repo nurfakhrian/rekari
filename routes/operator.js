@@ -245,4 +245,40 @@ operator.post('/edit', (req, res) => {
     });
 });
 
+operator.post('/change-password', (req, res) => {
+    Operator.findOne({
+        where: { id: req.body.id }
+    }).then(result => {
+        if (bcrypt.compareSync(req.body.currentPassword, result.password)) {
+            bcrypt.hash(req.body.newPassword, 10, (err, hash) => {
+                Operator.update({ password: hash }, {
+                    where: {
+                        id: req.body.id
+                    }
+                }).then(updated => {
+                    if (updated) {
+                        res.json({
+                            message: updated.dataValues,
+                        });
+                    }
+                    else {
+                        res.status(400).json({
+                            message: { error: 'database error' }
+                        });
+                    }
+                });
+            });
+        }
+        else {
+            res.status(400).json({
+                message: { error: "password aktif salah" }
+            });
+        }
+    }).catch(err => {
+        res.status(400).json({
+            message: { error: err }
+        });
+    });
+});
+
 module.exports = operator;

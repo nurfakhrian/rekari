@@ -25,14 +25,12 @@ import WorksubassyAdd from './components/dashboard/worksubassy/Add';
 import WorksubassyDetail from './components/dashboard/worksubassy/Detail';
 
 import Login from './components/Login';
+import ChangePassword from './components/ChangePassword';
 import SubAssy from './components/SubAssy';
 
 import "./App.scss";
 
 const App = (props) => {
-
-    // console.log('aku', props.store.auth)
-
     return (
         <Router>
             <header>
@@ -64,6 +62,8 @@ const App = (props) => {
                     <PrivateRoute exact path="/dashboard/work-subassy" auth={props.store.auth} component={Worksubassy} />
                     <PrivateRoute exact path="/dashboard/work-subassy/add" auth={props.store.auth} component={WorksubassyAdd}/>
                     <PrivateRoute exact path="/dashboard/work-subassy/detail/:logpartId" auth={props.store.auth} component={WorksubassyDetail}/>
+                    {/* Account */}
+                    <PrivateRoute exact path="/account/change-password" auth={props.store.auth} component={ChangePassword}/>
                 </Container>
             </main>
             <Footer />
