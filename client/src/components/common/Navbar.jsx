@@ -49,7 +49,8 @@ class Navbar extends Component {
     };
 
     render() {
-        const pathsUri = this.getLocation().pathname.split('/');
+        const pathname = this.getLocation().pathname.startsWith("/") ? this.getLocation().pathname : "/" + this.getLocation().pathname;
+        const pathsUri = pathname.split('/');
         const breadcrumb1 = breadcrumbData1.find(o => o.name === pathsUri[1]);
         const breadcrumb2 = breadcrumbData2.find(o => o.name === pathsUri[2]);
         const breadcrumb3 = (breadcrumb1 && breadcrumb1.name) === 'dashboard' ? breadcrumbData3.find(o => o.name === (pathsUri[3] || 'list')) : null;
