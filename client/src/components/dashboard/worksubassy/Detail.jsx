@@ -43,7 +43,8 @@ class Detail extends Component {
                     bwipjs.toCanvas(canvasBarcode, {
                         bcid: 'qrcode',
                         text: this.state.lotpartBarcode,
-                        scale: 4
+                        scale: 2,
+                        version: 5
                     });
                     document.getElementById("imgBarcode").src = canvasBarcode.toDataURL('image/png');
                 });
