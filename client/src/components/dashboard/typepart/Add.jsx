@@ -69,7 +69,7 @@ class Add extends Component {
             this.state.section &&
             !nullSubPart) {
             const { selectSection, ...newData } = this.state;
-            axios.post('http://localhost:3028/typepart/add', newData)
+            axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/typepart/add`, newData)
                 .then(response => {
                     this.props.history.push("./detail/" + response.data.message.id)
                 })

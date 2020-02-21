@@ -18,7 +18,7 @@ class Detail extends Component {
     }
 
     componentDidMount() {
-        axios.post('http://localhost:3028/operator/detail', { id: this.state.id })
+        axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/operator/detail`, { id: this.state.id })
             .then(response => {
                 const roleOptions = [
                     { value: 'su', label: 'Super Admin' },

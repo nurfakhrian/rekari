@@ -33,7 +33,7 @@ class ChangePassword extends Component {
     onSubmit(e) {
         e.preventDefault();
         if (this.state.newPassword === this.state.confirmNewPassword) {
-            axios.post('http://localhost:3028/operator/change-password', this.state)
+            axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/operator/change-password`, this.state)
                 .then(response => {
                     alert("password berhasil diubah, anda harus login kembali")
                     this.logout();

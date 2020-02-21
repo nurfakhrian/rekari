@@ -41,7 +41,7 @@ class Add extends Component {
             this.state.role && 
             this.state.password) {
             const { selectRole, ...newOperator } = this.state;
-            axios.post('http://localhost:3028/operator/add', newOperator)
+            axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/operator/add`, newOperator)
                 .then(response => {
                     this.props.history.push("./detail/" + response.data.message.id)
                 })

@@ -76,7 +76,7 @@ class Add extends Component {
      }
 
     componentDidMount() {
-        axios.post('http://localhost:3028/typepart')
+        axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/typepart`)
             .then(response => {
                 this.setState({
                     typeParts: response.data.message.map(
@@ -177,7 +177,7 @@ class Add extends Component {
         if (this.isFormValid()) {
             const generatedUnique = this.generateUnique();
             try {
-                const newLog = await axios.post('http://localhost:3028/lotpart/add', {
+                const newLog = await axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/lotpart/add`, {
                     lotpartBarcode: generatedUnique,
                     total: this.state.total,
                     operatorId: this.props.auth.id,

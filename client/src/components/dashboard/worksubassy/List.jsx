@@ -46,7 +46,7 @@ class List extends Component {
     }
 
     drawTable(query = {}) {
-        axios.post('http://localhost:3028/lotpart', query)
+        axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/lotpart`, query)
             .then(response => {
                 this.setState({
                     dataSet: response.data.message
@@ -57,7 +57,7 @@ class List extends Component {
 
     async fetchDropdown() {
         try {
-            const typeParts = await axios.post('http://localhost:3028/typepart');
+            const typeParts = await axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/typepart`);
             const typePartsTemp = typeParts.data.message.map(
                 item => ({ value: item.id, label: item.name, ...item })
             );
@@ -123,22 +123,6 @@ class List extends Component {
         this.drawTable(query)
     }
 
-    // handleDelete(e) {
-    //     if (window.confirm(`Hapus data dengan id ${e.target.dataset.id} (${e.target.dataset.name}) ?`)) {
-    //         axios.post('http://localhost:3028/typepart/delete', { id: e.target.dataset.id })
-    //             .then(response => {
-    //                 if (response.data.message.id) {
-    //                     alert(`Data dengan id ${response.data.message.id} (${response.data.message.name}) berhasil dihapus.`)
-    //                     this.handleSearch();
-    //                 }
-    //                 else {
-    //                     alert("Terjadi kesalahan.");
-    //                 }
-    //             })
-    //             .catch(err => console.log(err.response.data.message));
-    //     }
-    // }
-
     render() {
         const columns = [
             {
@@ -199,18 +183,6 @@ class List extends Component {
                             className="btn btn-cc btn-cc-primary btn-cc-radius-normal p-1 mb-1">
                             <FontAwesomeIcon icon={faInfoCircle} />&nbsp;Detil
                         </Link>
-                        {/* <Link to={{pathname: `/dashboard/tipe-part/edit/${original.id}`}}
-                            className="btn btn-cc btn-cc-primary btn-cc-radius-normal p-1 mb-1">
-                            <FontAwesomeIcon icon={faEdit} />&nbsp;Edit
-                        </Link> */}
-                        {/* <button
-                            className="btn btn-cc btn-cc-secondary btn-cc-radius-normal p-1 mb-1"
-                            data-id={original.id}
-                            data-name={original.name}
-                            // onClick={this.handleDelete}
-                            >
-                            <FontAwesomeIcon icon={faTrashAlt} />&nbsp;Hapus
-                        </button> */}
                     </>
                 )
             },

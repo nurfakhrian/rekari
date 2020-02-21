@@ -4,7 +4,7 @@ export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 
 export const login = user => dispatch => {
-    return axios.post('http://localhost:3028/operator/login', user)
+    return axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/operator/login`, user)
         .then(response => {
             localStorage.setItem('logintoken', response.data.token);
             dispatch({ type: LOGIN, response: response.data.message });

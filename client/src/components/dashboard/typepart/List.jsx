@@ -32,7 +32,7 @@ class List extends Component {
     }
 
     drawTable(query = {}) {
-        axios.post('http://localhost:3028/typepart', query)
+        axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/typepart`, query)
             .then(response => {
                 this.setState({
                     dataSet: response.data.message
@@ -67,7 +67,7 @@ class List extends Component {
 
     handleDelete(e) {
         if (window.confirm(`Hapus data dengan id ${e.target.dataset.id} (${e.target.dataset.name}) ?`)) {
-            axios.post('http://localhost:3028/typepart/delete', { id: e.target.dataset.id })
+            axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/typepart/delete`, { id: e.target.dataset.id })
                 .then(response => {
                     if (response.data.message.id) {
                         alert(`Data dengan id ${response.data.message.id} (${response.data.message.name}) berhasil dihapus.`)

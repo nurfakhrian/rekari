@@ -35,7 +35,7 @@ class List extends Component {
     }
 
     drawTable(query = {}) {
-        axios.post('http://localhost:3028/operator', query)
+        axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/operator`, query)
             .then(response => {
                 this.setState({
                     dataSet: response.data.message
@@ -48,7 +48,7 @@ class List extends Component {
         // this.props.dispatch(getOperator()).then(response => {
         //     console.log(response);
         // });
-        // axios.post('http://localhost:3028/operator')
+        // axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/operator`)
         //     .then(response => {
         //         this.setState({
         //             datatable: { data: response.data.message }
@@ -80,7 +80,7 @@ class List extends Component {
 
     handleDelete(e) {
         if (window.confirm(`Hapus data dengan id ${e.target.dataset.id} dan code ${e.target.dataset.code} ?`)) {
-            axios.post('http://localhost:3028/operator/delete', { id: e.target.dataset.id })
+            axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/operator/delete`, { id: e.target.dataset.id })
                 .then(response => {
                     if (response.data.message.id) {
                         alert(`Data dengan id ${response.data.message.id} dan code ${response.data.message.code} berhasil dihapus.`)

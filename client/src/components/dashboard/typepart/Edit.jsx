@@ -27,7 +27,7 @@ class Edit extends Component {
     }
 
     componentDidMount() {
-        axios.post('http://localhost:3028/typepart/detail', { id: this.state.id })
+        axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/typepart/detail`, { id: this.state.id })
             .then(response => {
                 this.setState({
                     name: response.data.message.name,
@@ -94,7 +94,7 @@ class Edit extends Component {
             this.state.nSubPart > 1 && 
             this.state.section &&
             !nullSubPart) {
-            axios.post('http://localhost:3028/typepart/edit', this.state)
+            axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/typepart/edit`, this.state)
                 .then(response => {
                     this.props.history.push("../detail/" + this.state.id)
                 })

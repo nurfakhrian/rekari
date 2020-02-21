@@ -23,7 +23,7 @@ class Edit extends Component {
     }
 
     componentDidMount() {
-        axios.post('http://localhost:3028/operator/detail', { id: this.state.id })
+        axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/operator/detail`, { id: this.state.id })
             .then(response => {
                 this.setState({
                     code: response.data.message.code,
@@ -51,7 +51,7 @@ class Edit extends Component {
         if (this.state.code && 
             this.state.name && 
             this.state.role) {
-            axios.post('http://localhost:3028/operator/edit', this.state)
+            axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/operator/edit`, this.state)
                 .then(response => {
                     this.props.history.push("../detail/" + this.state.id)
                 })

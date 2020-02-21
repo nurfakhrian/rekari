@@ -20,7 +20,7 @@ class Detail extends Component {
     }
 
     componentDidMount() {
-        axios.post('http://localhost:3028/typepart/detail', { id: this.state.id })
+        axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/typepart/detail`, { id: this.state.id })
             .then(response => {
                 const sectionOptions = [
                     { value: 'master', label: 'Master' },
