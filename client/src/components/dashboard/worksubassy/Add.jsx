@@ -66,13 +66,14 @@ class Add extends Component {
     }
 
     generateUnique = () => {
-        const length = 15;
+        const length = 14;
         let result = '';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         for ( var i = 0; i < length; i++ ) {
            result += characters.charAt(Math.floor(Math.random() * characters.length));
         }
-        return result;
+        const str = (new Date()).getTime().toString();
+        return result + str.substr(str.length - 4);
      }
 
     componentDidMount() {
