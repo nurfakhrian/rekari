@@ -14,26 +14,26 @@ class BarcodeToPrint extends Component {
     render() {
         return (
             <div className="mx-5 mt-5">
-                <table className="table table-bordered" style={{width:500, border: '2px solid #000'}}>
+                <table className="table table-bordered" style={{width:400, border: '2px solid #000'}}>
                     <tbody>
                         <tr>
                             <th scope="row">Sub Assy</th>
                             <td>
-                                <span className="h5">{this.props.name}</span>
+                                <span className="h6">{this.props.name}</span>
                             </td>
                             <td rowSpan="2" className="text-center">
-                                <img src={this.props.src} alt="barcode" style={{width:200}}/>
-                                <p className="mt-3 h5">{this.props.code}</p>
+                                <img src={this.props.src} alt="barcode" style={{width:150}}/>
+                                <p className="mt-3 h6">{this.props.code}</p>
                             </td>
                         </tr>
                         <tr>
                             <th scope="row">SNP</th>
-                            <td><span className="h5">{this.props.total}</span></td>
+                            <td><span className="h6">{this.props.total}</span></td>
                         </tr>
                         <tr>
                             <th scope="row">Time</th>
                             <td colSpan="2">
-                                <span className="h5">{this.props.time}</span>
+                                <span className="h6">{this.props.time}</span>
                             </td>
                         </tr>
                     </tbody>
