@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 import Moment from 'react-moment';
 
-
-
 import ReactTable from 'react-table-6';
+import { CSVLink } from 'react-csv';
 import 'react-table-6/react-table.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,7 +11,8 @@ import {
     faSearch,
     faPlus,
     // faTrashAlt,
-    faInfoCircle
+    faInfoCircle,
+    faDownload
 } from '@fortawesome/free-solid-svg-icons';
 
 import Card from '../../common/Card';
@@ -34,15 +34,16 @@ class List extends Component {
             },
             typeParts: [],
             searchStartDate: null,
-            searchEndDate: null
+            searchEndDate: null,
+            downloadTapped: false
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
-        // this.handleDelete = this.handleDelete.bind(this);
         this.drawTable = this.drawTable.bind(this);
         this.handleStartDateChange = this.handleStartDateChange.bind(this);
         this.handleEndDateChange = this.handleEndDateChange.bind(this);
+        this.exportCSV = this.exportCSV.bind(this);
     }
 
     drawTable(query = {}) {
@@ -120,7 +121,14 @@ class List extends Component {
             startDate: this.state.searchStartDate,
             endDate: this.state.searchEndDate
         };
-        this.drawTable(query)
+        this.drawTable(query);
+        this.setState({
+            downloadTapped: true
+        })
+    }
+
+    exportCSV() {
+        this.csvLink.link.click();
     }
 
     render() {
@@ -187,7 +195,24 @@ class List extends Component {
                 )
             },
         ];
-
+        const headers = [
+            { label: "No ID", key: "id" },
+            { label: "ID Barcode", key: "lotpartBarcode" },
+            { label: "SNP", key: "total" },
+            { label: "Sub Assy", key: "typePart.name" },
+            { label: "Repack Part Name 1", key: "lotPartsLotSubParts[0].subPartName" },
+            { label: "Repack Part Code 1", key: "lotPartsLotSubParts[0].lotSubPartCode" },
+            { label: "Repack Part Name 2", key: "lotPartsLotSubParts[1].subPartName" },
+            { label: "Repack Part Code 2", key: "lotPartsLotSubParts[1].lotSubPartCode" },
+            { label: "Repack Part Name 3", key: "lotPartsLotSubParts[2].subPartName" },
+            { label: "Repack Part Code 3", key: "lotPartsLotSubParts[2].lotSubPartCode" },
+            { label: "Repack Part Name 4", key: "lotPartsLotSubParts[3].subPartName" },
+            { label: "Repack Part Code 4", key: "lotPartsLotSubParts[3].lotSubPartCode" },
+            { label: "Repack Part Name 5", key: "lotPartsLotSubParts[4].subPartName" },
+            { label: "Repack Part Code 5", key: "lotPartsLotSubParts[4].lotSubPartCode" },
+            { label: "Kode Operator", key: "operator.code" },
+            { label: "Created", key: "createdAt" }
+        ];
         return (
             <Card title={"Log Sub Assy"} col={12}>
                 <div className="row align-items-center">
@@ -245,6 +270,27 @@ class List extends Component {
                             <FontAwesomeIcon icon={faSearch} />&ensp;Cari
                         </button>
                     </div>
+
+                    <div className="col-md-2 p-md-1 pl-md-3 text-center text-md-left">
+                        <button
+                            className="btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5 px-md-2"
+                            onClick={this.exportCSV}
+                            disabled={!this.state.downloadTapped}
+                            >
+                            <FontAwesomeIcon icon={faDownload} />&ensp;Download
+                        </button>
+                        <CSVLink 
+                            data={this.state.dataSet} 
+                            headers={headers}
+                            filename="subassy.csv"
+                            target="_blank"
+                            style={{ display: 'none' }}
+                            ref={(r) => this.csvLink = r}
+                            >
+                            Download me
+                        </CSVLink>
+                    </div>
+
                     <div className="col-md-3 ml-md-auto text-center text-md-right">
                         <Link
                             to="/dashboard/work-subassy/add"
