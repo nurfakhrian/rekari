@@ -13,27 +13,27 @@ import moment from 'moment';
 class BarcodeToPrint extends Component {
     render() {
         return (
-            <div className="mx-5 mt-5">
-                <table className="table table-bordered" style={{width:400, border: '2px solid #000'}}>
+            <div style={{ marginTop:300 }}>
+                <table className="table table-bordered" style={{height:900, border: '2px solid #000'}}>
                     <tbody>
                         <tr>
-                            <th scope="row">Sub Assy</th>
+                            <th scope="row"><span className="h1">Sub Assy</span></th>
                             <td>
-                                <span className="h6">{this.props.name}</span>
+                                <span className="h1">{this.props.name}</span>
                             </td>
                             <td rowSpan="2" className="text-center">
-                                <img src={this.props.src} alt="barcode" style={{width:150}}/>
-                                <p className="mt-3 h6">{this.props.code}</p>
+                                <img src={this.props.src} alt="barcode" style={{width:500}}/>
+                                <p className="mt-3 h1">{this.props.code}</p>
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">SNP</th>
-                            <td><span className="h6">{this.props.total}</span></td>
+                            <th scope="row"><span className="h1">SNP</span></th>
+                            <td><span className="h1">{this.props.total}</span></td>
                         </tr>
                         <tr>
-                            <th scope="row">Time</th>
+                            <th scope="row"><span className="h1">Time</span></th>
                             <td colSpan="2">
-                                <span className="h6">{this.props.time}</span>
+                                <span className="h1">{this.props.time}</span>
                             </td>
                         </tr>
                     </tbody>
