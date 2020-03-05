@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Card from '../../common/Card';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faPlusSquare, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import bwipjs from 'bwip-js';
 import moment from 'moment';
@@ -74,7 +74,7 @@ class Detail extends Component {
                             readOnly />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="iTime">Code</label>
+                    <label htmlFor="iTime">Time</label>
                     <input
                             id="iTime"
                             type="text"
@@ -158,10 +158,10 @@ class Detail extends Component {
                         className="btn btn-cc btn-cc-white btn-cc-radius-normal ml-0 py-2 px-5">
                         <i><FontAwesomeIcon icon={faArrowLeft} /></i>&nbsp;Semua
                     </Link>
-                    <button type="submit"
+                    <Link to={{pathname: `/dashboard/work-subassy/edit/${this.state.id}`}}
                         className="ml-auto btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">
-                        <i><FontAwesomeIcon icon={faPlusSquare} /></i>&nbsp;Tambahkan
-                    </button>
+                        <i><FontAwesomeIcon icon={faEdit} /></i>&nbsp;Edit
+                    </Link>
                 </div>
             </Card>
         )

@@ -23,6 +23,7 @@ import TypepartDetail from './components/dashboard/typepart/Detail';
 import Worksubassy from './components/dashboard/worksubassy/List';
 import WorksubassyAdd from './components/dashboard/worksubassy/Add';
 import WorksubassyDetail from './components/dashboard/worksubassy/Detail';
+import WorksubassyEdit from './components/dashboard/worksubassy/Edit';
 
 import Login from './components/Login';
 import ChangePassword from './components/ChangePassword';
@@ -62,6 +63,7 @@ const App = (props) => {
                     <PrivateRoute exact path="/dashboard/work-subassy" auth={props.store.auth} component={Worksubassy} />
                     <PrivateRoute exact path="/dashboard/work-subassy/add" auth={props.store.auth} component={WorksubassyAdd}/>
                     <PrivateRoute exact path="/dashboard/work-subassy/detail/:logpartId" auth={props.store.auth} component={WorksubassyDetail}/>
+                    <PrivateRoute exact path="/dashboard/work-subassy/edit/:logpartId" auth={props.store.auth} component={WorksubassyEdit}/>
                     {/* Account */}
                     <PrivateRoute exact path="/account/change-password" auth={props.store.auth} component={ChangePassword}/>
                 </Container>
