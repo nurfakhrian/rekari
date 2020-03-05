@@ -17,21 +17,31 @@ class BarcodeToPrint extends Component {
                 <table className="table table-bordered" style={{height:700, border: '2px solid #000'}}>
                     <tbody>
                         <tr>
-                            <th scope="row"><span className="h1">Sub Assy</span></th>
-                            <td>
+                            <td><span className="h1">Sub Assy</span></td>
+                            <td colSpan="3">
                                 <span className="h1">{this.props.name}</span>
-                            </td>
-                            <td rowSpan="2" className="text-center">
-                                <img src={this.props.src} alt="barcode" style={{ width:350 }}/>
-                                <p className="mt-3 h1">{this.props.code}</p>
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row"><span className="h1">SNP</span></th>
+                            <td colSpan="2">
+                                <span className="h1">{this.props.code}</span>
+                            </td>
+                            <td rowSpan="3" className="text-center">
+                                <img src={this.props.src} alt="barcode" style={{ marginTop: 60, width:290 }}/>
+                            </td>
+                            <td rowSpan="2"><span className="h1">Stamp 1</span></td>
+                        </tr>
+                        <tr>
+                            <td><span className="h1">SNP</span></td>
                             <td><span className="h1">{this.props.total}</span></td>
                         </tr>
                         <tr>
-                            <th scope="row"><span className="h1">Time</span></th>
+                            <td><span className="h1">Operator</span></td>
+                            <td><span className="h1">{this.props.op.code}</span></td>
+                            <td rowSpan="2"><span className="h1">Stamp 2</span></td>
+                        </tr>
+                        <tr>
+                            <td><span className="h1">Time</span></td>
                             <td colSpan="2">
                                 <span className="h1">{this.props.time}</span>
                             </td>
@@ -272,6 +282,7 @@ class Add extends Component {
                                 code={this.state.generatedUnique}
                                 total={this.state.total}
                                 time={this.state.timeLabel}
+                                op={this.props.auth}
                                 src={this.state.barcodeDataUrl}
                                 ref={el => (this.componentRef = el)} />
                         </div>

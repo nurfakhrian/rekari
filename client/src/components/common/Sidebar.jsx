@@ -35,16 +35,6 @@ class Sidebar extends Component {
                                             </ul>
                                         </div>
                                     </li>
-                                    <li>
-                                        <a href="/#" className="collapsible-header disable-anchor waves-effect arrow-r">Sub Assy</a>
-                                        <div className="collapsible-body d-block">
-                                            <ul>
-                                                <li>
-                                                    <NavLink to="/sub-assy" className="waves-effect pl-4"><FontAwesomeIcon icon={faBox} />&emsp;Logs</NavLink>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
                                 </>
                             }
                             {/* <li>
