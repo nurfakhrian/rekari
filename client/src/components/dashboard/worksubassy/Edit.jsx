@@ -20,7 +20,8 @@ class Edit extends Component {
           lotPartsLotSubParts: [],
           total: 0,
           operator: {name:"", code:"", role:""},
-          createdAt: new Date()
+          createdAt: new Date(),
+          typeParts: []
       }
       this.handleChange = this.handleChange.bind(this);
       // this.handleChangeSelect = this.handleChangeSelect.bind(this);
@@ -29,7 +30,20 @@ class Edit extends Component {
       // this.isFormValid = this.isFormValid.bind(this);
   }
 
-    componentDidMount() {
+    async componentDidMount() {
+        try {
+            const typePartResponse = await axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/typepart`)
+            this.setState({
+                typeParts: typePartResponse.data.message.map(
+                    item => ({ value: item.id, label: item.name, ...item })
+                )
+            }, () => console.log(this.state.typeParts));
+        }
+        catch(err) {
+            console.log(err.response.data.message)
+        }
+        
+
       axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/lotpart/detail`, { id: this.state.id })
       .then(response => {
           const {
