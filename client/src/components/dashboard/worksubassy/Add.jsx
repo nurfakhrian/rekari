@@ -13,8 +13,8 @@ import moment from 'moment';
 class BarcodeToPrint extends Component {
     render() {
         return (
-            <div style={{ marginTop:300 }}>
-                <table className="table table-bordered" style={{height:900, border: '2px solid #000'}}>
+            <div style={{ marginLeft: 75, marginTop:400 }}>
+                <table className="table table-bordered" style={{height:700, border: '2px solid #000'}}>
                     <tbody>
                         <tr>
                             <th scope="row"><span className="h1">Sub Assy</span></th>
@@ -22,7 +22,7 @@ class BarcodeToPrint extends Component {
                                 <span className="h1">{this.props.name}</span>
                             </td>
                             <td rowSpan="2" className="text-center">
-                                <img src={this.props.src} alt="barcode" style={{width:500}}/>
+                                <img src={this.props.src} alt="barcode" style={{ width:350 }}/>
                                 <p className="mt-3 h1">{this.props.code}</p>
                             </td>
                         </tr>
