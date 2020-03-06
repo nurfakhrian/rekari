@@ -153,4 +153,33 @@ lotpart.post('/edit-subpart', async (req, res) => {
     });
 })
 
+lotpart.post('/delete', (req, res) => {
+    models.LotPart.findOne({
+        where: { id: req.body.id }
+    }).then(result => {
+        if (result) {
+            models.LotPart.destroy({
+                where: { id: result.dataValues.id }
+            }).then(r => {
+                res.json({
+                    message: result.dataValues,
+                });
+            }).catch(err => {
+                res.status(400).json({
+                    message: { error: err },
+                });
+            });
+        }
+        else {
+            res.status(400).json({
+                message: { error: 'lotpart does not exist' },
+            });
+        }
+    }).catch(err => {
+        res.status(400).json({
+            message: { error: err },
+        });
+    });
+});
+
 module.exports = lotpart;

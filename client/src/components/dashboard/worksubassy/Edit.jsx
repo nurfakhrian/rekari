@@ -34,43 +34,44 @@ class Edit extends Component {
     }
 
     async componentDidMount() {
-          
-        try {
-            const lotPartResponse = await axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/lotpart/detail`, { id: this.state.id })
-            const {
-                lotpartBarcode,
-                typePart,
-                lotPartsLotSubParts,
-                total,
-                operator,
-                createdAt,
-                updatedAt } = lotPartResponse.data.message;
-            this.setState({
-              lotpartBarcode,
-              typePart,
-              lotPartsLotSubParts,
-              total,
-              operator,
-              createdAt,
-              totalOriginal: total,
-              createdAtTimeLabel: moment(createdAt).format("DD/MM/YYYY HH:mm:ss"),
-              updatedAtTimeLabel: moment(createdAt).format("DD/MM/YYYY HH:mm:ss") === moment(updatedAt).format("DD/MM/YYYY HH:mm:ss") ? "-" : moment(updatedAt).format("DD/MM/YYYY HH:mm:ss")
-          }, () => {
-              const canvasBarcode = document.createElement('canvas');
-              bwipjs.toCanvas(canvasBarcode, {
-                  bcid: 'qrcode',
-                  text: this.state.lotpartBarcode,
-                  scale: 2,
-                  version: 5
+        if (this.props.auth.role === "su" || this.props.auth.role === "admin") {
+            try {
+                const lotPartResponse = await axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/lotpart/detail`, { id: this.state.id })
+                const {
+                    lotpartBarcode,
+                    typePart,
+                    lotPartsLotSubParts,
+                    total,
+                    operator,
+                    createdAt,
+                    updatedAt } = lotPartResponse.data.message;
+                this.setState({
+                  lotpartBarcode,
+                  typePart,
+                  lotPartsLotSubParts,
+                  total,
+                  operator,
+                  createdAt,
+                  totalOriginal: total,
+                  createdAtTimeLabel: moment(createdAt).format("DD/MM/YYYY HH:mm:ss"),
+                  updatedAtTimeLabel: moment(createdAt).format("DD/MM/YYYY HH:mm:ss") === moment(updatedAt).format("DD/MM/YYYY HH:mm:ss") ? "-" : moment(updatedAt).format("DD/MM/YYYY HH:mm:ss")
+              }, () => {
+                  const canvasBarcode = document.createElement('canvas');
+                  bwipjs.toCanvas(canvasBarcode, {
+                      bcid: 'qrcode',
+                      text: this.state.lotpartBarcode,
+                      scale: 2,
+                      version: 5
+                  });
+                  document.getElementById("imgBarcode").src = canvasBarcode.toDataURL('image/png');
+                  this.setState({
+                    barcodeDataUrl: canvasBarcode.toDataURL('image/png')
+                  })
               });
-              document.getElementById("imgBarcode").src = canvasBarcode.toDataURL('image/png');
-              this.setState({
-                barcodeDataUrl: canvasBarcode.toDataURL('image/png')
-              })
-          });
-        }
-        catch(err) {
-            console.log(err.response.data.message)
+            }
+            catch(err) {
+                console.log(err.response.data.message)
+            }
         }
     }
 
@@ -178,138 +179,143 @@ class Edit extends Component {
       ];
       return (
           <Card title="Edit Sub Assy" col={6}>
-              <div className="text-center">
-                  <img id="imgBarcode" alt="barcode"/>
-              </div>
-              <form
-                    onSubmit={(e) => e.preventDefault()}
-                    noValidate>
-                  <div className="form-group">
-                      <label htmlFor="iCode">Code</label>
-                      <input
-                              id="iCode"
-                              type="text"
-                              className="form-control"
-                              name="iCode"
-                              value={this.state.lotpartBarcode}
-                              readOnly />
-                  </div>
-                  <div className="form-group">
-                      <label htmlFor="iTime">Time</label>
-                      <input
-                              id="iTime"
-                              type="text"
-                              className="form-control"
-                              name="iTime"
-                              value={moment(this.state.createdAt).format("DD/MM/YYYY HH:mm:ss")}
-                              readOnly />
-                  </div>
-                  <div className="form-group">
-                      <label htmlFor="iOperator">Operator</label>
-                      <input
-                              id="iOperator"
-                              type="text"
-                              className="form-control"
-                              name="iOperator"
-                              value={this.state.operator.code}
-                              readOnly />
-                  </div>
-                  <div className="ml-5">
-                      <div className="form-group">
-                          <label htmlFor="iOperatorName">Name</label>
-                          <input
-                                  id="iOperatorName"
-                                  type="text"
-                                  className="form-control"
-                                  name="iOperatorName"
-                                  value={this.state.operator.name}
-                                  readOnly />
-                      </div>
-                      <div className="form-group">
-                          <label htmlFor="iOperatorRole">Role</label>
-                          <input
-                                  id="iOperatorRole"
-                                  type="text"
-                                  className="form-control"
-                                  name="iOperatorRole"
-                                  value={
-                                      (roleOptions.find(o => o.value === this.state.operator.role) === undefined) ? "" :
-                                      roleOptions.find(o => o.value === this.state.operator.role).label
-                                  }
-                                  readOnly />
-                      </div>
-                  </div>
-                  <div className="form-group">
-                      <label htmlFor="iTypePart">Tipe Part</label>
-                      <input
-                              id="iTypePart"
-                              type="text"
-                              className="form-control"
-                              name="iTypePart"
-                              value={this.state.typePart.name}
-                              readOnly/>
-                  </div>
-                  <div className="ml-5">
-                      {this.state.lotPartsLotSubParts.map((item, i) => (
-                          <div key={i} className="form-group">
-                              <label htmlFor={"iSubpart" + i}>{item.subPartName}</label>
-                              <input
-                                      id={"iSubpart" + i}
-                                      data-index={i}
-                                      tab-index="-1"
-                                      type="text"
-                                      className="form-control"
-                                      name="section"
-                                      value={item.lotSubPartCode}
-                                      onChange={this.handleChangeLotSubPartCode}
-                                      /><small>
-                                            <a href="/#" data-index={i} onClick={this.clearSubPartCode}>hapus</a>
-                                            &nbsp;terlebih dahulu sebelum mulai scan/diganti
-                                        </small>
-                          </div>
-                      ))}
-                  </div>
-                  <div className="form-group">
-                      <label htmlFor="iTotal">Total (SNP)</label>
-                      <input
-                              id="iTotal"
-                              type="number"
-                              className="form-control"
-                              name="total"
-                              value={this.state.total}
-                              onChange={this.handleChange}
-                              />
-                  </div>
-                  <div className="d-flex">
-                        <Link to={"/dashboard/work-subassy/detail/" + this.state.id}
-                            className="btn btn-cc btn-cc-white btn-cc-radius-normal ml-0 py-2 px-5">
-                            <i><FontAwesomeIcon icon={faArrowLeft} /></i>&nbsp;Kembali
-                        </Link>
-                        <ReactToPrint
-                            trigger={() => <button
-                                type="submit"
-                                disabled={!this.isFormValid()}
-                                className="ml-auto btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">
-                                <i><FontAwesomeIcon icon={faSave} /></i>&nbsp;Save/Print
-                            </button>}
-                            content={() => this.componentRef}
-                            onBeforeGetContent={() => this.handleSubmit()}
-                        />
-                        <div
-                            style={{ display: "none" }}
-                            >
-                            <BarcodeToPrint
-                                name={this.state.typePart.name}
-                                code={this.state.lotpartBarcode}
-                                total={this.state.total}
-                                time={this.state.createdAtTimeLabel}
-                                timeRev={this.state.updatedAtTimeLabel}
-                                op={this.props.auth}
-                                src={this.state.barcodeDataUrl}
-                                ref={el => (this.componentRef = el)} />
+              {this.props.auth.role === "su" || this.props.auth.role === "admin" ?
+              <>
+                <div className="text-center">
+                    <img id="imgBarcode" alt="barcode"/>
+                </div>
+                <form
+                        onSubmit={(e) => e.preventDefault()}
+                        noValidate>
+                    <div className="form-group">
+                        <label htmlFor="iCode">Code</label>
+                        <input
+                                id="iCode"
+                                type="text"
+                                className="form-control"
+                                name="iCode"
+                                value={this.state.lotpartBarcode}
+                                readOnly />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="iTime">Time</label>
+                        <input
+                                id="iTime"
+                                type="text"
+                                className="form-control"
+                                name="iTime"
+                                value={moment(this.state.createdAt).format("DD/MM/YYYY HH:mm:ss")}
+                                readOnly />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="iOperator">Operator</label>
+                        <input
+                                id="iOperator"
+                                type="text"
+                                className="form-control"
+                                name="iOperator"
+                                value={this.state.operator.code}
+                                readOnly />
+                    </div>
+                    <div className="ml-5">
+                        <div className="form-group">
+                            <label htmlFor="iOperatorName">Name</label>
+                            <input
+                                    id="iOperatorName"
+                                    type="text"
+                                    className="form-control"
+                                    name="iOperatorName"
+                                    value={this.state.operator.name}
+                                    readOnly />
                         </div>
-                  </div>
-              </form>
+                        <div className="form-group">
+                            <label htmlFor="iOperatorRole">Role</label>
+                            <input
+                                    id="iOperatorRole"
+                                    type="text"
+                                    className="form-control"
+                                    name="iOperatorRole"
+                                    value={
+                                        (roleOptions.find(o => o.value === this.state.operator.role) === undefined) ? "" :
+                                        roleOptions.find(o => o.value === this.state.operator.role).label
+                                    }
+                                    readOnly />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="iTypePart">Tipe Part</label>
+                        <input
+                                id="iTypePart"
+                                type="text"
+                                className="form-control"
+                                name="iTypePart"
+                                value={this.state.typePart.name}
+                                readOnly/>
+                    </div>
+                    <div className="ml-5">
+                        {this.state.lotPartsLotSubParts.map((item, i) => (
+                            <div key={i} className="form-group">
+                                <label htmlFor={"iSubpart" + i}>{item.subPartName}</label>
+                                <input
+                                        id={"iSubpart" + i}
+                                        data-index={i}
+                                        tab-index="-1"
+                                        type="text"
+                                        className="form-control"
+                                        name="section"
+                                        value={item.lotSubPartCode}
+                                        onChange={this.handleChangeLotSubPartCode}
+                                        /><small>
+                                                <a href="/#" data-index={i} onClick={this.clearSubPartCode}>hapus</a>
+                                                &nbsp;terlebih dahulu sebelum mulai scan/diganti
+                                            </small>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="iTotal">Total (SNP)</label>
+                        <input
+                                id="iTotal"
+                                type="number"
+                                className="form-control"
+                                name="total"
+                                value={this.state.total}
+                                onChange={this.handleChange}
+                                />
+                    </div>
+                    <div className="d-flex">
+                            <Link to={"/dashboard/work-subassy/detail/" + this.state.id}
+                                className="btn btn-cc btn-cc-white btn-cc-radius-normal ml-0 py-2 px-5">
+                                <i><FontAwesomeIcon icon={faArrowLeft} /></i>&nbsp;Kembali
+                            </Link>
+                            <ReactToPrint
+                                trigger={() => <button
+                                    type="submit"
+                                    disabled={!this.isFormValid()}
+                                    className="ml-auto btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">
+                                    <i><FontAwesomeIcon icon={faSave} /></i>&nbsp;Save/Print
+                                </button>}
+                                content={() => this.componentRef}
+                                onBeforeGetContent={() => this.handleSubmit()}
+                            />
+                            <div
+                                style={{ display: "none" }}
+                                >
+                                <BarcodeToPrint
+                                    name={this.state.typePart.name}
+                                    code={this.state.lotpartBarcode}
+                                    total={this.state.total}
+                                    time={this.state.createdAtTimeLabel}
+                                    timeRev={this.state.updatedAtTimeLabel}
+                                    op={this.state.operator}
+                                    opRev={this.props.auth}
+                                    src={this.state.barcodeDataUrl}
+                                    ref={el => (this.componentRef = el)} />
+                            </div>
+                    </div>
+                </form>
+              </> :
+              <div className="text-center"><span>access denied</span></div>}
           </Card>
       )
   }

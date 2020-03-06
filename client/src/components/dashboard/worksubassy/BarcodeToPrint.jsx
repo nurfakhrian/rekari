@@ -19,7 +19,7 @@ class BarcodeToPrint extends Component {
                           <td rowSpan="3" className="text-center">
                               <img src={this.props.src} alt="barcode" style={{ marginTop: 60, width:290 }}/>
                           </td>
-                          <td rowSpan="2"><span className="h1">Stamp 1</span></td>
+                          <td rowSpan="2"><span className="h2">Stampel Inspeksi</span></td>
                       </tr>
                       <tr>
                           <td><span className="h1">SNP</span></td>
@@ -27,8 +27,12 @@ class BarcodeToPrint extends Component {
                       </tr>
                       <tr>
                           <td><span className="h1">Operator</span></td>
-                          <td><span className="h1">{this.props.op.code}</span></td>
-                          <td rowSpan="2"><span className="h1">Stamp 2</span></td>
+                          <td><span className="h1">
+                            {this.props.op.code}
+                            <br />
+                            Rev: {this.props.opRev.code}
+                          </span></td>
+                          <td rowSpan="2"><span className="h2">Stamp Spesial</span></td>
                       </tr>
                       <tr>
                           <td><span className="h1">Time</span></td>

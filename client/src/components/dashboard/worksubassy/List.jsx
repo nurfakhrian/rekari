@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Select from 'react-select';
 import Moment from 'react-moment';
 
@@ -12,7 +13,9 @@ import {
     faPlus,
     // faTrashAlt,
     faInfoCircle,
-    faDownload
+    faDownload,
+    faEdit,
+    faTrashAlt
 } from '@fortawesome/free-solid-svg-icons';
 
 import Card from '../../common/Card';
@@ -44,6 +47,7 @@ class List extends Component {
         this.handleStartDateChange = this.handleStartDateChange.bind(this);
         this.handleEndDateChange = this.handleEndDateChange.bind(this);
         this.exportCSV = this.exportCSV.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
     }
 
     drawTable(query = {}) {
@@ -100,6 +104,23 @@ class List extends Component {
             }
         });
     };
+
+    handleDelete(e) {
+        if (window.confirm(`Hapus data dengan id ${e.target.dataset.id} (${e.target.dataset.code}) ?`)) {
+            axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/lotpart/delete`, { id: e.target.dataset.id })
+                .then(response => {
+                    if (response.data.message.id) {
+                        console.log(response.data.message)
+                        alert(`Data dengan id ${response.data.message.id} (${response.data.message.lotpartBarcode}) berhasil dihapus.`)
+                        this.handleSearch();
+                    }
+                    else {
+                        alert("Terjadi kesalahan.");
+                    }
+                })
+                .catch(err => console.log(err.response.data.message));
+        }
+    }
 
     handleEndDateChange = date => {
         let searchEndDate = new Date();
@@ -179,7 +200,7 @@ class List extends Component {
                         {original.createdAt}
                     </Moment>
                 ),
-                width: 150
+                width: 200
             },
             {
                 Header: 'Updated At',
@@ -193,18 +214,31 @@ class List extends Component {
                         return (<span>-</span>)
                     }
                 },
-                width: 150
+                width: 200
             },
             {
                 Header: 'Action',
                 sortable: false,
-                width: 100,
+                width: 250,
                 Cell: ({ original }) => (
                     <>
                         <Link to={{pathname: `/dashboard/work-subassy/detail/${original.id}`}}
                             className="btn btn-cc btn-cc-primary btn-cc-radius-normal p-1 mb-1">
                             <FontAwesomeIcon icon={faInfoCircle} />&nbsp;Detil
                         </Link>
+                        {this.props.auth.role === "su" || this.props.auth.role === "admin" ?
+                        <Link to={{pathname: `/dashboard/work-subassy/edit/${original.id}`}}
+                            className="btn btn-cc btn-cc-primary btn-cc-radius-normal p-1 mb-1">
+                            <FontAwesomeIcon icon={faEdit} />&nbsp;Edit
+                        </Link> : <></>}
+                        {this.props.auth.role === "su" ?
+                        <button
+                            className="btn btn-cc btn-cc-secondary btn-cc-radius-normal p-1 mb-1"
+                            data-id={original.id}
+                            data-code={original.lotpartBarcode}
+                            onClick={this.handleDelete}>
+                            <FontAwesomeIcon icon={faTrashAlt} />&nbsp;Hapus
+                        </button> : <></>}
                     </>
                 )
             },
@@ -301,7 +335,7 @@ class List extends Component {
                             style={{ display: 'none' }}
                             ref={(r) => this.csvLink = r}
                             >
-                            Download me
+                            Download
                         </CSVLink>
                     </div>
 
@@ -323,4 +357,6 @@ class List extends Component {
     }
 }
 
-export default List;
+export default connect(state => ({
+    auth: state.auth
+}))(List);

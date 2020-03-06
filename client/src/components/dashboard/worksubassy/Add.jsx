@@ -242,6 +242,7 @@ class Add extends Component {
                                 time={this.state.timeLabel}
                                 timeRev={"-"}
                                 op={this.props.auth}
+                                opRev={"-"}
                                 src={this.state.barcodeDataUrl}
                                 ref={el => (this.componentRef = el)} />
                         </div>
