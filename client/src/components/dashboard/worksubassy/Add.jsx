@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import Card from '../../common/Card';
+import BarcodeToPrint from './BarcodeToPrint';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
@@ -9,49 +10,6 @@ import { Link } from 'react-router-dom';
 import bwipjs from 'bwip-js';
 import ReactToPrint from 'react-to-print';
 import moment from 'moment';
-
-class BarcodeToPrint extends Component {
-    render() {
-        return (
-            <div style={{ marginLeft: 75, marginTop:400 }}>
-                <table className="table table-bordered" style={{height:700, border: '2px solid #000'}}>
-                    <tbody>
-                        <tr>
-                            <td><span className="h1">Sub Assy</span></td>
-                            <td colSpan="3">
-                                <span className="h1">{this.props.name}</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colSpan="2">
-                                <span className="h1">{this.props.code}</span>
-                            </td>
-                            <td rowSpan="3" className="text-center">
-                                <img src={this.props.src} alt="barcode" style={{ marginTop: 60, width:290 }}/>
-                            </td>
-                            <td rowSpan="2"><span className="h1">Stamp 1</span></td>
-                        </tr>
-                        <tr>
-                            <td><span className="h1">SNP</span></td>
-                            <td><span className="h1">{this.props.total}</span></td>
-                        </tr>
-                        <tr>
-                            <td><span className="h1">Operator</span></td>
-                            <td><span className="h1">{this.props.op.code}</span></td>
-                            <td rowSpan="2"><span className="h1">Stamp 2</span></td>
-                        </tr>
-                        <tr>
-                            <td><span className="h1">Time</span></td>
-                            <td colSpan="2">
-                                <span className="h1">{this.props.time}</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        );
-    }
-}
 
 class Add extends Component {
     constructor(props) {
@@ -282,6 +240,7 @@ class Add extends Component {
                                 code={this.state.generatedUnique}
                                 total={this.state.total}
                                 time={this.state.timeLabel}
+                                timeRev={"-"}
                                 op={this.props.auth}
                                 src={this.state.barcodeDataUrl}
                                 ref={el => (this.componentRef = el)} />

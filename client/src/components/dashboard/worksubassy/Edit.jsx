@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Select from 'react-select';
 import Card from '../../common/Card';
+import BarcodeToPrint from './BarcodeToPrint';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faPlusSquare, faSave, faPrint } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faSave } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import bwipjs from 'bwip-js';
 import ReactToPrint from 'react-to-print';
@@ -21,45 +21,40 @@ class Edit extends Component {
           total: 0,
           operator: {name:"", code:"", role:""},
           createdAt: new Date(),
-          typeParts: []
+          createdAtTimeLabel: "",
+          updatedAtTimeLabel: "",
+          barcodeDataUrl: "",
+          totalOriginal: 0
       }
       this.handleChange = this.handleChange.bind(this);
-      // this.handleChangeSelect = this.handleChangeSelect.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
-      // this.handleChangeSubPart = this.handleChangeSubPart.bind(this);
-      // this.isFormValid = this.isFormValid.bind(this);
-  }
+      this.handleChangeLotSubPartCode = this.handleChangeLotSubPartCode.bind(this);
+      this.clearSubPartCode = this.clearSubPartCode.bind(this);
+      this.isFormValid = this.isFormValid.bind(this);
+    }
 
     async componentDidMount() {
+          
         try {
-            const typePartResponse = await axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/typepart`)
+            const lotPartResponse = await axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/lotpart/detail`, { id: this.state.id })
+            const {
+                lotpartBarcode,
+                typePart,
+                lotPartsLotSubParts,
+                total,
+                operator,
+                createdAt,
+                updatedAt } = lotPartResponse.data.message;
             this.setState({
-                typeParts: typePartResponse.data.message.map(
-                    item => ({ value: item.id, label: item.name, ...item })
-                )
-            }, () => console.log(this.state.typeParts));
-        }
-        catch(err) {
-            console.log(err.response.data.message)
-        }
-        
-
-      axios.post(`http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/lotpart/detail`, { id: this.state.id })
-      .then(response => {
-          const {
               lotpartBarcode,
               typePart,
               lotPartsLotSubParts,
               total,
               operator,
-              createdAt } = response.data.message;
-          this.setState({
-              lotpartBarcode,
-              typePart,
-              lotPartsLotSubParts,
-              total,
-              operator,
-              createdAt
+              createdAt,
+              totalOriginal: total,
+              createdAtTimeLabel: moment(createdAt).format("DD/MM/YYYY HH:mm:ss"),
+              updatedAtTimeLabel: moment(createdAt).format("DD/MM/YYYY HH:mm:ss") === moment(updatedAt).format("DD/MM/YYYY HH:mm:ss") ? "-" : moment(updatedAt).format("DD/MM/YYYY HH:mm:ss")
           }, () => {
               const canvasBarcode = document.createElement('canvas');
               bwipjs.toCanvas(canvasBarcode, {
@@ -69,9 +64,14 @@ class Edit extends Component {
                   version: 5
               });
               document.getElementById("imgBarcode").src = canvasBarcode.toDataURL('image/png');
+              this.setState({
+                barcodeDataUrl: canvasBarcode.toDataURL('image/png')
+              })
           });
-      })
-      .catch(err => console.log(err.response.data.message));
+        }
+        catch(err) {
+            console.log(err.response.data.message)
+        }
     }
 
     handleChange(e) {
@@ -80,43 +80,7 @@ class Edit extends Component {
         });
     }
 
-    // handleChangeNSubPart(e) {
-    //     const value = e.target.value;
-    //     if (value > 1) {
-    //         this.setState(
-    //             (prevState) => {
-    //                 if (parseInt(value) > parseInt(prevState.nSubPart)) {
-    //                     return {
-    //                         nSubPart: parseInt(value),
-    //                         subParts: [ ...prevState.subParts, {name: "", typePartId: this.state.id}]
-    //                     }
-    //                 }
-    //                 else {
-    //                     return {
-    //                         nSubPart: parseInt(value),
-    //                     }
-    //                 }
-    //             }
-    //         );
-    //     }
-    // }
-
-    // handleChangeSelect(obj) {
-    //     this.setState({
-    //         section: obj.value
-    //     });
-    // }
-
-    // handleChangeSubPart(e) {
-    //     let tempSubParts = [ ...this.state.subParts ];
-    //     tempSubParts[e.target.dataset.index].name = e.target.value;
-    //     this.setState(
-    //         { subParts: tempSubParts }
-    //     );
-    // }
-
-    async handleSubmit(e) {
-        e.preventDefault();
+    isFormValid() {
         let nullSubPart = false;
         for (let i = 0; i < this.state.lotPartsLotSubParts.length; i++) {
             if (this.state.lotPartsLotSubParts[i].lotSubPartCode === "") {
@@ -124,13 +88,30 @@ class Edit extends Component {
                 break;
             }
         }
-        if (this.state.total > 1 && !nullSubPart) {
+        return this.state.total > 0 && !nullSubPart;
+    }
+
+    async handleSubmit() {
+        if (this.isFormValid()) {
             try {
                 const { id, total } = this.state;
-                const response = await axios.post(
-                    `http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/lotpart/edit`,
-                    {id, total});
-                alert("data pada database berhasil diperbarui");
+                if (this.state.totalOriginal !== this.state.total) {
+                    const response = await axios.post(
+                        `http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/lotpart/edit`,
+                        {id, total});
+                    this.setState({
+                        totalOriginal: response.data.message.total,
+                        updatedAtTimeLabel: moment(response.data.message.updatedAt).format("DD/MM/YYYY HH:mm:ss")
+                    })
+                }
+                this.state.lotPartsLotSubParts.forEach(async item => {
+                    if (!item.createdAt) {
+                        await axios.post(
+                            `http://${process.env.REACT_APP_API_URL || 'localhost'}:3028/lotpart/edit-subpart`,
+                            item);
+                    }
+                })
+                // alert("mndeteksi perubahan data, data pada database berhasil diperbarui");
             }
             catch(err) {
                 console.log(err.response.data.message)
@@ -141,25 +122,53 @@ class Edit extends Component {
         }
     }
 
-    // renderSubPart() {
-    //     const subPartElem = index => (
-    //         <div className="form-group" key={index}>
-    //             <label>Sub Part {index + 1}</label>
-    //             <input
-    //                 value={(this.state.subParts[index] && this.state.subParts[index].name) || ""}
-    //                 data-index={index}
-    //                 onChange={this.handleChangeSubPart}
-    //                 type="text"
-    //                 className="form-control"
-    //                 name="subPart" />
-    //         </div>
-    //     );
-    //     let subPartForm = [];
-    //     for (let i = 0; i < this.state.nSubPart ; i++) {
-    //         subPartForm.push(subPartElem(i));
-    //     }
-    //     return subPartForm;
-    // }
+    handleChangeLotSubPartCode(e) {
+        let tempLotPartsLotSubParts = [ ...this.state.lotPartsLotSubParts ];
+        const { id } = this.state.lotPartsLotSubParts[e.target.dataset.index]
+        tempLotPartsLotSubParts[e.target.dataset.index] = {
+            id,
+            lotSubPartCode: e.target.value,
+            subPartName: this.state.lotPartsLotSubParts[e.target.dataset.index].subPartName
+        };
+        this.setState(
+            { lotPartsLotSubParts: tempLotPartsLotSubParts }
+        );
+        const regex = /.*(.{7})=.*-BR0.*PC\s(\d+)\s{28,29}(.*)(\d{8})\s*\*/;
+        if (regex.test(e.target.value)) {
+            const catchGroup = regex.exec(e.target.value);
+            let tempLotPartsLotSubParts2 = [ ...this.state.lotPartsLotSubParts ];
+            const { id } = this.state.lotPartsLotSubParts[e.target.dataset.index]
+            tempLotPartsLotSubParts2[e.target.dataset.index] = {
+                id,
+                lotSubPartCode: catchGroup[2] + "-" + catchGroup[4] + "-" + catchGroup[1] + "-" + catchGroup[3],
+                subPartName: this.state.lotPartsLotSubParts[e.target.dataset.index].subPartName
+            };
+            this.setState(
+                { lotPartsLotSubParts: tempLotPartsLotSubParts2 }
+            );
+            try {
+                document.getElementById("iSubPart" + (parseInt(e.target.dataset.index) + 1)).focus();
+            }
+            catch {
+                document.getElementById("iTotal").focus();
+            }
+        }
+    }
+
+    clearSubPartCode(e) {
+        e.preventDefault();
+        let tempLotPartsLotSubParts = [ ...this.state.lotPartsLotSubParts ];
+        const { id } = this.state.lotPartsLotSubParts[e.target.dataset.index]
+        tempLotPartsLotSubParts[e.target.dataset.index] = {
+            id,
+            lotSubPartCode: "",
+            subPartName: this.state.lotPartsLotSubParts[e.target.dataset.index].subPartName
+        };
+        this.setState(
+            { lotPartsLotSubParts: tempLotPartsLotSubParts }
+        );
+        document.getElementById("iSubpart" + parseInt(e.target.dataset.index)).focus();
+    }
 
     render() {
       const roleOptions = [
@@ -173,7 +182,7 @@ class Edit extends Component {
                   <img id="imgBarcode" alt="barcode"/>
               </div>
               <form
-                    onSubmit={this.handleSubmit}
+                    onSubmit={(e) => e.preventDefault()}
                     noValidate>
                   <div className="form-group">
                       <label htmlFor="iCode">Code</label>
@@ -246,11 +255,17 @@ class Edit extends Component {
                               <label htmlFor={"iSubpart" + i}>{item.subPartName}</label>
                               <input
                                       id={"iSubpart" + i}
+                                      data-index={i}
+                                      tab-index="-1"
                                       type="text"
                                       className="form-control"
                                       name="section"
                                       value={item.lotSubPartCode}
-                                      readOnly/>
+                                      onChange={this.handleChangeLotSubPartCode}
+                                      /><small>
+                                            <a href="/#" data-index={i} onClick={this.clearSubPartCode}>hapus</a>
+                                            &nbsp;terlebih dahulu sebelum mulai scan/diganti
+                                        </small>
                           </div>
                       ))}
                   </div>
@@ -258,7 +273,7 @@ class Edit extends Component {
                       <label htmlFor="iTotal">Total (SNP)</label>
                       <input
                               id="iTotal"
-                              type="text"
+                              type="number"
                               className="form-control"
                               name="total"
                               value={this.state.total}
@@ -266,18 +281,33 @@ class Edit extends Component {
                               />
                   </div>
                   <div className="d-flex">
-                      <Link to="/dashboard/work-subassy"
-                          className="btn btn-cc btn-cc-white btn-cc-radius-normal ml-0 py-2 px-5">
-                          <i><FontAwesomeIcon icon={faArrowLeft} /></i>&nbsp;Semua
-                      </Link>
-                      <button
-                          className="ml-auto btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">
-                          <i><FontAwesomeIcon icon={faPrint} /></i>&nbsp;Print
-                      </button>
-                      <button type="submit"
-                          className="ml-auto btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">
-                          <i><FontAwesomeIcon icon={faSave} /></i>&nbsp;Save
-                      </button>
+                        <Link to={"/dashboard/work-subassy/detail/" + this.state.id}
+                            className="btn btn-cc btn-cc-white btn-cc-radius-normal ml-0 py-2 px-5">
+                            <i><FontAwesomeIcon icon={faArrowLeft} /></i>&nbsp;Kembali
+                        </Link>
+                        <ReactToPrint
+                            trigger={() => <button
+                                type="submit"
+                                disabled={!this.isFormValid()}
+                                className="ml-auto btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5">
+                                <i><FontAwesomeIcon icon={faSave} /></i>&nbsp;Save/Print
+                            </button>}
+                            content={() => this.componentRef}
+                            onBeforeGetContent={() => this.handleSubmit()}
+                        />
+                        <div
+                            style={{ display: "none" }}
+                            >
+                            <BarcodeToPrint
+                                name={this.state.typePart.name}
+                                code={this.state.lotpartBarcode}
+                                total={this.state.total}
+                                time={this.state.createdAtTimeLabel}
+                                timeRev={this.state.updatedAtTimeLabel}
+                                op={this.props.auth}
+                                src={this.state.barcodeDataUrl}
+                                ref={el => (this.componentRef = el)} />
+                        </div>
                   </div>
               </form>
           </Card>

@@ -121,6 +121,33 @@ lotpart.post('/edit', async (req, res) => {
             message: { error: 'database error' },
         });
     }
+    const result2 = await models.LotPart.findOne({
+        where: { id: req.body.id },
+        include: ['lotPartsLotSubParts']
+    });
+    res.json({
+        message: result2,
+    });
+})
+
+lotpart.post('/edit-subpart', async (req, res) => {
+    const result = await models.LotPartsLotSubPart.findOne({
+        where: { id: req.body.id }
+    });
+    if (!result) {
+        res.status(400).json({
+            message: { error: 'database error' },
+        });
+    }
+    const  { id, ...reqWithoutId } = req.body;
+    const updated = await models.LotPartsLotSubPart.update(reqWithoutId, {
+        where: { id }
+    })
+    if (!updated) {
+        res.status(400).json({
+            message: { error: 'database error' },
+        });
+    }
     res.json({
         message: req.body,
     });

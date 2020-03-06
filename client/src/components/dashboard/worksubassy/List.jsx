@@ -173,12 +173,26 @@ class List extends Component {
                 width: 150
             },
             {
-                Header: 'Created at',
+                Header: 'Orginal Time',
                 Cell: ({ original }) => (
                     <Moment format="DD/MM/YYYY HH:mm:ss">
                         {original.createdAt}
                     </Moment>
                 ),
+                width: 150
+            },
+            {
+                Header: 'Updated At',
+                Cell: ({ original }) => {
+                    if (!(original.createdAt === original.updatedAt)) {
+                        return (<Moment format="DD/MM/YYYY HH:mm:ss">
+                            {original.updatedAt}
+                        </Moment>)
+                    }
+                    else {
+                        return (<span>-</span>)
+                    }
+                },
                 width: 150
             },
             {
