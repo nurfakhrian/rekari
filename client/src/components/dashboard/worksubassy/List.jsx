@@ -149,7 +149,10 @@ class List extends Component {
     }
 
     exportCSV() {
-        this.csvLink.link.click();
+        this.cariButton.click();
+        setTimeout(() => {
+            this.csvLink.link.click();
+        }, 1000);
     }
 
     render() {
@@ -314,7 +317,7 @@ class List extends Component {
                         <button
                             className="btn btn-cc btn-cc-primary btn-cc-radius-normal ml-0 py-2 px-5 px-md-2"
                             onClick={this.handleSearch}
-                            >
+                            ref={(r) => this.cariButton = r}>
                             <FontAwesomeIcon icon={faSearch} />&ensp;Cari
                         </button>
                     </div>
